@@ -1,0 +1,125 @@
+
+:host ::ng-deep .custom-spinner circle {
+    stroke: white;
+  }
+  
+  * {
+      margin: 0;
+      padding: 0;
+      text-decoration: none;
+      font-family: Montserrat, sans-serif;
+      box-sizing: border-box
+  }
+  .login-form {
+      display: block;
+      width: 665px;
+      background: #e4e3e3;
+      height: 670px;
+      padding: 20px 40px;
+      border-radius: 35px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%)
+  }
+  .box {
+      position: absolute;
+      left: 50%;
+      top: 57%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      width: 350px;
+      height: 200px;
+      border-radius: 5px;
+      padding-left: 2%;
+      padding-right: 2%;
+      box-shadow: 0 10px 10px rgba(150, 150, 150, .8)
+  }
+  .login-form h1 {
+      text-align: center;
+      margin-bottom: 60px
+  }
+  .logbtn {
+      display: block;
+      width: 35%;
+      height: 50px;
+      border: none;
+      background-image: linear-gradient(to bottom right, #63a1e2, #6883e6, #6f6ee9);
+      color: #fff;
+      outline: none;
+      position: absolute;
+      font-size: large;
+      top: 78%;
+      left: 32.5%;
+      border-radius: 5px;
+      box-shadow: 0 10px 10px rgba(150, 150, 150, .8)
+  }
+  .spin {
+      padding-left: 15%
+  }
+  .logo {
+      margin-top: 8%;
+      margin-left: 38%;
+      height: 125px;
+      width: 125px
+  }
+  .head {
+      font-family: Montserrat, sans-serif;
+      margin-top: 3%;
+      font-weight: 700;
+      text-align: center;
+  }
+  .form__group {
+      position: relative;
+      padding: 15px 0 0;
+      margin-top: 20px
+  }
+  .form__field {
+      width: 100%;
+      border: 0;
+      border-bottom: 1.5px solid #9b9b9b;
+      outline: 0;
+      font-size: 1.2rem;
+      padding: 7px 0;
+      background: 0 0;
+      transition: border-color .2s
+  }
+  .form__field::placeholder {
+      color: transparent
+  }
+  .form__field:placeholder-shown~.form__label {
+      font-size: 1.4rem;
+      font-weight: 300;
+      font-family: Montserrat, sans-serif;
+      cursor: text;
+      top: 20px
+  }
+  .form__label {
+      position: absolute;
+      top: 0;
+      display: block;
+      transition: .2s;
+      font-size: 1.2rem;
+      color: #adadad;
+      font-family: Montserrat, sans-serif;
+      font-weight: 600
+  }
+  .form__field:focus {
+      padding-bottom: 6px;
+      font-family: Montserrat, sans-serif;
+      font-weight: 400;
+      border-width: 3px;
+      border-image: linear-gradient(to right, #63a1e2, #6883e6, #6f6ee9);
+      border-image-slice: 1
+  }
+  .form__field:focus~.form__label {
+      position: absolute;
+      top: 0;
+      display: block;
+      transition: .2s;
+      font-size: 1rem;
+      color: #6f6ee9;
+      font-family: Montserrat, sans-serif;
+      font-weight: 500
+  }
+  

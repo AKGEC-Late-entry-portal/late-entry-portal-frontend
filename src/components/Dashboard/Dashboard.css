@@ -1,0 +1,106 @@
+#content button {
+    padding-right: 10%;
+    text-decoration: none;
+    font-size: 40px;
+    font-weight: 700;
+    color: #fff;
+    display: block;
+    background-image: linear-gradient(#6f6ee9, #6883e6, #63a1e2);
+    border-radius: 15px;
+    border: none;
+    width: 100%;
+    height: 300px;
+    font-family: sans-serif;
+    outline-style: none;
+  }
+  #content #content2 button {
+    padding-right: 10%;
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+    padding-left: 8px;
+    display: block;
+    background-image: linear-gradient(#6f6ee9, #6883e6, #63a1e2);
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+    height: 50px;
+    font-family: sans-serif;
+    outline-style: none;
+  }
+  .login-card {
+    border: 0;
+    margin-bottom: 30px;
+    margin-top: 35px;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 16px !important;
+    color: rgba(0, 0, 0, 0.87);
+    background: #fff;
+    min-height: 148px;
+    width: 90%;
+    outline: 0;
+    cursor: pointer;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  }
+  #b2 {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #fff;
+    display: block;
+    background-image: linear-gradient(#6f6ee9, #6883e6, #63a1e2);
+    border-radius: 30px;
+    margin: 10px;
+    margin-right: 4%;
+    border: none;
+    width: 150px;
+    font-family: sans-serif;
+    right: 2%;
+    position: fixed;
+    outline-style: none;
+  }
+  #h2 {
+    background-color: #ffab00;
+    position: relative;
+    padding-top: 2.5%;
+    padding-bottom: 1.5%;
+    z-index: 1;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: -50px;
+    border-radius: 8px;
+    height: 80px;
+    width: 30%;
+  }
+  #h3 {
+    background-color: #6586c9;
+    position: relative;
+    padding-top: 2.5%;
+    padding-bottom: 1.5%;
+    z-index: 1;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: -50px;
+    border-radius: 8px;
+    height: 80px;
+    width: 30%;
+  }
+  #h4 {
+    background-color: #00bfa5;
+    position: relative;
+    padding-top: 2.5%;
+    padding-bottom: 1.5%;
+    z-index: 1;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: -50px;
+    border-radius: 8px;
+    height: 80px;
+    width: 30%;
+  }
+  
+  h1{
+    font-family: 'Poppins', sans-serif;
+  }
