@@ -40,7 +40,7 @@ const Login = () => {
       await axios.post(Api.login, { userName, password }).then(function (res) {
         if (res) {
           toast.success("Login Successful!", {
-            position: "top-center",
+            position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
