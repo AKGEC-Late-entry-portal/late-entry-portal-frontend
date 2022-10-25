@@ -1,4 +1,4 @@
-import "./ManageUser";
+import "./ManageUser.css";
 
 const ManageUser = () => {
   return <div></div>;

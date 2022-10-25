@@ -1,4 +1,4 @@
-import "./Update";
+import "./Update.css";
 
 const update = () => {
   return <div>update</div>;

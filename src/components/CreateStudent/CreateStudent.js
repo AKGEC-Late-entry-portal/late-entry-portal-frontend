@@ -1,4 +1,4 @@
-import "./CreateStudent";
+import "./CreateStudent.css";
 
 const CreateStudent = () => {
   return <div></div>;

@@ -1,4 +1,4 @@
-import "./DailyReport";
+import "./DailyReport.css";
 
 const DailyReport = () => {
   return <div></div>;

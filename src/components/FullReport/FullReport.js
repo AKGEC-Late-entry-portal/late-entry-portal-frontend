@@ -1,4 +1,4 @@
-import "./FullReport";
+import "./FullReport.css";
 
 const FullReport = () => {
   return <div></div>;

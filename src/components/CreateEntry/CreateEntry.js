@@ -1,4 +1,4 @@
-import "./CreateEntry";
+import "./CreateEntry.css";
 
 const CreateEntry = () => {
   return <div></div>;

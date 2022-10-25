@@ -1,4 +1,4 @@
-import "./CreateUser";
+import "./CreateUser.css";
 
 const CreateUser = () => {
   return <div></div>;

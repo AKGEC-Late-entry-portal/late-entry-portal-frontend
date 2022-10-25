@@ -1,4 +1,4 @@
-import "./ManageEntry";
+import "./ManageEntry.css";
 
 const ManageEntry = () => {
   return <div></div>;

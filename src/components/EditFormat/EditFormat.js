@@ -1,4 +1,4 @@
-import "./EditFormat";
+import "./EditFormat.css";
 
 const EditFormat = () => {
   return <div></div>;

@@ -1,4 +1,4 @@
-import "./ManageStudent";
+import "./ManageStudent.css";
 
 const ManageStudent = () => {
   return <div></div>;

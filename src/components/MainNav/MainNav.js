@@ -1,4 +1,4 @@
-import "./MainNav";
+import "./MainNav.css";
 
 const MainNav = () => {
   return <div></div>;
