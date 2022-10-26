@@ -130,7 +130,7 @@ const ManageUser = () => {
     setLoading(true);
     setPage(1);
     func(page);
-  }, [user]);
+  }, [results]);
 
   const openDialog = () => {};
 
