@@ -9,16 +9,22 @@ import { useNavigate } from "react-router-dom";
 
 const ManageUser = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState();
+  const privilege = ["-", "Administrator", "Co-ordinator", "Volunteer"];
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
   const [nxt, setNxt] = useState(true);
   const [prv, setPrv] = useState(true);
-  const [page, setPage] = useState();
-  const [results, setResults] = useState([]);
+  const [user, setUser] = useState(null);
+
+  const next = () => {
+    setPage((page) => page + 1);
+    return fetchUsers(page);
+  };
 
   const prev = () => {
     if (page > 1) {
-      setPage(page - 1);
+      setPage((page) => page - 1);
     } else {
       toast.warn("Already on First Page !!", {
         position: "bottom-right",
@@ -31,61 +37,18 @@ const ManageUser = () => {
         theme: "colored",
       });
     }
-    return func(page);
+    return fetchUsers(page);
   };
 
-  const next = () => {
-    setPage(page + 1);
-    return func(page);
-  };
-
-  const func = (pg) => {
-    async function getComments() {
-      setResults([]);
-      setLoading(true);
-      try {
-        await axios
-          .get(
-            "http://akgec-late-entry.herokuapp.com/api/admin/user/readall?limit=10&page=" +
-              pg
-          )
-          .then(function (res) {
-            console.log(res.data.results);
-            setLoading(false);
-            res.data.results.forEach((item) => {
-              results.push(item);
-            });
-            setResults(results);
-            console.log(results);
-            if (results.length === 0) {
-              toast.error("You have reached the end of the document!", {
-                position: "bottom-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-              });
-              if (page > 1) {
-                prev();
-              }
-            }
-            if (res.data.next == null) {
-              setNxt(false);
-            } else {
-              setNxt(true);
-            }
-            if (res.data.previous == null) {
-              setPrv(false);
-            } else {
-              setPrv(true);
-            }
-          });
-      } catch (error) {
+  const fetchUsers = async (pg) => {
+    const response = await axios
+      .get(
+        "http://akgec-late-entry.herokuapp.com/api/admin/user/readall?limit=10&page=" +
+          pg
+      )
+      .catch((err) => {
         setLoading(false);
-        if (error.status === 403) {
+        if (err.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -104,7 +67,7 @@ const ManageUser = () => {
             "Unable to load Data .Check your connection and try refreshing Page !!",
             {
               position: "bottom-right",
-              autoClose: 3000,
+              autoClose: 5000,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
@@ -115,24 +78,47 @@ const ManageUser = () => {
           );
         }
         setResults(null);
+      });
+    if (response) {
+      setLoading(false);
+      const users = response.data.results;
+      setResults(users);
+      if (users.length === 0) {
+        toast.error("You have reached the end of the document!", {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        if (page > 1) {
+          prev();
+        }
+      }
+      if (response.data.next == null) {
+        setNxt(false);
+      } else {
+        setNxt(true);
+      }
+      if (response.data.previous == null) {
+        setPrv(false);
+      } else {
+        setPrv(true);
       }
     }
-    getComments();
-    async function getCommentsDash() {
-      await axios.get(Api.dash).then(function (res) {
-        setUser(res.data.msg.user);
-      });
+    const user_res = await axios.get(Api.dash).catch((err) => console.log(err));
+    if (user_res) {
+      setUser(user_res.data.msg.user);
     }
-    getCommentsDash();
   };
 
   useEffect(() => {
     setLoading(true);
-    setPage(1);
-    func(page);
-  }, [results]);
-
-  const openDialog = () => {};
+    fetchUsers(page);
+  }, []);
 
   const confirmDialog = (j, a) => {
     if (user === 1) {
@@ -144,12 +130,10 @@ const ManageUser = () => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: "colored",
       });
     }
   };
-
-  const forgotPswd = () => {};
 
   return (
     <div style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "2.5%" }}>
@@ -198,39 +182,31 @@ const ManageUser = () => {
                   )}
 
                   {results.map((com) => {
-                    console.log(com);
                     return (
-                      <tr key={com.id}>
+                      <tr key={com._id}>
                         <td>{com.name}</td>
                         <td>{com.mobile}</td>
                         <td>{com.userName}</td>
                         <td>{com.email}</td>
-                        {/* <td>{privilege[com.privilege]}</td> */}
+                        <td>{privilege[com.privilege]}</td>
                         <td className="text-primary">{com.dept}</td>
                         <td>
                           <button
-                            color="warn"
                             style={{
                               outlineStyle: "none",
                               marginTop: "-15%",
                               width: "30px",
                               height: "30px",
+                              border: "none",
+                              backgroundColor: "white",
+                              borderRadius: "100%",
                             }}
-                            onClick={confirmDialog(com._id, com.name)}
+                            onClick={() => confirmDialog(com._id, com.name)}
                           >
-                            <i className="fa fa-trash"></i>
-                          </button>
-                          <button
-                            color="primary"
-                            style={{
-                              outlineStyle: "none",
-                              marginTop: "-15%",
-                              width: "30px",
-                              height: "30px",
-                            }}
-                            onClick={openDialog(com._id)}
-                          >
-                            <i className="fa fa-edit"></i>
+                            <i
+                              className="fa fa-trash"
+                              style={{ color: "red" }}
+                            ></i>
                           </button>
                           <button
                             style={{
@@ -238,8 +214,28 @@ const ManageUser = () => {
                               marginTop: "-15%",
                               width: "30px",
                               height: "30px",
+                              border: "none",
+                              backgroundColor: "white",
+                              borderRadius: "100%",
                             }}
-                            onClick={forgotPswd}
+                            // onClick={() => openDialog(com._id)}
+                          >
+                            <i
+                              className="fa fa-edit"
+                              style={{ color: "#0000b3" }}
+                            ></i>
+                          </button>
+                          <button
+                            style={{
+                              outlineStyle: "none",
+                              marginTop: "-15%",
+                              width: "30px",
+                              height: "30px",
+                              border: "none",
+                              backgroundColor: "white",
+                              borderRadius: "100%",
+                            }}
+                            // onClick={forgotPswd}
                           >
                             <i className="fas fa-user-lock"></i>
                           </button>
@@ -264,19 +260,20 @@ const ManageUser = () => {
                     fontFamily: "Poppins, sans-serif",
                   }}
                   onClick={prev}
+                  disabled={!prv}
                 >
                   <i className="fas fa-angle-left"></i> Previous
                 </button>
                 &nbsp;
                 <li
-                  className="mat-stroked-button"
+                  className="btn"
                   style={{
                     color: "#63B967",
                     borderColor: "#63B967",
                     fontFamily: "Poppins, sans-serif",
                   }}
                 >
-                  {/* {page} */}
+                  {page}
                 </li>
                 &nbsp;
                 <button
@@ -288,6 +285,7 @@ const ManageUser = () => {
                     fontFamily: "Poppins, sans-serif",
                   }}
                   onClick={next}
+                  disabled={!nxt}
                 >
                   Next <i className="fas fa-angle-right"></i>
                 </button>
