@@ -3,6 +3,8 @@ import "./ManageUser.css";
 import { useEffect, useState } from "react";
 
 import Api from "../../Api";
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
+import Dialog from "@material-ui/core/Dialog";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +18,9 @@ const ManageUser = () => {
   const [nxt, setNxt] = useState(true);
   const [prv, setPrv] = useState(true);
   const [user, setUser] = useState(null);
+  const [message, setMessage] = useState("");
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [j, setJ] = useState("");
 
   const next = () => {
     setPage((page) => page + 1);
@@ -120,7 +125,7 @@ const ManageUser = () => {
     fetchUsers(page);
   }, []);
 
-  const confirmDialog = (j, a) => {
+  const confirmDialog = (id, a) => {
     if (user === 1) {
       toast.error("Can't Delete All Users!!", {
         position: "bottom-right",
@@ -132,12 +137,54 @@ const ManageUser = () => {
         progress: undefined,
         theme: "colored",
       });
+    } else {
+      setJ(id);
+      setMessage(`Are you sure you want to delete user ` + a + ` ?`);
+      setOpenConfirmDialog(true);
+    }
+  };
+
+  const handleClose = () => {
+    setOpenConfirmDialog(false);
+  };
+
+  const deleteItem = async (_id) => {
+    await axios
+      .delete(
+        "https://akgec-late-entry.herokuapp.com/api/admin/user/delete/" + _id
+      )
+      .catch((e) => console.log(e));
+    setResults(
+      results.filter((item) => {
+        return item._id !== _id;
+      })
+    );
+  };
+
+  const responseHandler = (remove) => {
+    setOpenConfirmDialog(false);
+    if (remove) {
+      deleteItem(j);
     }
   };
 
   return (
     <div style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "2.5%" }}>
       <div className="card card-profile">
+        <Dialog open={openConfirmDialog} onClose={handleClose} fullWidth={true}>
+          <ConfirmDialog
+            title="Delete User"
+            message={message}
+            onResponse={responseHandler}
+          />
+        </Dialog>
+        {/* <Dialog open={openConfirmDialog} onClose={handleClose} fullWidth={true}>
+          <ConfirmDialog
+            title="Delete User"
+            message={message}
+            onResponse={responseHandler}
+          />
+        </Dialog> */}
         <div className="card-header card-header-image">
           <h1
             className="card-title"
