@@ -1,9 +1,53 @@
 import "./Dashboard.css";
 
-const dashboard = () => {
-  const users = 1,
-    entry = 2,
-    student = 3;
+import { useEffect, useState } from "react";
+
+import Api from "../../Api";
+import axios from "axios";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+
+const Dashboard = () => {
+  const navigate = useNavigate();
+  const [arr, setArr] = useState({
+    users: null,
+    student: null,
+    entry: null,
+  });
+  // var users = 1;
+  // var student = 1;
+  // var entry = 1;
+
+  useEffect(() => {
+    async function fetchData() {
+      if (localStorage.getItem("token")) {
+        try {
+          await axios.get(Api.dash).then(function (res) {
+            setArr({
+              ...arr,
+              users: res.data.msg.user,
+              student: res.data.msg.student,
+              entry: res.data.msg.entry,
+            });
+            console.log(res.data.msg);
+            console.log(arr);
+          });
+        } catch (error) {
+          if (error.status === 403) {
+            console.log("invalid-token");
+            localStorage.removeItem("token");
+            localStorage.removeItem("results");
+            navigate("/");
+          }
+        }
+      }
+    }
+    const timer = setTimeout(() => {
+      fetchData();
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       <div className="container">
@@ -29,11 +73,11 @@ const dashboard = () => {
             className="col-md-4 col-sm-4 col-xs-4"
             style={{ paddingTop: "15px", paddingBottom: "15px" }}
           >
-            <mat-card
+            <MatCard
               className="login-card"
-              routerLink="/dashboard/manage-users"
+              onClick={() => navigate("/dashboard/manage-users")}
             >
-              <mat-card-header id="h2">
+              <MatCardHeader id="h2">
                 <i
                   className="fa fa-users"
                   style={{
@@ -45,8 +89,8 @@ const dashboard = () => {
                     color: "white",
                   }}
                 ></i>
-              </mat-card-header>
-              <mat-card-content>
+              </MatCardHeader>
+              <MatCardContent>
                 <div
                   style={{
                     position: "relative",
@@ -72,21 +116,21 @@ const dashboard = () => {
                       fontFamily: "Poppins, sans-serif",
                     }}
                   >
-                    {users}
+                    {arr.users}
                   </p>
                 </div>
-              </mat-card-content>
-            </mat-card>
+              </MatCardContent>
+            </MatCard>
           </div>
           <div
             className="col-md-4 col-sm-4 col-xs-4"
             style={{ paddingTop: "15px", paddingBottom: "15px" }}
           >
-            <mat-card
+            <MatCard
               className="login-card"
-              routerLink="/dashboard/manage-student"
+              onClick={() => navigate("/dashboard/manage-student")}
             >
-              <mat-card-header id="h3">
+              <MatCardHeader id="h3">
                 <i
                   className="fas fa-user-graduate"
                   style={{
@@ -97,8 +141,8 @@ const dashboard = () => {
                     color: "white",
                   }}
                 ></i>
-              </mat-card-header>
-              <mat-card-content>
+              </MatCardHeader>
+              <MatCardContent>
                 <div
                   style={{
                     position: "relative",
@@ -123,21 +167,21 @@ const dashboard = () => {
                       textAlign: "right",
                     }}
                   >
-                    {student}
+                    {arr.student}
                   </p>
                 </div>
-              </mat-card-content>
-            </mat-card>
+              </MatCardContent>
+            </MatCard>
           </div>
           <div
             className="col-md-4 col-sm-4 col-xs-4"
             style={{ paddingTop: "15px", paddingBottom: "15px" }}
           >
-            <mat-card
+            <MatCard
               className="login-card"
-              routerLink="/dashboard/manage-entry"
+              onClick={() => navigate("/dashboard/manage-entry")}
             >
-              <mat-card-header id="h4">
+              <MatCardHeader id="h4">
                 <i
                   className="fas fa-user-plus"
                   style={{
@@ -148,8 +192,8 @@ const dashboard = () => {
                     color: "white",
                   }}
                 ></i>
-              </mat-card-header>
-              <mat-card-content>
+              </MatCardHeader>
+              <MatCardContent>
                 <div
                   style={{
                     position: "relative",
@@ -174,11 +218,11 @@ const dashboard = () => {
                       textAlign: "right",
                     }}
                   >
-                    {entry}
+                    {arr.entry}
                   </p>
                 </div>
-              </mat-card-content>
-            </mat-card>
+              </MatCardContent>
+            </MatCard>
           </div>
         </div>
       </div>
@@ -186,4 +230,20 @@ const dashboard = () => {
   );
 };
 
-export default dashboard;
+const MatCard = styled.div`
+  transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+  position: relative;
+  padding: 16px;
+  border-radius: 4px;
+`;
+
+const MatCardContent = styled.div`
+  font-size: 14px;
+`;
+const MatCardHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export default Dashboard;

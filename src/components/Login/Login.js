@@ -1,6 +1,8 @@
 import "./Login.css";
 import "react-toastify/dist/ReactToastify.css";
 
+import { useEffect, useState } from "react";
+
 import AKGEC_logo from "../../assets/AKGEC_1_0.png";
 import Api from "../../Api";
 import Dialog from "@material-ui/core/Dialog";
@@ -9,7 +11,6 @@ import Spinner from "react-spinner-material";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
