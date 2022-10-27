@@ -23,10 +23,10 @@ const Update = (props) => {
   const [data, setData] = useState({
     name: "",
     userName: "",
-    mobile: null,
+    mobile: "",
     email: "",
     dept: "",
-    privilege: null,
+    privilege: "",
   });
   const [updatePass, setUpdatePass] = useState({
     oldPassword: "",
