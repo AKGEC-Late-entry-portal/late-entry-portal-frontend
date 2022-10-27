@@ -40,6 +40,7 @@
     margin-right: 90px;
     border: none;
     width: 200px;
+    height: 50px;
     text-align: center;
     font-family: 'Poppins', sans-serif;
     outline-style: none;
@@ -47,6 +48,9 @@
 
   #btn3{
     outline-style: none;
+    color: white;
+    border: none;
+    background-color: #63B967;
     font-size: 38px;
     margin-left: 72%;
     font-family: 'Poppins', sans-serif;

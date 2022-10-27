@@ -17,6 +17,7 @@ const Update = (props) => {
   const [loading, setLoading] = useState(true);
   const [cond, setCond] = useState("");
   const [disable, setDisable] = useState(false);
+  const [disable2, setDisable2] = useState(true);
   const [data, setData] = useState({
     name: "",
     userName: "",
@@ -24,6 +25,12 @@ const Update = (props) => {
     email: "",
     dept: "",
     privilege: null,
+  });
+  const [updatePass, setUpdatePass] = useState({
+    oldPassword: "",
+    mobile: null,
+    newPassword: "",
+    confirmPassword: "",
   });
 
   const submitHandler = (e) => {
@@ -159,8 +166,97 @@ const Update = (props) => {
 
   const forgotPswd = () => {};
 
-  const submitHandler2 = () => {
+  const submitHandler2 = (e) => {
+    e.preventDefault();
     setLoading(true);
+    if (updatePass.newPassword === updatePass.confirmPassword) {
+      const updatePassword = async (_id, data) => {
+        const res = await axios
+          .put(
+            "https://akgec-late-entry.herokuapp.com/api/admin/user/password/" +
+              _id,
+            data
+          )
+          .catch((error) => {
+            if (error.status === 403) {
+              toast.error("Unauthorized User", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              });
+              localStorage.removeItem("token");
+              localStorage.removeItem("results");
+              navigate("/");
+            } else if (error.status === 404) {
+              toast.error("User Not Found!", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              });
+            } else if (error.status === 409) {
+              toast.error("Old password did not match!", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              });
+            } else {
+              toast.error("Can't reset your password!", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              });
+            }
+            setLoading(false);
+          });
+        if (res) {
+          toast.success("Password Changed Successfully", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          setLoading(false);
+          props.onSuccessfulUpdate(true);
+        }
+      };
+      updatePassword(props._id, updatePass);
+    } else {
+      toast.warn("New Password and Re-enter New Password must be same.", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setLoading(false);
+    }
   };
 
   return (
@@ -379,17 +475,39 @@ const Update = (props) => {
         <div>
           <div
             style={{
+              display: "flex",
               backgroundColor: "#63B967",
               color: "white",
               borderRadius: "5px",
+              height: "68px",
+              margin: "2% 2.5%",
+              padding: "1.5%",
             }}
           >
-            <h2 style={{ marginLeft: "2%" }}>Change Password</h2>
+            <h5
+              style={{
+                marginLeft: "1%",
+                marginTop: "1%",
+                fontFamily: "Poppins, sans-serif",
+                padding: "0 0.5%",
+              }}
+            >
+              Change
+            </h5>
+            <h5
+              style={{
+                marginTop: "1%",
+                fontFamily: "Poppins, sans-serif",
+                padding: "0 0.3%",
+              }}
+            >
+              Password
+            </h5>
             <button id="btn3" onClick={changePswd}>
               <i className="fas fa-arrow-circle-left"></i>
             </button>
           </div>
-          <form className="login-form" onSubmit={submitHandler2}>
+          <form className="loginform" onSubmit={submitHandler2}>
             <div
               style={{
                 display: "flex",
@@ -412,6 +530,12 @@ const Update = (props) => {
                             width: 175,
                           }}
                           required
+                          onChange={(e) =>
+                            setUpdatePass({
+                              ...updatePass,
+                              oldPassword: e.target.value,
+                            })
+                          }
                         />
                       </div>
                     </td>
@@ -427,6 +551,15 @@ const Update = (props) => {
                           variant="standard"
                           sx={{
                             width: 175,
+                          }}
+                          onChange={(e) => {
+                            setDisable2(
+                              !(e.target.value.toString().length === 10)
+                            );
+                            setUpdatePass({
+                              ...updatePass,
+                              mobile: e.target.value,
+                            });
                           }}
                           required
                         />
@@ -445,6 +578,12 @@ const Update = (props) => {
                           sx={{
                             width: 175,
                           }}
+                          onChange={(e) =>
+                            setUpdatePass({
+                              ...updatePass,
+                              newPassword: e.target.value,
+                            })
+                          }
                           required
                         />
                       </div>
@@ -462,6 +601,12 @@ const Update = (props) => {
                           sx={{
                             width: 175,
                           }}
+                          onChange={(e) =>
+                            setUpdatePass({
+                              ...updatePass,
+                              confirmPassword: e.target.value,
+                            })
+                          }
                           required
                         />
                       </div>
@@ -478,7 +623,7 @@ const Update = (props) => {
                       }}
                     >
                       {!loading && (
-                        <button type="submit" id="btn2">
+                        <button type="submit" id="btn2" disabled={disable2}>
                           Change Password
                         </button>
                       )}
@@ -492,10 +637,13 @@ const Update = (props) => {
                             paddingBottom: "9px",
                           }}
                         >
-                          {/* <mat-spinner
-                          className="custom-spinner"
-                          diameter="30"
-                        ></mat-spinner> */}
+                          <Spinner
+                            radius={30}
+                            color={"#FFFFFF"}
+                            stroke={3}
+                            visible={true}
+                            style={{ marginLeft: "2%" }}
+                          />
                         </button>
                       )}
                     </td>
