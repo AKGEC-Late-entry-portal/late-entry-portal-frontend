@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Api from "../../Api";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import Dialog from "@material-ui/core/Dialog";
+import Update from "../Update/Update";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +22,8 @@ const ManageUser = () => {
   const [message, setMessage] = useState("");
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [j, setJ] = useState("");
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [userData, setUserData] = useState({});
 
   const next = () => {
     setPage((page) => page + 1);
@@ -146,6 +149,7 @@ const ManageUser = () => {
 
   const handleClose = () => {
     setOpenConfirmDialog(false);
+    setOpenEditDialog(false);
   };
 
   const deleteItem = async (_id) => {
@@ -168,6 +172,19 @@ const ManageUser = () => {
     }
   };
 
+  const openDialog = (_id) => {
+    setJ(_id);
+    setUserData(results.filter((item) => item._id === _id));
+    setOpenEditDialog(true);
+  };
+
+  const successfulUpdateHandler = (res) => {
+    if (res) {
+      setOpenEditDialog(false);
+      fetchUsers(page);
+    }
+  };
+
   return (
     <div style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "2.5%" }}>
       <div className="card card-profile">
@@ -178,13 +195,23 @@ const ManageUser = () => {
             onResponse={responseHandler}
           />
         </Dialog>
-        {/* <Dialog open={openConfirmDialog} onClose={handleClose} fullWidth={true}>
-          <ConfirmDialog
-            title="Delete User"
-            message={message}
-            onResponse={responseHandler}
+        <Dialog
+          open={openEditDialog}
+          onClose={handleClose}
+          fullWidth={true}
+          maxWidth="md"
+          PaperProps={{
+            style: {
+              height: "75%",
+            },
+          }}
+        >
+          <Update
+            onSuccessfulUpdate={successfulUpdateHandler}
+            _id={j}
+            data={userData}
           />
-        </Dialog> */}
+        </Dialog>
         <div className="card-header card-header-image">
           <h1
             className="card-title"
@@ -265,7 +292,7 @@ const ManageUser = () => {
                               backgroundColor: "white",
                               borderRadius: "100%",
                             }}
-                            // onClick={() => openDialog(com._id)}
+                            onClick={() => openDialog(com._id)}
                           >
                             <i
                               className="fa fa-edit"

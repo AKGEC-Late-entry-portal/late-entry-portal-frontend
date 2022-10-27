@@ -176,7 +176,7 @@ const Login = () => {
               <Spinner
                 radius={30}
                 color={"#FFFFFF"}
-                stroke={2}
+                stroke={3}
                 visible={true}
               />
             </button>

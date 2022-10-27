@@ -1,250 +1,491 @@
 import "./Update.css";
 
-const Update = () => {
+import { useEffect, useState } from "react";
+
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Spinner from "react-spinner-material";
+import TextField from "@mui/material/TextField";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
+const Update = (props) => {
+  const navigate = useNavigate();
+  const [isPswd, setIsPswd] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [cond, setCond] = useState("");
+  const [data, setData] = useState({
+    name: "",
+    userName: "",
+    mobile: null,
+    email: "",
+    dept: "",
+    privilege: null,
+  });
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    const updateData = async (_id, data) => {
+      const res = await axios
+        .put(
+          "https://akgec-late-entry.herokuapp.com/api/admin/user/update/" + _id,
+          data
+        )
+        .catch((err) => {
+          props.onSuccessfulUpdate(false);
+          setLoading(false);
+          setCond("updating");
+          toast.error(
+            `Error ${cond} User! Check Your Connection and Try Again!`,
+            {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            }
+          );
+          if (err.status === 403) {
+            toast.error("Unauthorized User", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            localStorage.removeItem("token");
+            localStorage.removeItem("results");
+            navigate("/");
+          } else {
+            toast.error("Error Updating User", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+          }
+        });
+      if (res) {
+        setLoading(false);
+        props.onSuccessfulUpdate(true);
+        toast.success("User Updated Successfully!!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    };
+    updateData(props._id, data);
+  };
+
+  const fetchUser = async (id) => {
+    const res = await axios
+      .get("https://akgec-late-entry.herokuapp.com/api/admin/user/read/" + id)
+      .catch((err) => {
+        if (err.status === 403) {
+          toast.error("Unauthorized User", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          localStorage.removeItem("token");
+          localStorage.removeItem("results");
+          navigate("/");
+        } else {
+          toast.error("Unable to access user information!", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
+        setLoading(false);
+        setCond("loading");
+        toast.error(
+          `Error ${cond} User! Check Your Connection and Try Again!`,
+          {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          }
+        );
+      });
+    if (res) {
+      setLoading(false);
+      setData(res.data.result);
+    }
+  };
+
+  useEffect(() => {
+    setIsPswd(false);
+    fetchUser(props._id);
+  }, []);
+
   return (
-    <>
-      <div>
-        <mat-toolbar
-          style={{
-            backgroundColor: "#63B967",
-            color: "white",
-            borderRadius: "5px",
-          }}
-        >
-          <mat-spinner className="custom-spinner" diameter="30"></mat-spinner>
-          <h5 style={{ marginLeft: "2%", fontFamily: "Poppins, sans-serif" }}>
-            Modify User
-          </h5>
-        </mat-toolbar>
-        <div className="alert alert-danger" style={{ marginTop: "2%" }}>
-          {/* Error {cond} User! Check Your Connection and Try Again! */}
+    <div>
+      {!isPswd && (
+        <div>
+          <div
+            style={{
+              display: "flex",
+              backgroundColor: "#63B967",
+              color: "white",
+              borderRadius: "5px",
+              height: "68px",
+              margin: "2% 2.5%",
+              padding: "1.5%",
+            }}
+          >
+            {loading && (
+              <Spinner
+                radius={30}
+                color={"#FFFFFF"}
+                stroke={3}
+                visible={true}
+                style={{ marginLeft: "2%" }}
+              />
+            )}
+
+            <h5
+              style={{
+                marginLeft: "1%",
+                marginTop: "1%",
+                fontFamily: "Poppins, sans-serif",
+                padding: "0 0.5%",
+              }}
+            >
+              Modify User
+            </h5>
+          </div>
+
+          <form className="loginform" onSubmit={submitHandler}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <table>
+                <tbody>
+                  <tr>
+                    <td style={{ paddingTop: "15px" }}>
+                      <label>Name:</label>
+                    </td>
+                    <td style={{ width: "100px" }}>
+                      <div>
+                        <TextField
+                          id="standard-basic"
+                          variant="standard"
+                          sx={{
+                            width: 175,
+                          }}
+                          value={data.name}
+                          onChange={(e) => {
+                            setData({ ...data, name: e.target.value });
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ paddingTop: "15px" }}>
+                      <label>Mobile No:</label>
+                    </td>
+                    <td>
+                      <div>
+                        <TextField
+                          id="standard-basic"
+                          variant="standard"
+                          sx={{
+                            width: 175,
+                          }}
+                          value={data.mobile}
+                          onChange={(e) => {
+                            setData({ ...data, mobile: e.target.value });
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ paddingTop: "15px" }}>
+                      <label>Email:</label>
+                    </td>
+                    <td>
+                      <div>
+                        <TextField
+                          id="standard-basic"
+                          variant="standard"
+                          sx={{
+                            width: 175,
+                          }}
+                          value={data.email}
+                          onChange={(e) => {
+                            setData({ ...data, email: e.target.value });
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ paddingTop: "15px" }}>
+                      <label>Role:</label>
+                    </td>
+                    <td>
+                      <div>
+                        <FormControl variant="standard" sx={{ minWidth: 175 }}>
+                          <Select
+                            labelId="demo-simple-select-standard-label"
+                            id="demo-simple-select-standard"
+                            onChange={(e) => {
+                              setData({ ...data, privilege: e.target.value });
+                            }}
+                            value={data.privilege}
+                          >
+                            <MenuItem value={1}>Administrator</MenuItem>
+                            <MenuItem value={2}>Co-ordinator</MenuItem>
+                            <MenuItem value={3}>Volunteer</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style={{ paddingTop: "15px" }}>
+                      <label>Department:</label>
+                    </td>
+                    <td>
+                      <div>
+                        <FormControl variant="standard" sx={{ minWidth: 175 }}>
+                          <Select
+                            labelId="demo-simple-select-standard-label"
+                            id="demo-simple-select-standard"
+                            onChange={(e) => {
+                              setData({ ...data, dept: e.target.value });
+                            }}
+                            value={data.dept}
+                          >
+                            <MenuItem value={"AS"}>Applied Science</MenuItem>
+                            <MenuItem value={"CS"}>Computer Science</MenuItem>
+                            <MenuItem value={"IT"}>
+                              Information Technology
+                            </MenuItem>
+                            <MenuItem value={"ECE"}>
+                              Electronics and Communication
+                            </MenuItem>
+                            <MenuItem value={"EEE"}>
+                              Electrical and Electronics
+                            </MenuItem>
+                            <MenuItem value={"ME"}>Mechanical</MenuItem>
+                            <MenuItem value={"CE"}>Civil</MenuItem>
+                            <MenuItem value={"MCA"}>MCA</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      colSpan="2"
+                      style={{
+                        justifyContent: "center",
+                        justifyItems: "center",
+                        alignItems: "center",
+                        paddingLeft: "15%",
+                      }}
+                    >
+                      <button id="btn1" type="submit">
+                        Update
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      colSpan="2"
+                      style={{ textAlign: "center", padding: "0" }}
+                    >
+                      <a
+                        className="text-primary"
+                        style={{
+                          cursor: "pointer",
+                          fontFamily: "Poppins, sans-serif",
+                        }}
+                      >
+                        Change/ Forgot Password
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </form>
         </div>
-        <form className="login-form">
+      )}
+
+      {isPswd && (
+        <div>
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              backgroundColor: "#63B967",
+              color: "white",
+              borderRadius: "5px",
             }}
           >
-            <table>
-              <tr>
-                <td style={{ paddingTop: "15px" }}>
-                  <label>Name:</label>
-                </td>
-                <td style={{ width: "100px" }}>
-                  <mat-form-field>
-                    <input name="name" formControlName="name" required />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td style={{ paddingTop: "15px" }}>
-                  <label>Mobile No:</label>
-                </td>
-                <td>
-                  <mat-form-field>
-                    <input name="mobile" formControlName="mobile" required />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td style={{ paddingTop: "15px" }}>
-                  <label>Email:</label>
-                </td>
-                <td>
-                  <mat-form-field>
-                    <input name="email" formControlName="email" required />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td style={{ paddingTop: "15px" }}>
-                  <label>Role:</label>
-                </td>
-                <td>
-                  <mat-form-field>
-                    <mat-select
-                      name="privelage"
-                      formControlName="privilege"
-                      required
-                    >
-                      {/* <mat-option>{privelage.viewValue}</mat-option> */}
-                    </mat-select>
-                  </mat-form-field>
-                </td>
-              </tr>
-
-              <tr>
-                <td style={{ paddingTop: "15px" }}>
-                  <label>Department:</label>
-                </td>
-                <td>
-                  <mat-form-field>
-                    <mat-select
-                      name="department"
-                      formControlName="dept"
-                      required
-                    >
-                      {/* <mat-option>{department.viewValue}</mat-option> */}
-                    </mat-select>
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  colspan="2"
-                  style={{
-                    justifyContent: "center",
-                    justifyItems: "center",
-                    alignItems: "center",
-                    paddingLeft: "15%",
-                  }}
-                >
-                  {" "}
-                  <button id="btn1" type="submit">
-                    Update
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2" style={{ textAlign: "center" }}>
-                  <a
-                    className="text-primary"
-                    style={{
-                      cursor: "pointer",
-                      fontFamily: "Poppins, sans-serif",
-                    }}
-                  >
-                    Change/ Forgot Password
-                  </a>
-                </td>
-              </tr>
-            </table>
+            <h2 style={{ marginLeft: "2%" }}>Change Password</h2>
+            <button mat-icon-button id="btn3">
+              <i className="fas fa-arrow-circle-left"></i>
+            </button>
           </div>
-        </form>
-      </div>
-
-      <div>
-        <mat-toolbar
-          style={{
-            backgroundColor: "#63B967",
-            color: "white",
-            borderRadius: "5px",
-          }}
-        >
-          <h2 style={{ marginLeft: "2%" }}>Change Password</h2>
-          <button mat-icon-button id="btn3">
-            <i className="fas fa-arrow-circle-left"></i>
-          </button>
-        </mat-toolbar>
-        <form className="login-form">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <table>
-              <tr>
-                <td style={{ paddingTop: "15px" }}>
-                  <label>Old Password:</label>
-                </td>
-                <td>
-                  <mat-form-field>
-                    <input
-                      type="password"
-                      name="pasword"
-                      formControlName="oldPassword"
-                      required
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td style={{ paddingTop: "15px" }}>
-                  <label>Mobile No:</label>
-                </td>
-                <td>
-                  <mat-form-field>
-                    <input name="mobile" formControlName="mobile" required />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td style={{ paddingTop: "15px" }}>
-                  <label>New Password:</label>
-                </td>
-                <td>
-                  <mat-form-field>
-                    <input
-                      matInput
-                      type="password"
-                      name="newPassword"
-                      formControlName="newPassword"
-                      required
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td style={{ paddingTop: "15px" }}>
-                  <label>Re-Enter New Password:</label>
-                </td>
-                <td>
-                  <mat-form-field>
-                    <input
-                      type="password"
-                      name="pswd2"
-                      formControlName="pswd2"
-                      required
-                    />
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  colspan="2"
-                  style={{
-                    justifyContent: "center",
-                    justifyItems: "center",
-                    alignItems: "center",
-                    paddingLeft: "19%",
-                  }}
-                >
-                  {" "}
-                  <button type="submit" id="btn2">
-                    Change Password
-                  </button>
-                  <button
-                    type="btn"
-                    id="btn2"
-                    style={{
-                      paddingLeft: "29%",
-                      paddingTop: "9px",
-                      paddingBottom: "9px",
-                    }}
-                  >
-                    <mat-spinner
-                      className="custom-spinner"
-                      diameter="30"
-                    ></mat-spinner>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2" style={{ textAlign: "center" }}>
-                  <a className="text-primary" style={{ cursor: "pointer" }}>
-                    Forgot Password
-                  </a>
-                </td>
-              </tr>
-            </table>
-          </div>
-        </form>
-      </div>
-    </>
+          <form className="login-form">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <table>
+                <tbody>
+                  <tr>
+                    <td style={{ paddingTop: "15px" }}>
+                      <label>Old Password:</label>
+                    </td>
+                    <td>
+                      <div>
+                        <TextField
+                          id="standard-basic"
+                          variant="standard"
+                          sx={{
+                            width: 175,
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ paddingTop: "15px" }}>
+                      <label>Mobile No:</label>
+                    </td>
+                    <td>
+                      <div>
+                        <TextField
+                          id="standard-basic"
+                          variant="standard"
+                          sx={{
+                            width: 175,
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ paddingTop: "15px" }}>
+                      <label>New Password:</label>
+                    </td>
+                    <td>
+                      <div>
+                        <TextField
+                          id="standard-basic"
+                          variant="standard"
+                          sx={{
+                            width: 175,
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ paddingTop: "15px" }}>
+                      <label>Re-Enter New Password:</label>
+                    </td>
+                    <td>
+                      <div>
+                        <TextField
+                          id="standard-basic"
+                          variant="standard"
+                          sx={{
+                            width: 175,
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      colSpan="2"
+                      style={{
+                        justifyContent: "center",
+                        justifyItems: "center",
+                        alignItems: "center",
+                        paddingLeft: "19%",
+                      }}
+                    >
+                      <button type="submit" id="btn2">
+                        Change Password
+                      </button>
+                      <button
+                        type="btn"
+                        id="btn2"
+                        style={{
+                          paddingLeft: "29%",
+                          paddingTop: "9px",
+                          paddingBottom: "9px",
+                        }}
+                      >
+                        {/* <mat-spinner
+                          className="custom-spinner"
+                          diameter="30"
+                        ></mat-spinner> */}
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colSpan="2" style={{ textAlign: "center" }}>
+                      <a className="text-primary" style={{ cursor: "pointer" }}>
+                        Forgot Password
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+      )}
+    </div>
   );
 };
 
