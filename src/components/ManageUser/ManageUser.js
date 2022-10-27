@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Api from "../../Api";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import Dialog from "@material-ui/core/Dialog";
+import ForgotPswd from "../ForgotPswd/ForgotPswd";
 import Update from "../Update/Update";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -23,6 +24,7 @@ const ManageUser = () => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [j, setJ] = useState("");
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openForgotPswd, setOpenForgotPswd] = useState(false);
   const [userData, setUserData] = useState({});
 
   const next = () => {
@@ -150,6 +152,7 @@ const ManageUser = () => {
   const handleClose = () => {
     setOpenConfirmDialog(false);
     setOpenEditDialog(false);
+    setOpenForgotPswd(false);
   };
 
   const deleteItem = async (_id) => {
@@ -185,6 +188,13 @@ const ManageUser = () => {
     }
   };
 
+  const forgotPswdHandler = (res) => {
+    if (res) {
+      setOpenEditDialog(false);
+      setOpenForgotPswd(true);
+    }
+  };
+
   return (
     <div style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "2.5%" }}>
       <div className="card card-profile">
@@ -208,9 +218,13 @@ const ManageUser = () => {
         >
           <Update
             onSuccessfulUpdate={successfulUpdateHandler}
+            onForgotPswd={forgotPswdHandler}
             _id={j}
             data={userData}
           />
+        </Dialog>
+        <Dialog open={openForgotPswd} onClose={handleClose}>
+          <ForgotPswd />
         </Dialog>
         <div className="card-header card-header-image">
           <h1
@@ -309,7 +323,7 @@ const ManageUser = () => {
                               backgroundColor: "white",
                               borderRadius: "100%",
                             }}
-                            // onClick={forgotPswd}
+                            onClick={() => forgotPswdHandler(true)}
                           >
                             <i className="fas fa-user-lock"></i>
                           </button>

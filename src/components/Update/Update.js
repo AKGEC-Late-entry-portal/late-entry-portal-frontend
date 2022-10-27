@@ -2,6 +2,8 @@ import "./Update.css";
 
 import { useEffect, useState } from "react";
 
+import Dialog from "@material-ui/core/Dialog";
+import ForgotPswd from "../ForgotPswd/ForgotPswd";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -164,7 +166,9 @@ const Update = (props) => {
     setIsPswd((isPswd) => !isPswd);
   };
 
-  const forgotPswd = () => {};
+  const forgotPswd = () => {
+    props.onForgotPswd(true);
+  };
 
   const submitHandler2 = (e) => {
     e.preventDefault();
