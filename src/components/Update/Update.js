@@ -16,6 +16,7 @@ const Update = (props) => {
   const [isPswd, setIsPswd] = useState(false);
   const [loading, setLoading] = useState(true);
   const [cond, setCond] = useState("");
+  const [disable, setDisable] = useState(false);
   const [data, setData] = useState({
     name: "",
     userName: "",
@@ -152,6 +153,16 @@ const Update = (props) => {
     fetchUser(props._id);
   }, []);
 
+  const changePswd = () => {
+    setIsPswd((isPswd) => !isPswd);
+  };
+
+  const forgotPswd = () => {};
+
+  const submitHandler2 = () => {
+    setLoading(true);
+  };
+
   return (
     <div>
       {!isPswd && (
@@ -215,6 +226,7 @@ const Update = (props) => {
                           onChange={(e) => {
                             setData({ ...data, name: e.target.value });
                           }}
+                          required
                         />
                       </div>
                     </td>
@@ -233,8 +245,12 @@ const Update = (props) => {
                           }}
                           value={data.mobile}
                           onChange={(e) => {
+                            setDisable(
+                              !(e.target.value.toString().length === 10)
+                            );
                             setData({ ...data, mobile: e.target.value });
                           }}
+                          required
                         />
                       </div>
                     </td>
@@ -255,6 +271,7 @@ const Update = (props) => {
                           onChange={(e) => {
                             setData({ ...data, email: e.target.value });
                           }}
+                          required
                         />
                       </div>
                     </td>
@@ -273,6 +290,7 @@ const Update = (props) => {
                               setData({ ...data, privilege: e.target.value });
                             }}
                             value={data.privilege}
+                            required
                           >
                             <MenuItem value={1}>Administrator</MenuItem>
                             <MenuItem value={2}>Co-ordinator</MenuItem>
@@ -297,6 +315,7 @@ const Update = (props) => {
                               setData({ ...data, dept: e.target.value });
                             }}
                             value={data.dept}
+                            required
                           >
                             <MenuItem value={"AS"}>Applied Science</MenuItem>
                             <MenuItem value={"CS"}>Computer Science</MenuItem>
@@ -327,7 +346,7 @@ const Update = (props) => {
                         paddingLeft: "15%",
                       }}
                     >
-                      <button id="btn1" type="submit">
+                      <button id="btn1" type="submit" disabled={disable}>
                         Update
                       </button>
                     </td>
@@ -343,6 +362,7 @@ const Update = (props) => {
                           cursor: "pointer",
                           fontFamily: "Poppins, sans-serif",
                         }}
+                        onClick={changePswd}
                       >
                         Change/ Forgot Password
                       </a>
@@ -365,11 +385,11 @@ const Update = (props) => {
             }}
           >
             <h2 style={{ marginLeft: "2%" }}>Change Password</h2>
-            <button mat-icon-button id="btn3">
+            <button id="btn3" onClick={changePswd}>
               <i className="fas fa-arrow-circle-left"></i>
             </button>
           </div>
-          <form className="login-form">
+          <form className="login-form" onSubmit={submitHandler2}>
             <div
               style={{
                 display: "flex",
@@ -391,6 +411,7 @@ const Update = (props) => {
                           sx={{
                             width: 175,
                           }}
+                          required
                         />
                       </div>
                     </td>
@@ -407,6 +428,7 @@ const Update = (props) => {
                           sx={{
                             width: 175,
                           }}
+                          required
                         />
                       </div>
                     </td>
@@ -423,6 +445,7 @@ const Update = (props) => {
                           sx={{
                             width: 175,
                           }}
+                          required
                         />
                       </div>
                     </td>
@@ -439,6 +462,7 @@ const Update = (props) => {
                           sx={{
                             width: 175,
                           }}
+                          required
                         />
                       </div>
                     </td>
@@ -453,28 +477,36 @@ const Update = (props) => {
                         paddingLeft: "19%",
                       }}
                     >
-                      <button type="submit" id="btn2">
-                        Change Password
-                      </button>
-                      <button
-                        type="btn"
-                        id="btn2"
-                        style={{
-                          paddingLeft: "29%",
-                          paddingTop: "9px",
-                          paddingBottom: "9px",
-                        }}
-                      >
-                        {/* <mat-spinner
+                      {!loading && (
+                        <button type="submit" id="btn2">
+                          Change Password
+                        </button>
+                      )}
+                      {loading && (
+                        <button
+                          type="btn"
+                          id="btn2"
+                          style={{
+                            paddingLeft: "29%",
+                            paddingTop: "9px",
+                            paddingBottom: "9px",
+                          }}
+                        >
+                          {/* <mat-spinner
                           className="custom-spinner"
                           diameter="30"
                         ></mat-spinner> */}
-                      </button>
+                        </button>
+                      )}
                     </td>
                   </tr>
                   <tr>
                     <td colSpan="2" style={{ textAlign: "center" }}>
-                      <a className="text-primary" style={{ cursor: "pointer" }}>
+                      <a
+                        className="text-primary"
+                        style={{ cursor: "pointer" }}
+                        onClick={forgotPswd}
+                      >
                         Forgot Password
                       </a>
                     </td>
