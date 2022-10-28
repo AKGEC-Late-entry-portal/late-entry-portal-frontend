@@ -144,7 +144,7 @@ const CreateUser = () => {
   return (
     <div>
       <div style={{ paddingTop: "6%" }}>
-        <div className="logincard">
+        <div className="logincard2">
           <div
             style={{
               backgroundColor: "#ffab00",
@@ -182,13 +182,16 @@ const CreateUser = () => {
                   alignItems: "center",
                 }}
               >
-                <table>
+                <table
+                  className="create__table"
+                  style={{ marginTop: "5% !important" }}
+                >
                   <tbody>
                     <tr>
-                      <td>
+                      <td className="create__td">
                         <label>Name:</label>
                       </td>
-                      <td style={{ width: "100px" }}>
+                      <td className="create__td" style={{ width: "100px" }}>
                         <FormControl variant="standard" sx={{ minWidth: 180 }}>
                           <Input
                             id="component-helper"
@@ -211,10 +214,10 @@ const CreateUser = () => {
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td className="create__td">
                         <label>Mobile No:</label>
                       </td>
-                      <td>
+                      <td className="create__td">
                         <FormControl variant="standard" sx={{ minWidth: 180 }}>
                           <Input
                             id="component-helper"
@@ -249,10 +252,10 @@ const CreateUser = () => {
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td className="create__td">
                         <label>Email:</label>
                       </td>
-                      <td>
+                      <td className="create__td">
                         <FormControl variant="standard" sx={{ minWidth: 180 }}>
                           <Input
                             id="component-helper"
@@ -284,10 +287,10 @@ const CreateUser = () => {
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td className="create__td">
                         <label>Role</label>
                       </td>
-                      <td>
+                      <td className="create__td">
                         <FormControl sx={{ minWidth: 180 }} variant="standard">
                           <Select
                             labelId="demo-simple-select-helper-label"
@@ -309,10 +312,10 @@ const CreateUser = () => {
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td className="create__td">
                         <label>Password:</label>
                       </td>
-                      <td>
+                      <td className="create__td">
                         <FormControl variant="standard" sx={{ minWidth: 180 }}>
                           <Input
                             id="component-helper"
@@ -335,10 +338,10 @@ const CreateUser = () => {
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td className="create__td">
                         <label>Department:</label>
                       </td>
-                      <td>
+                      <td className="create__td">
                         <FormControl sx={{ minWidth: 180 }} variant="standard">
                           <Select
                             labelId="demo-simple-select-helper-label"
@@ -377,7 +380,7 @@ const CreateUser = () => {
                 {!loading && (
                   <button
                     type="submit"
-                    className="reg__btn"
+                    className="reg__btn1"
                     disabled={
                       !(
                         Object.values(isEmpty).every(
@@ -395,7 +398,7 @@ const CreateUser = () => {
                 {loading && (
                   <button
                     type="submit"
-                    className="reg__btn"
+                    className="reg__btn1"
                     style={{
                       display: "flex",
                       justifyContent: "center",

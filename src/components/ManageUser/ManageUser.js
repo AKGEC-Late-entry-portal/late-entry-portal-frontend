@@ -272,13 +272,15 @@ const ManageUser = () => {
                   {results.map((com) => {
                     return (
                       <tr key={com._id}>
-                        <td>{com.name}</td>
-                        <td>{com.mobile}</td>
-                        <td>{com.userName}</td>
-                        <td>{com.email}</td>
-                        <td>{privilege[com.privilege]}</td>
+                        <td className="manage__td">{com.name}</td>
+                        <td className="manage__td">{com.mobile}</td>
+                        <td className="manage__td">{com.userName}</td>
+                        <td className="manage__td">{com.email}</td>
+                        <td className="manage__td">
+                          {privilege[com.privilege]}
+                        </td>
                         <td className="text-primary">{com.dept}</td>
-                        <td>
+                        <td className="manage__td">
                           <button
                             style={{
                               outlineStyle: "none",

@@ -1,0 +1,31 @@
+.image-template{
+    border: solid 1.2px #6586C9;
+    margin-top: 3px;
+    border-radius: 5px;
+}
+
+tr{
+    margin-bottom: 5px;
+}
+
+#btn2{
+    line-height: 24px;
+    padding: 6px 8px 6px 6px;
+    text-decoration: none;
+    font-size: 16px;
+    color: white;
+    display: block;
+    background-color: #6586C9;
+    border-radius: 30px;
+    margin: 10px;
+    margin-right: 90px;
+    border: none;
+    width: 130px;
+    text-align: center;
+    font-family: sans-serif;
+    outline-style: none;
+  }
+
+  :host ::ng-deep .custom-spinner circle {
+    stroke: white;
+  }

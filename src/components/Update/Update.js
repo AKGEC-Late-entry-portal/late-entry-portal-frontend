@@ -300,7 +300,11 @@ const Update = (props) => {
             </h5>
           </div>
 
-          <form className="loginform" onSubmit={submitHandler}>
+          <form
+            className="loginform"
+            onSubmit={submitHandler}
+            style={{ top: "57%" }}
+          >
             <div
               style={{
                 display: "flex",
@@ -511,7 +515,11 @@ const Update = (props) => {
               <i className="fas fa-arrow-circle-left"></i>
             </button>
           </div>
-          <form className="loginform" onSubmit={submitHandler2}>
+          <form
+            className="loginform"
+            onSubmit={submitHandler2}
+            style={{ top: "57%" }}
+          >
             <div
               style={{
                 display: "flex",
