@@ -418,7 +418,7 @@ const Update = (props) => {
                             required
                           >
                             <MenuItem value={"AS"}>Applied Science</MenuItem>
-                            <MenuItem value={"CS"}>Computer Science</MenuItem>
+                            <MenuItem value={"CSE"}>Computer Science</MenuItem>
                             <MenuItem value={"IT"}>
                               Information Technology
                             </MenuItem>

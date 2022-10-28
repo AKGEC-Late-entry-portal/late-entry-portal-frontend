@@ -87,3 +87,6 @@ th,td{
 .lds-ellipsis div{
     background:#63B967 !important;
 }
+td {
+    padding: 0.70rem !important;
+}

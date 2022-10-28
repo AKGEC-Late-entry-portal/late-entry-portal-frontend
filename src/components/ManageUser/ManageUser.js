@@ -243,7 +243,7 @@ const ManageUser = () => {
           <div className="table-responsive" style={{ paddingTop: "2%" }}>
             <div className="row" style={{ width: "100%", minHeight: "70vh" }}>
               <table className="table">
-                <thead className="text-primary">
+                <thead className="text-primary" style={{ marginBottom: "3px" }}>
                   <tr>
                     <th>Name</th>
                     <th>Mobile</th>

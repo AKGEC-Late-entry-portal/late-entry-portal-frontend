@@ -1,0 +1,106 @@
+.login-card button {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  display: block;
+  background-color: #ffab00;
+  border-radius: 30px;
+  margin: 10px;
+  margin-right: 90px;
+  border: none;
+  width: 190px;
+  font-family: "Poppins", sans-serif;
+  outline-style: none;
+}
+.logincard {
+  border: 0;
+  margin-bottom: 30px;
+  margin-top: 5% !important;
+  margin-left: 5%;
+  margin-right: 5%;
+  border-radius: 6px !important;
+  color: rgba(0, 0, 0, 0.87);
+  background: #fff;
+  width: 90%;
+  height: 80vh;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+.abc {
+  padding-top: 30px;
+}
+
+html * {
+  -webkit-font-smoothing: antialiased;
+}
+.blue-snackbar {
+  background-color: green;
+}
+
+/* #b2 {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+    background-color: #ffab00;
+    border-radius: 30px;
+    margin: 10px;
+    margin-right: 4%;
+    border: none;
+    width: 150px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    float: right;
+    position: relative;
+    outline-style: none;
+  } */
+
+:host ::ng-deep .custom-spinner circle {
+  stroke: white;
+}
+
+input {
+  font-family: "Poppins", sans-serif;
+}
+
+label {
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
+  margin-bottom: 0px;
+}
+
+td {
+  /* margin: 10px !important; */
+  /* padding: 12px !important; */
+  height: 53px;
+  padding: 0 !important;
+}
+table {
+  margin-top: 5%;
+}
+
+.reg__btn {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  display: block;
+  background-color: #ffab00;
+  border-radius: 30px;
+  margin: 10px;
+  margin-right: 4%;
+  border: none;
+  width: 150px;
+  font-family: "Poppins", sans-serif;
+  float: right;
+  position: relative;
+  outline-style: none;
+  height: 50px !important;
+  font-weight: 500;
+  left: -500px;
+}
+#component-helper-text {
+  color: red;
+}
