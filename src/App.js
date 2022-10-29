@@ -2,6 +2,7 @@ import "./App.css";
 
 import { Route, Routes } from "react-router";
 
+import CreateEntry from "./components/CreateEntry/CreateEntry";
 import CreateStudent from "./components/CreateStudent/CreateStudent";
 import CreateUser from "./components/CreateUser/CreateUser";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -21,6 +22,7 @@ function App() {
         <Route path="dashboard/manage-users" element={<ManageUser />} />
         <Route path="dashboard/create-users" element={<CreateUser />} />
         <Route path="dashboard/student" element={<CreateStudent />} />
+        <Route path="dashboard/create-entry" element={<CreateEntry />} />
       </Routes>
     </>
   );

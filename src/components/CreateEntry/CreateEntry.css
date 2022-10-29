@@ -4,7 +4,7 @@ html * {
   }
   
   
-  .card {
+  .ce__card {
     border: 3px solid #759fe6;
     margin-bottom: 30px;
     margin-top: 100px;
@@ -16,18 +16,18 @@ html * {
       0 1px 5px 0 rgba(0, 0, 0, 0.12);
   }
   
-  .card .card-body {
+  .ce__card .ce__card-body {
     padding: 0.9375rem 1.875rem;
   }
   
-  .card-description {
+  .ce__card-description {
     color: #999;
   }
   
-  .card.card-profile {
+  .ce__card.ce__card-profile {
     text-align: center;
   }
-  .card .card-header.card-header-image {
+  .ce__card .ce__card-header.ce__card-header-image {
     background-image: linear-gradient(135deg,#6f6ee9, #6883e6, #63a1e2);
     position: relative;
     padding-top: 2%;
@@ -39,54 +39,54 @@ html * {
     padding-bottom: 0px;
   }
   
-  .card .card-header.card-header-image .card-title {
+  .ce__card .ce__card-header.ce__card-header-image .ce__card-title {
     color: white;
     float: left;
     margin-bottom: 0px;
   }
-  .card .card-category {
+  .ce__card .ce__card-category {
     margin-top: 15px;
     margin-bottom: 10px;
   }
   
-  .card .card-body {
+  .ce__card .ce__card-body {
     padding-top: 0;
     border: 0;
     border-radius: 6px;
   }
   
-  .card-profile .card-body {
+  .ce__card-profile .ce__card-body {
     margin-top: 15px;
   }
   
-  .card-body
+  .ce__card-body
     ::ng-deep
-    .mat-form-field-appearance-outline
-    .mat-form-field-outline {
+    .ce__mat-form-field-appearance-outline
+    .ce__mat-form-field-outline {
     color: #0833cc;
   }
   
-  .card-body ::ng-deep .mat-form-field-appearance-outline .mat-select-arrow {
+  .ce__card-body ::ng-deep .ce__mat-form-field-appearance-outline .ce__mat-select-arrow {
     color: #0833cc;
   }
   
-  .card-body ::ng-deep .mat-form-field-appearance-outline .ng-star-inserted {
+  .ce__card-body ::ng-deep .ce__mat-form-field-appearance-outline .ng-star-inserted {
     color: #0833cc;
   }
   
-  .field1 ::ng-deep .mat-form-field-appearance-outline .ng-star-inserted {
+  .field1 ::ng-deep .ce__mat-form-field-appearance-outline .ng-star-inserted {
     color: white;
   }
   
-  .field1 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  .field1 ::ng-deep .ce__mat-form-field-appearance-outline .ce__mat-form-field-outline {
     color: white;
   }
   
-  .field1 ::ng-deep .mat-form-field-appearance-outline .mat-select-arrow {
+  .field1 ::ng-deep .ce__mat-form-field-appearance-outline .ce__mat-select-arrow {
     color: white;
   }
   
-  #b2 {
+  #ce__b2 {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     font-size: 20px;
@@ -105,13 +105,13 @@ html * {
   }
   
   
-  .card__image {
+  .ce__card__image {
     width: 97px;
     height: 97px;
     border-radius: 50%;
   }
   
-  .card .card-img-top{
+  .ce__card .ce__card-img-top{
     height: 100px;
     width: 100px;
     border-radius: 50px;
@@ -121,7 +121,7 @@ html * {
     border: 3px solid #759fe6;
     overflow: hidden;
   }
-  h2 {
+  .ce__h5 {
     padding-top: 0.5em;
     padding-bottom: 0.8em;
     margin-bottom: 0px;
@@ -133,14 +133,14 @@ html * {
     stroke: white;
   }
   
-  .logbtn-2 {
+  .ce__ce__logbtn-2 {
     background-image: linear-gradient(to bottom right, #63a1e2, #6883e6, #6f6ee9);
       color: #fff;
     outline: 0;
     font-family: 'Poppins', sans-serif;
   }
   
-  .logbtn {
+  .ce__logbtn {
       display: block;
       width: 20%;
       height: 40px;
@@ -161,11 +161,8 @@ html * {
       padding-left: 7.5%
   }
   
-  td{
-    font-family: 'Poppins', sans-serif;
-  }
   
-  .resetbtn{
+  .ce__resetbtn{
     background-image: linear-gradient(to bottom right, #63a1e2, #6883e6, #6f6ee9);
       color: #fff;
     outline: 0;
