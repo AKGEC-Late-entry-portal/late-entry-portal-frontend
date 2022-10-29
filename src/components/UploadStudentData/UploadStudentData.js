@@ -1,11 +1,80 @@
-import "./UpdateStudentData.css";
+import "./UploadStudentData.css";
 
 import Spinner from "react-spinner-material";
+import axios from "axios";
+import { toast } from "react-toastify";
 import uploadFormat from "../../assets/uploadformat.PNG";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const UpdateStudentData = () => {
+const UploadStudentData = (props) => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [disableUpload, setDisableUpload] = useState(true);
+
+  const changeHandler = (event) => {
+    setSelectedFile(event.target.files[0]);
+    setDisableUpload(event === null || "" ? true : false);
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const fd = new FormData();
+    fd.append("student", selectedFile, selectedFile.name);
+    const uploadStudentData = async (fd) => {
+      const res = await axios
+        .post(
+          "https://akgec-late-entry.herokuapp.com/api/admin/student/upload",
+          fd
+        )
+        .catch((err) => {
+          setLoading(false);
+          if (err.status === 403) {
+            toast.error("Unauthorized User", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            localStorage.removeItem("token");
+            localStorage.removeItem("results");
+            navigate("/");
+          } else {
+            toast.error("Error Adding Data!", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+          }
+        });
+      if (res) {
+        toast.success("Student Data Added Succesfully!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        setLoading(false);
+        props.onUploadStudentData(true);
+      }
+    };
+    uploadStudentData(fd);
+  };
   return (
     <div style={{ padding: "4%" }}>
       <div
@@ -34,9 +103,9 @@ const UpdateStudentData = () => {
         {loading && (
           <h5
             style={{
-              marginLeft: "2%",
+              marginLeft: "9%",
               fontFamily: "Poppins, sans-serif",
-              marginTop: "0",
+              marginTop: "-26px",
             }}
           >
             Uploading Student Data File
@@ -68,7 +137,7 @@ const UpdateStudentData = () => {
       <div className="alert alert-warning" style={{ marginTop: "2%" }}>
         Only .csv files are accepted !!
       </div>
-      <form>
+      <form onSubmit={submitHandler}>
         <table style={{ marginTop: "5px", marginLeft: "185px" }}>
           <tbody>
             <tr>
@@ -79,6 +148,7 @@ const UpdateStudentData = () => {
                   style={{ outline: "none" }}
                   name="student"
                   accept=".csv"
+                  onChange={changeHandler}
                   required
                 />
               </td>
@@ -93,6 +163,7 @@ const UpdateStudentData = () => {
                     height: "36px",
                     width: "43%",
                   }}
+                  disabled={disableUpload}
                 >
                   Upload
                 </button>
@@ -105,4 +176,4 @@ const UpdateStudentData = () => {
   );
 };
 
-export default UpdateStudentData;
+export default UploadStudentData;

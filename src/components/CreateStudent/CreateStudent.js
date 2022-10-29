@@ -7,7 +7,7 @@ import Input from "@mui/material/Input";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Spinner from "react-spinner-material";
-import UpdateStudentData from "../UpdateStudentData/UpdateStudentData";
+import UploadStudentData from "../UploadStudentData/UploadStudentData";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +16,7 @@ import { useState } from "react";
 const CreateStudent = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [openUpdateStudentData, setOpenUpdateStudentData] = useState(false);
+  const [openUploadStudentData, setOpenUploadStudentData] = useState(false);
   const [student, setStudent] = useState({
     stdNo: "",
     name: "",
@@ -164,17 +164,21 @@ const CreateStudent = () => {
   };
 
   const handleClose = () => {
-    setOpenUpdateStudentData(false);
+    setOpenUploadStudentData(false);
+  };
+
+  const successfulUpdateHandler = (res) => {
+    if (res) setOpenUploadStudentData(false);
   };
 
   return (
     <div>
       <Dialog
-        open={openUpdateStudentData}
+        open={openUploadStudentData}
         onClose={handleClose}
         fullWidth={true}
       >
-        <UpdateStudentData />
+        <UploadStudentData onUploadStudentData={successfulUpdateHandler} />
       </Dialog>
       <div style={{ paddingTop: "8%" }}>
         <div className="logincard1">
@@ -215,7 +219,7 @@ const CreateStudent = () => {
                 paddingTop: "12.5px",
               }}
             >
-              <div class="container">
+              <div className="container">
                 <button
                   id="uploadbtn"
                   className="mat-stroked-button"
@@ -228,11 +232,11 @@ const CreateStudent = () => {
                     borderRadius: "6px",
                     marginTop: "5.5%",
                   }}
-                  onClick={() => setOpenUpdateStudentData(true)}
+                  onClick={() => setOpenUploadStudentData(true)}
                 >
                   Upload File &nbsp;
                   <i
-                    class="fa fa-upload"
+                    className="fa fa-upload"
                     style={{ color: "white", marginTop: "4px" }}
                   ></i>
                 </button>
