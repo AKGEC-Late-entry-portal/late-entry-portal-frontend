@@ -1,6 +1,5 @@
 import "./CreateEntry.css";
 
-import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import { InputLabel } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
