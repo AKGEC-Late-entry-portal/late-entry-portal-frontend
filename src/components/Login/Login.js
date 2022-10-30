@@ -39,7 +39,7 @@ const Login = () => {
     setLoader(true);
     try {
       await axios.post(Api.login, { userName, password }).then(function (res) {
-        if (res) {
+        if (res.data.privilege === 1) {
           toast.success("Login Successful!", {
             position: "bottom-right",
             autoClose: 5000,
@@ -50,7 +50,7 @@ const Login = () => {
             progress: undefined,
             theme: "colored",
           });
-          localStorage.setItem("token", res.token);
+          localStorage.setItem("token", res.data.token);
           setLoader(false);
           navigate("/dashboard/dash");
         } else {
@@ -98,10 +98,14 @@ const Login = () => {
       if (localStorage.getItem("token")) {
         setLoader(true);
         try {
-          await axios.get(Api.dash).then(function (data) {
-            navigate("/dashboard/dash");
-            setLoader(false);
-          });
+          await axios
+            .get(Api.dash, {
+              headers: { Authorization: `Bearer ${localStorage.token}` },
+            })
+            .then(function (data) {
+              navigate("/dashboard/dash");
+              setLoader(false);
+            });
         } catch (error) {
           if (error.status === 403) {
             console.log("invalid-token");

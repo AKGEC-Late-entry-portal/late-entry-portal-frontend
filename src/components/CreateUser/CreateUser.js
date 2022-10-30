@@ -91,7 +91,10 @@ const CreateUser = () => {
         const res = await axios
           .post(
             "https://akgec-late-entry.herokuapp.com/api/admin/user/create",
-            user
+            user,
+            {
+              headers: { Authorization: `Bearer ${localStorage.token}` },
+            }
           )
           .catch((err) => {
             toast.error(`User Already Exists!!`, {

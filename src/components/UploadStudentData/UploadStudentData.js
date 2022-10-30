@@ -27,7 +27,10 @@ const UploadStudentData = (props) => {
       const res = await axios
         .post(
           "https://akgec-late-entry.herokuapp.com/api/admin/student/upload",
-          fd
+          fd,
+          {
+            headers: { Authorization: `Bearer ${localStorage.token}` },
+          }
         )
         .catch((err) => {
           setLoading(false);

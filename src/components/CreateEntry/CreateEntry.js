@@ -38,7 +38,10 @@ const CreateEntry = () => {
       const res = await axios
         .get(
           "https://akgec-late-entry.herokuapp.com/api/admin/student/read?stdNo=" +
-            stdNo
+            stdNo,
+          {
+            headers: { Authorization: `Bearer ${localStorage.token}` },
+          }
         )
         .catch((err) => {
           setLoading(false);
@@ -99,7 +102,10 @@ const CreateEntry = () => {
       const res = await axios
         .post(
           "https://akgec-late-entry.herokuapp.com/api/admin/entry/create",
-          data
+          data,
+          {
+            headers: { Authorization: `Bearer ${localStorage.token}` },
+          }
         )
         .catch((err) => {
           setLoading(false);

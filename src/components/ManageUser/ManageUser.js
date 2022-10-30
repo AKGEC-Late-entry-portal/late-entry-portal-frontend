@@ -29,7 +29,7 @@ const ManageUser = () => {
 
   const next = () => {
     setPage((page) => page + 1);
-    return fetchUsers(page);
+    return fetchUsers(page + 1);
   };
 
   const prev = () => {
@@ -47,14 +47,17 @@ const ManageUser = () => {
         theme: "colored",
       });
     }
-    return fetchUsers(page);
+    return fetchUsers(page - 1);
   };
 
   const fetchUsers = async (pg) => {
     const response = await axios
       .get(
         "http://akgec-late-entry.herokuapp.com/api/admin/user/readall?limit=10&page=" +
-          pg
+          pg,
+        {
+          headers: { Authorization: `Bearer ${localStorage.token}` },
+        }
       )
       .catch((err) => {
         setLoading(false);
@@ -119,14 +122,17 @@ const ManageUser = () => {
         setPrv(true);
       }
     }
-    const user_res = await axios.get(Api.dash).catch((err) => console.log(err));
+    const user_res = await axios
+      .get(Api.dash, {
+        headers: { Authorization: `Bearer ${localStorage.token}` },
+      })
+      .catch((err) => console.log(err));
     if (user_res) {
       setUser(user_res.data.msg.user);
     }
   };
 
   useEffect(() => {
-    setLoading(true);
     fetchUsers(page);
   }, []);
 
@@ -158,7 +164,10 @@ const ManageUser = () => {
   const deleteItem = async (_id) => {
     await axios
       .delete(
-        "https://akgec-late-entry.herokuapp.com/api/admin/user/delete/" + _id
+        "https://akgec-late-entry.herokuapp.com/api/admin/user/delete/" + _id,
+        {
+          headers: { Authorization: `Bearer ${localStorage.token}` },
+        }
       )
       .catch((e) => console.log(e));
     setResults(

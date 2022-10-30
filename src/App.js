@@ -7,6 +7,7 @@ import CreateStudent from "./components/CreateStudent/CreateStudent";
 import CreateUser from "./components/CreateUser/CreateUser";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Login from "./components/Login/Login";
+import ManageEntry from "./components/ManageEntry/ManageEntry";
 import ManageUser from "./components/ManageUser/ManageUser";
 import { ToastContainer } from "react-toastify";
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="dashboard/create-users" element={<CreateUser />} />
         <Route path="dashboard/student" element={<CreateStudent />} />
         <Route path="dashboard/create-entry" element={<CreateEntry />} />
+        <Route path="dashboard/manage-entry" element={<ManageEntry />} />
       </Routes>
     </>
   );

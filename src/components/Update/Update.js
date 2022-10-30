@@ -41,7 +41,10 @@ const Update = (props) => {
       const res = await axios
         .put(
           "https://akgec-late-entry.herokuapp.com/api/admin/user/update/" + _id,
-          data
+          data,
+          {
+            headers: { Authorization: `Bearer ${localStorage.token}` },
+          }
         )
         .catch((err) => {
           props.onSuccessfulUpdate(false);
@@ -107,7 +110,9 @@ const Update = (props) => {
 
   const fetchUser = async (id) => {
     const res = await axios
-      .get("https://akgec-late-entry.herokuapp.com/api/admin/user/read/" + id)
+      .get("https://akgec-late-entry.herokuapp.com/api/admin/user/read/" + id, {
+        headers: { Authorization: `Bearer ${localStorage.token}` },
+      })
       .catch((err) => {
         if (err.status === 403) {
           toast.error("Unauthorized User", {
@@ -179,7 +184,10 @@ const Update = (props) => {
           .put(
             "https://akgec-late-entry.herokuapp.com/api/admin/user/password/" +
               _id,
-            data
+            data,
+            {
+              headers: { Authorization: `Bearer ${localStorage.token}` },
+            }
           )
           .catch((error) => {
             if (error.status === 403) {

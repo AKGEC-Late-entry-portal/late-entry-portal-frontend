@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Api from "../../Api";
 import axios from "axios";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -14,30 +15,54 @@ const Dashboard = () => {
     student: null,
     entry: null,
   });
-  // var users = 1;
-  // var student = 1;
-  // var entry = 1;
 
   useEffect(() => {
     async function fetchData() {
       if (localStorage.getItem("token")) {
         try {
-          await axios.get(Api.dash).then(function (res) {
-            setArr({
-              ...arr,
-              users: res.data.msg.user,
-              student: res.data.msg.student,
-              entry: res.data.msg.entry,
+          await axios
+            .get(Api.dash, {
+              headers: { Authorization: `Bearer ${localStorage.token}` },
+            })
+            .then(function (res) {
+              setArr({
+                ...arr,
+                users: res.data.msg.user,
+                student: res.data.msg.student,
+                entry: res.data.msg.entry,
+              });
+              console.log(res.data.msg);
+              console.log(arr);
             });
-            console.log(res.data.msg);
-            console.log(arr);
-          });
         } catch (error) {
           if (error.status === 403) {
-            console.log("invalid-token");
+            toast.error("Unauthorized User", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
             localStorage.removeItem("token");
             localStorage.removeItem("results");
             navigate("/");
+          } else {
+            toast.warn(
+              "Unable to load Data .Check your connection and try refreshing Page !!",
+              {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              }
+            );
           }
         }
       }

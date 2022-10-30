@@ -100,7 +100,10 @@ const CreateStudent = () => {
         const res = await axios
           .post(
             "https://akgec-late-entry.herokuapp.com/api/admin/student/create",
-            student
+            student,
+            {
+              headers: { Authorization: `Bearer ${localStorage.token}` },
+            }
           )
           .catch((err) => {
             setLoading(false);
