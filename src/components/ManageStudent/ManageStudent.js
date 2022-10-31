@@ -11,6 +11,9 @@ import UpdateStudent from "../UpdateStudent/UpdateStudent";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Checkbox from "@mui/material/Checkbox";
+
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Year = ["-", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ"];
 
@@ -188,10 +191,10 @@ const ManageStudent = () => {
     deselectAll();
     setLoading(true);
     if (createStd.branch === null) {
-      setCreateStd({ createStd, branch: "" });
+      setCreateStd({ ...createStd, branch: "" });
     }
     if (createStd.year === null) {
-      setCreateStd({ createStd, year: "" });
+      setCreateStd({ ...createStd, year: "" });
     }
     const res = await axios
       .get(
@@ -368,6 +371,9 @@ const ManageStudent = () => {
       year: "",
       branch: "",
     });
+    setD(0);
+    setPage(1);
+    fetchStudents(1);
     setSelected({ ...selected, student: [] });
     setSearchedStd("");
     setSearchStd({ stdno: "" });
@@ -720,8 +726,31 @@ const ManageStudent = () => {
                     <table className="table ms__table">
                       <thead className="text-primary">
                         <tr>
-                          {/* <td style={{width: "15%"}}><mat-checkbox (click)="selectAll()" *ngIf="!check"></mat-checkbox>
-                  <mat-checkbox (click)="deselectAll()" *ngIf="check" [checked]="true"></mat-checkbox></td> */}
+                          <th style={{ padding: "0", width: "15%" }}>
+                            {!check && (
+                              <Checkbox
+                                sx={{
+                                  color: "gray",
+                                  "&.Mui-checked": {
+                                    color: "#ff783d",
+                                  },
+                                }}
+                                onClick={selectAll}
+                              />
+                            )}
+                            {check && (
+                              <Checkbox
+                                checked={true}
+                                sx={{
+                                  color: "gray",
+                                  "&.Mui-checked": {
+                                    color: "#ff783d",
+                                  },
+                                }}
+                                onClick={deselectAll}
+                              />
+                            )}
+                          </th>
                           <th style={{ width: "28%" }} className="ms__th">
                             Name
                           </th>
@@ -758,19 +787,55 @@ const ManageStudent = () => {
                         {results.map((com) => {
                           return (
                             <tr key={com._id}>
-                              <td style={{ width: "15%" }} className="ms__td">
+                              <td
+                                style={{ width: "15%", padding: "0" }}
+                                className="ms__td"
+                              >
+                                <Checkbox
+                                  checked={check}
+                                  onChange={() => {
+                                    Selected(
+                                      com._id,
+                                      com.name,
+                                      com.stdNo,
+                                      com.branch,
+                                      com.mobile,
+                                      com.email,
+                                      com.year,
+                                      com.lateCount,
+                                      com.fineCount
+                                    );
+                                  }}
+                                  sx={{
+                                    color: "gray",
+                                    "&.Mui-checked": {
+                                      color: "#ff783d",
+                                    },
+                                  }}
+                                />
+                              </td>
+                              <td
+                                style={{ width: "28%", fontWeight: "bold" }}
+                                className="ms__td"
+                              >
                                 {com.name}
                               </td>
-                              <td style={{ width: "28%" }} className="ms__td">
-                                {com.name}
-                              </td>
-                              <td style={{ width: "20%" }} className="ms__td">
+                              <td
+                                style={{ width: "20%", fontWeight: "bold" }}
+                                className="ms__td"
+                              >
                                 {com.stdNo}
                               </td>
-                              <td style={{ width: "17%" }} className="ms__td">
+                              <td
+                                style={{ width: "17%", fontWeight: "bold" }}
+                                className="ms__td"
+                              >
                                 {com.branch}
                               </td>
-                              <td style={{ width: "20%" }} className="ms__td">
+                              <td
+                                style={{ width: "20%", fontWeight: "bold" }}
+                                className="ms__td"
+                              >
                                 {Year[com.year]}
                               </td>
                             </tr>
@@ -865,14 +930,19 @@ const ManageStudent = () => {
                 <h5 style={{ marginBottom: "2px", marginTop: "9px" }}>
                   Filter
                 </h5>
-                <form>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    func2(1);
+                  }}
+                >
                   <div className="ms__options">
-                    <FormControl
-                      required
-                      sx={{ m: 1, minWidth: 130, maxWidth: 130 }}
-                    >
-                      <InputLabel id="demo-simple-select-required-label">
-                        YEAR
+                    <FormControl sx={{ m: 1, minWidth: 130, maxWidth: 130 }}>
+                      <InputLabel
+                        id="demo-simple-select-required-label"
+                        style={{ color: "white" }}
+                      >
+                        YEAR *
                       </InputLabel>
                       <Select
                         labelId="demo-simple-select-required-label"
@@ -896,12 +966,12 @@ const ManageStudent = () => {
                         <MenuItem value={4}>IV</MenuItem>
                       </Select>
                     </FormControl>
-                    <FormControl
-                      required
-                      sx={{ m: 1, minWidth: 130, maxWidth: 130 }}
-                    >
-                      <InputLabel id="demo-simple-select-required-label">
-                        BRANCH
+                    <FormControl sx={{ m: 1, minWidth: 130, maxWidth: 130 }}>
+                      <InputLabel
+                        id="demo-simple-select-required-label"
+                        style={{ color: "white" }}
+                      >
+                        BRANCH *
                       </InputLabel>
                       <Select
                         labelId="demo-simple-select-required-label"
