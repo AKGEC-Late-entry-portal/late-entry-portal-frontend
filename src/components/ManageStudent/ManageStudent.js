@@ -13,8 +13,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
 
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
-
 const Year = ["-", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ"];
 
 const ManageStudent = () => {
@@ -29,7 +27,7 @@ const ManageStudent = () => {
   const [isDelete, setIsDelete] = useState(false);
   const [isStoring, setIsStoring] = useState(false);
   const [check, setCheck] = useState(false);
-  const [index, setIndex] = useState("");
+  const [isCheck, setIsCheck] = useState([]);
 
   const [selected, setSelected] = useState({
     student: [],
@@ -53,7 +51,6 @@ const ManageStudent = () => {
     fineCount: "",
   });
   const [boolArr, setBoolArr] = useState([]);
-  const [len, setLen] = useState(null);
   const [createStd, setCreateStd] = useState({
     year: "",
     branch: "",
@@ -66,11 +63,11 @@ const ManageStudent = () => {
     editVal: {},
   });
   const [openDialog, setOpenDialog] = useState(false);
-
   const next = () => {
     setPage((prevPage) => prevPage + 1);
     if (check) {
       setCheck(false);
+      selectAll();
     }
     if (d === 0) return fetchStudents(page + 1);
     else if (d === 1) return func2(page + 1);
@@ -292,9 +289,17 @@ const ManageStudent = () => {
     fetchStudents(page);
   }, []);
 
+  const handleClick = (e) => {
+    const { id, checked } = e.target;
+    setIsCheck([...isCheck, id]);
+    if (!checked) {
+      setIsCheck(isCheck.filter((item) => item !== id));
+    }
+  };
+
   const handleDelete = async () => {
     setIsDelete(true);
-    setLen(selected.student.length);
+    let len = selected.student.length;
     if (len === 0) {
       toast.warn("Atleast one student must be selected!", {
         position: "bottom-right",
@@ -390,8 +395,8 @@ const ManageStudent = () => {
     lateCount,
     fineCount
   ) => {
-    setIndex(selected.student.indexOf(id));
-    if (index < 0) {
+    const ind = selected.student.indexOf(id);
+    if (ind < 0) {
       selected.student.push(id);
       selected.name.push(Name);
       selected.stdNo.push(Stdno);
@@ -402,35 +407,55 @@ const ManageStudent = () => {
       selected.lateCount.push(lateCount);
       selected.fineCount.push(fineCount);
     } else {
-      selected.student.splice(index, 1);
-      selected.name.splice(index, 1);
-      selected.stdNo.splice(index, 1);
-      selected.year.splice(index, 1);
-      selected.branch.splice(index, 1);
-      selected.mobile.splice(index, 1);
-      selected.email.splice(index, 1);
-      selected.fineCount.splice(index, 1);
-      selected.lateCount.splice(index, 1);
+      selected.student.splice(ind, 1);
+      selected.name.splice(ind, 1);
+      selected.stdNo.splice(ind, 1);
+      selected.year.splice(ind, 1);
+      selected.branch.splice(ind, 1);
+      selected.mobile.splice(ind, 1);
+      selected.email.splice(ind, 1);
+      selected.fineCount.splice(ind, 1);
+      selected.lateCount.splice(ind, 1);
     }
+    setSelected(selected);
   };
 
   const selectAll = () => {
-    setCheck(true);
-    var id = "";
-    for (var i = 0; i < results.length; i++) {
-      id = results[i]._id;
-      setIndex(selected.student.indexOf(id));
-      if (index < 0) {
-        selected.student.push(id);
-        selected.name.push(results[i].name);
-        selected.stdNo.push(results[i].stdNo);
-        selected.year.push(results[i].year);
-        selected.branch.push(results[i].branch);
-        selected.mobile.push(results[i].mobile);
-        selected.email.push(results[i].email);
-        selected.lateCount.push(results[i].lateCount);
-        selected.fineCount.push(results[i].fineCount);
+    setCheck(!check);
+    setIsCheck(results.map((li) => li._id));
+    if (check) {
+      setIsCheck([]);
+      setSelected({
+        student: [],
+        name: [],
+        stdNo: [],
+        branch: [],
+        year: [],
+        mobile: [],
+        email: [],
+        lateCount: [],
+        fineCount: [],
+      });
+      setBoolArr([]);
+    } else {
+      // setCheck(true);
+      var id = "";
+      for (var i = 0; i < results.length; i++) {
+        id = results[i]._id;
+        const ind = selected.student.indexOf(id);
+        if (ind < 0) {
+          selected.student.push(id);
+          selected.name.push(results[i].name);
+          selected.stdNo.push(results[i].stdNo);
+          selected.year.push(results[i].year);
+          selected.branch.push(results[i].branch);
+          selected.mobile.push(results[i].mobile);
+          selected.email.push(results[i].email);
+          selected.lateCount.push(results[i].lateCount);
+          selected.fineCount.push(results[i].fineCount);
+        }
       }
+      setSelected(selected);
     }
   };
 
@@ -464,7 +489,7 @@ const ManageStudent = () => {
   };
 
   const update = () => {
-    setLen(selected.student.length);
+    let len = selected.student.length;
     if (len === 0) {
       toast.warn("Atleast one student must be selected!", {
         position: "bottom-right",
@@ -689,7 +714,10 @@ const ManageStudent = () => {
             <div style={{ float: "right" }}>
               <div className="ms__container">
                 <form
-                  onSubmit={submitHandler}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    search();
+                  }}
                   style={{ marginRight: " 45px", marginTop: "4%" }}
                 >
                   <input
@@ -698,6 +726,7 @@ const ManageStudent = () => {
                     className="searchbar"
                     type="text"
                     placeholder="Search..."
+                    onChange={(e) => setSearchedStd(e.target.value)}
                   />
                   <button
                     type="submit"
@@ -727,29 +756,15 @@ const ManageStudent = () => {
                       <thead className="text-primary">
                         <tr>
                           <th style={{ padding: "0", width: "15%" }}>
-                            {!check && (
-                              <Checkbox
-                                sx={{
-                                  color: "gray",
-                                  "&.Mui-checked": {
-                                    color: "#ff783d",
-                                  },
-                                }}
-                                onClick={selectAll}
-                              />
-                            )}
-                            {check && (
-                              <Checkbox
-                                checked={true}
-                                sx={{
-                                  color: "gray",
-                                  "&.Mui-checked": {
-                                    color: "#ff783d",
-                                  },
-                                }}
-                                onClick={deselectAll}
-                              />
-                            )}
+                            <Checkbox
+                              sx={{
+                                color: "gray",
+                                "&.Mui-checked": {
+                                  color: "#ff783d",
+                                },
+                              }}
+                              onClick={selectAll}
+                            />
                           </th>
                           <th style={{ width: "28%" }} className="ms__th">
                             Name
@@ -792,7 +807,9 @@ const ManageStudent = () => {
                                 className="ms__td"
                               >
                                 <Checkbox
-                                  checked={check}
+                                  id={com._id}
+                                  checked={isCheck.includes(com._id)}
+                                  inputProps={{ "aria-label": "controlled" }}
                                   onChange={() => {
                                     Selected(
                                       com._id,
@@ -806,6 +823,7 @@ const ManageStudent = () => {
                                       com.fineCount
                                     );
                                   }}
+                                  onClick={handleClick}
                                   sx={{
                                     color: "gray",
                                     "&.Mui-checked": {
