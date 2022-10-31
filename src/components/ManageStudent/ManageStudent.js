@@ -67,7 +67,6 @@ const ManageStudent = () => {
     setPage((prevPage) => prevPage + 1);
     if (check) {
       setCheck(false);
-      selectAll();
     }
     if (d === 0) return fetchStudents(page + 1);
     else if (d === 1) return func2(page + 1);
@@ -93,10 +92,6 @@ const ManageStudent = () => {
     }
     if (d === 0) return fetchStudents(page - 1);
     else if (d === 1) return func2(page - 1);
-  };
-
-  const submitHandler = (e) => {
-    e.preventDefault();
   };
 
   const fetchStudents = async (pg) => {
@@ -378,10 +373,10 @@ const ManageStudent = () => {
     });
     setD(0);
     setPage(1);
-    fetchStudents(1);
     setSelected({ ...selected, student: [] });
     setSearchedStd("");
-    setSearchStd({ stdno: "" });
+    setSearchStd({ ...searchStd, stdno: "" });
+    fetchStudents(1);
   };
 
   const Selected = (
@@ -421,46 +416,30 @@ const ManageStudent = () => {
   };
 
   const selectAll = () => {
-    setCheck(!check);
+    setCheck(true);
     setIsCheck(results.map((li) => li._id));
-    if (check) {
-      setIsCheck([]);
-      setSelected({
-        student: [],
-        name: [],
-        stdNo: [],
-        branch: [],
-        year: [],
-        mobile: [],
-        email: [],
-        lateCount: [],
-        fineCount: [],
-      });
-      setBoolArr([]);
-    } else {
-      // setCheck(true);
-      var id = "";
-      for (var i = 0; i < results.length; i++) {
-        id = results[i]._id;
-        const ind = selected.student.indexOf(id);
-        if (ind < 0) {
-          selected.student.push(id);
-          selected.name.push(results[i].name);
-          selected.stdNo.push(results[i].stdNo);
-          selected.year.push(results[i].year);
-          selected.branch.push(results[i].branch);
-          selected.mobile.push(results[i].mobile);
-          selected.email.push(results[i].email);
-          selected.lateCount.push(results[i].lateCount);
-          selected.fineCount.push(results[i].fineCount);
-        }
+    var id = "";
+    for (var i = 0; i < results.length; i++) {
+      id = results[i]._id;
+      const ind = selected.student.indexOf(id);
+      if (ind < 0) {
+        selected.student.push(id);
+        selected.name.push(results[i].name);
+        selected.stdNo.push(results[i].stdNo);
+        selected.year.push(results[i].year);
+        selected.branch.push(results[i].branch);
+        selected.mobile.push(results[i].mobile);
+        selected.email.push(results[i].email);
+        selected.lateCount.push(results[i].lateCount);
+        selected.fineCount.push(results[i].fineCount);
       }
-      setSelected(selected);
     }
+    setSelected(selected);
   };
 
   const deselectAll = () => {
     setCheck(false);
+    setIsCheck([]);
     setSelected({
       student: [],
       name: [],
@@ -489,6 +468,7 @@ const ManageStudent = () => {
   };
 
   const update = () => {
+    console.log(selected.student);
     let len = selected.student.length;
     if (len === 0) {
       toast.warn("Atleast one student must be selected!", {
@@ -502,7 +482,7 @@ const ManageStudent = () => {
         theme: "colored",
       });
     } else {
-      setBoolArr([
+      var boolArray = [
         AllTheSame(selected.name),
         AllTheSame(selected.mobile),
         AllTheSame(selected.email),
@@ -511,8 +491,8 @@ const ManageStudent = () => {
         AllTheSame(selected.stdNo),
         AllTheSame(selected.lateCount),
         AllTheSame(selected.fineCount),
-      ]);
-      if (AllFalse(boolArr)) {
+      ];
+      if (AllFalse(boolArray)) {
         toast.error("No information can be changed for selected students!", {
           position: "bottom-right",
           autoClose: 5000,
@@ -552,6 +532,7 @@ const ManageStudent = () => {
   };
 
   const search = async () => {
+    console.log(searchStd);
     if (searchStd.stdno === "" || searchStd.stdno === null) {
       toast.warn("Search field cannot be empty !", {
         position: "bottom-right",
@@ -569,7 +550,7 @@ const ManageStudent = () => {
         setPage(1);
         func2(1);
       } else {
-        setResults([]);
+        var _res = [];
         setLoading(true);
         setSelected({ ...selected, student: [] });
         const res = await axios
@@ -614,9 +595,11 @@ const ManageStudent = () => {
             else if (d === 1) return func2(page);
           });
         if (res) {
+          console.log(res.data);
           setLoading(false);
           setIsData(true);
-          setResults(res.data.result);
+          _res[0] = res.data.result;
+          setResults(_res);
           if (check) {
             setCheck(false);
           }
@@ -638,9 +621,11 @@ const ManageStudent = () => {
   const storeALL = async () => {
     setIsStoring(true);
     if (createStd.branch === null) {
+      createStd.branch = "";
       setCreateStd({ ...createStd, branch: "" });
     }
     if (createStd.year === null) {
+      createStd.year = "";
       setCreateStd({ ...createStd, year: "" });
     }
     const res = await axios
@@ -721,12 +706,15 @@ const ManageStudent = () => {
                   style={{ marginRight: " 45px", marginTop: "4%" }}
                 >
                   <input
-                    required
                     id="searchBar"
                     className="searchbar"
                     type="text"
                     placeholder="Search..."
-                    onChange={(e) => setSearchedStd(e.target.value)}
+                    value={searchedStd}
+                    onChange={(e) => {
+                      setSearchedStd(e.target.value);
+                      setSearchStd({ ...searchStd, stdno: e.target.value });
+                    }}
                   />
                   <button
                     type="submit"
@@ -756,15 +744,29 @@ const ManageStudent = () => {
                       <thead className="text-primary">
                         <tr>
                           <th style={{ padding: "0", width: "15%" }}>
-                            <Checkbox
-                              sx={{
-                                color: "gray",
-                                "&.Mui-checked": {
-                                  color: "#ff783d",
-                                },
-                              }}
-                              onClick={selectAll}
-                            />
+                            {!check && (
+                              <Checkbox
+                                sx={{
+                                  color: "gray",
+                                  "&.Mui-checked": {
+                                    color: "#ff783d",
+                                  },
+                                }}
+                                onClick={selectAll}
+                              />
+                            )}
+                            {check && (
+                              <Checkbox
+                                checked={true}
+                                sx={{
+                                  color: "gray",
+                                  "&.Mui-checked": {
+                                    color: "#ff783d",
+                                  },
+                                }}
+                                onClick={deselectAll}
+                              />
+                            )}
                           </th>
                           <th style={{ width: "28%" }} className="ms__th">
                             Name
