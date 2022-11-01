@@ -1,0 +1,19 @@
+:host ::ng-deep .custom-spinner circle {
+    stroke: white;
+  }
+
+  #us__btn1{
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+    background-color: #ff783d;
+    border-radius: 30px;
+    margin: 10px;
+    margin-right: 90px;
+    border: none;
+    width: 190px;
+    font-family: 'Poppins', sans-serif;
+    outline-style: none;
+  }

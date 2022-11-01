@@ -12,6 +12,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
+import { DialogContent } from "@mui/material";
 
 const Year = ["-", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ"];
 
@@ -182,10 +183,14 @@ const ManageStudent = () => {
     setD(1);
     deselectAll();
     setLoading(true);
+    var branch = createStd.branch;
+    var year = createStd.year;
     if (createStd.branch === null) {
+      branch = "";
       setCreateStd({ ...createStd, branch: "" });
     }
     if (createStd.year === null) {
+      year = "";
       setCreateStd({ ...createStd, year: "" });
     }
     const res = await axios
@@ -193,9 +198,9 @@ const ManageStudent = () => {
         "http://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=" +
           page +
           "&limit=10&year=" +
-          createStd.year +
+          year +
           "&branch=" +
-          createStd.branch +
+          branch +
           "&name=" +
           searchedStd,
         {
@@ -468,7 +473,7 @@ const ManageStudent = () => {
   };
 
   const update = () => {
-    console.log(selected.student);
+    // console.log(selected.student);
     let len = selected.student.length;
     if (len === 0) {
       toast.warn("Atleast one student must be selected!", {
@@ -532,7 +537,7 @@ const ManageStudent = () => {
   };
 
   const search = async () => {
-    console.log(searchStd);
+    // console.log(searchStd);
     if (searchStd.stdno === "" || searchStd.stdno === null) {
       toast.warn("Search field cannot be empty !", {
         position: "bottom-right",
@@ -595,7 +600,7 @@ const ManageStudent = () => {
             else if (d === 1) return func2(page);
           });
         if (res) {
-          console.log(res.data);
+          // console.log(res.data);
           setLoading(false);
           setIsData(true);
           _res[0] = res.data.result;
@@ -619,21 +624,26 @@ const ManageStudent = () => {
   };
 
   const storeALL = async () => {
+    console.log(createStd);
+    console.log(selected.student);
+    console.log(searchedStd);
     setIsStoring(true);
+    var branch = createStd.branch;
+    var year = createStd.year;
     if (createStd.branch === null) {
-      createStd.branch = "";
+      branch = "";
       setCreateStd({ ...createStd, branch: "" });
     }
     if (createStd.year === null) {
-      createStd.year = "";
+      year = "";
       setCreateStd({ ...createStd, year: "" });
     }
     const res = await axios
       .get(
         "http://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=1&limit=5000&year=" +
-          createStd.year +
+          year +
           "&branch=" +
-          createStd.branch +
+          branch +
           "&name=" +
           searchedStd,
         {
@@ -644,6 +654,7 @@ const ManageStudent = () => {
         console.log(err);
       });
     if (res) {
+      console.log(res.data.results);
       localStorage.removeItem("results");
       localStorage.setItem("results", JSON.stringify(res.data.results));
       setIsStoring(false);
@@ -651,6 +662,9 @@ const ManageStudent = () => {
   };
 
   const showALL = () => {
+    console.log(createStd);
+    console.log(selected.student);
+    console.log(searchedStd);
     setIsStoring(true);
     setResults(JSON.parse(localStorage.getItem("results")));
     setNxt(false);
@@ -671,11 +685,19 @@ const ManageStudent = () => {
     <div>
       <Dialog
         fullWidth={true}
-        maxWidth={"sm"}
         open={openDialog}
         onClose={handleClose}
+        PaperProps={{
+          style: {
+            minHeight: "90%",
+            maxHeight: "100%",
+            overflowX: "hidden",
+          },
+        }}
       >
-        <UpdateStudent />
+        <DialogContent>
+          <UpdateStudent />
+        </DialogContent>
       </Dialog>
       <div style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "6%" }}>
         <div className="ms__card ms__card-profile">
