@@ -138,7 +138,10 @@ const FullReport = () => {
     const res = await axios
       .post(
         "http://akgec-late-entry.herokuapp.com/api/admin/report/send",
-        send_mail
+        send_mail,
+        {
+          headers: { Authorization: `Bearer ${localStorage.token}` },
+        }
       )
       .catch((err) => {
         if (err.status === 403) {
@@ -271,10 +274,27 @@ const FullReport = () => {
     setOpenDialog(false);
   };
 
+  const successfulEditFormatHandler = (res) => {
+    if (res) {
+      setOpenDialog(false);
+    }
+  };
+
   return (
     <div>
-      <Dialog open={openDialog} onClose={handleClose} fullWidth={true}>
-        <EditFormat />
+      <Dialog
+        open={openDialog}
+        onClose={handleClose}
+        fullWidth={true}
+        maxWidth="sm"
+        PaperProps={{
+          style: {
+            minHeight: "52vh",
+            maxHeight: "100vh",
+          },
+        }}
+      >
+        <EditFormat onEditingFormat={successfulEditFormatHandler} />
       </Dialog>
       <div style={{ paddingLeft: "5%", paddingRight: "5%", marginTop: "11vh" }}>
         <div className="fr__card fr__card-profile" style={{ height: "93vh" }}>
