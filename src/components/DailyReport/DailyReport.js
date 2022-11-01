@@ -296,6 +296,7 @@ const DailyReport = () => {
                   onClick={() => {
                     setPage(1);
                     fetchEntries(1);
+                    setLoc("");
                   }}
                 >
                   Refresh
@@ -315,6 +316,7 @@ const DailyReport = () => {
                     setPage(1);
                     setD(0);
                     fetchEntries(1);
+                    setLoc("");
                   }}
                 >
                   All Entries
