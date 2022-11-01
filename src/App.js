@@ -12,6 +12,7 @@ import ManageUser from "./components/ManageUser/ManageUser";
 import { ToastContainer } from "react-toastify";
 import ManageStudent from "./components/ManageStudent/ManageStudent";
 import DailyReport from "./components/DailyReport/DailyReport";
+import FullReport from "./components/FullReport/FullReport";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="dashboard/manage-entry" element={<ManageEntry />} />
         <Route path="dashboard/manage-student" element={<ManageStudent />} />
         <Route path="dashboard/daily-report" element={<DailyReport />} />
+        <Route path="dashboard/report" element={<FullReport />} />
       </Routes>
     </>
   );

@@ -624,9 +624,9 @@ const ManageStudent = () => {
   };
 
   const storeALL = async () => {
-    console.log(createStd);
-    console.log(selected.student);
-    console.log(searchedStd);
+    // console.log(createStd);
+    // console.log(selected.student);
+    // console.log(searchedStd);
     setIsStoring(true);
     var branch = createStd.branch;
     var year = createStd.year;
@@ -654,7 +654,7 @@ const ManageStudent = () => {
         console.log(err);
       });
     if (res) {
-      console.log(res.data.results);
+      // console.log(res.data.results);
       localStorage.removeItem("results");
       localStorage.setItem("results", JSON.stringify(res.data.results));
       setIsStoring(false);
@@ -662,9 +662,9 @@ const ManageStudent = () => {
   };
 
   const showALL = () => {
-    console.log(createStd);
-    console.log(selected.student);
-    console.log(searchedStd);
+    // console.log(createStd);
+    // console.log(selected.student);
+    // console.log(searchedStd);
     setIsStoring(true);
     setResults(JSON.parse(localStorage.getItem("results")));
     setNxt(false);
@@ -699,11 +699,13 @@ const ManageStudent = () => {
           <UpdateStudent />
         </DialogContent>
       </Dialog>
-      <div style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "6%" }}>
-        <div className="ms__card ms__card-profile">
+      <div
+        style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "4.5%" }}
+      >
+        <div className="ms__card ms__card-profile" style={{ height: "101vh" }}>
           <div
             className="ms__card-header ms__card-header-image"
-            style={{ height: "12vh", position: "relative", top: "-37px" }}
+            style={{ height: "12vh", position: "relative", top: "-30px" }}
           >
             <h4
               className="ms__card-title"
@@ -712,8 +714,9 @@ const ManageStudent = () => {
                 paddingTop: "1%",
                 fontFamily: "Poppins, sans-serif",
                 fontWeight: "500",
-                margin: "6px",
-                marginLeft: "3%",
+                position: "absolute",
+                bottom: "9%",
+                left: "3%",
               }}
             >
               Manage Students
@@ -751,16 +754,12 @@ const ManageStudent = () => {
             </div>
           </div>
           <div className="ms__card-body">
-            <div className="row" style={{ position: "relative", top: "-37px" }}>
-              <div
-                className="col-md-8"
-                id="ms__ta-col"
-                style={{ height: "90vh" }}
-              >
+            <div className="row" style={{ position: "relative", top: "-29px" }}>
+              <div className="col-md-8" id="ms__ta-col">
                 <div className="table-responsive" style={{ paddingTop: "2%" }}>
                   <div
                     className="row"
-                    style={{ width: "100%", minHeight: "78vh" }}
+                    style={{ width: "100%", minHeight: "79vh" }}
                   >
                     <table className="table ms__table">
                       <thead className="text-primary">
@@ -895,9 +894,10 @@ const ManageStudent = () => {
                         borderColor: "#ff783d",
                         backgroundColor: "#ff783d",
                         fontFamily: "Poppins, sans-serif",
-                        position: "absolute",
-                        bottom: "11.5px",
                       }}
+                      //   position: "absolute",
+                      //   bottom: "11.5px",
+                      // }}
                       onClick={() => {
                         setPage(1);
                         fetchStudents(1);
@@ -919,9 +919,9 @@ const ManageStudent = () => {
                           color: "#ff783d",
                           borderColor: "#ff783d",
                           fontFamily: "Poppins, sans-serif",
-                          position: "absolute",
-                          right: "22%",
-                          bottom: "2%",
+                          // position: "absolute",
+                          // right: "22%",
+                          // bottom: "2%",
                         }}
                         disabled={!prv}
                       >
@@ -935,9 +935,9 @@ const ManageStudent = () => {
                             color: "#ff783d",
                             borderColor: "#ff783d",
                             fontFamily: "Poppins, sans-serif",
-                            position: "absolute",
-                            bottom: "2.05%",
-                            right: "12.5%",
+                            // position: "absolute",
+                            // bottom: "2.05%",
+                            // right: "12.5%",
                             border: "1.2px solid",
                             borderRadius: "3px",
                             width: "59px",
@@ -956,9 +956,9 @@ const ManageStudent = () => {
                           color: "#ff783d",
                           borderColor: "#ff783d",
                           fontFamily: "Poppins, sans-serif",
-                          position: "absolute",
-                          right: "2%",
-                          bottom: "2%",
+                          // position: "absolute",
+                          // right: "2%",
+                          // bottom: "2%",
                         }}
                         disabled={!nxt}
                       >
@@ -978,7 +978,15 @@ const ManageStudent = () => {
                     func2(1);
                   }}
                 >
-                  <div className="ms__options">
+                  <div
+                    className="ms__options"
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <FormControl sx={{ m: 1, minWidth: 130, maxWidth: 130 }}>
                       <InputLabel
                         id="demo-simple-select-required-label"

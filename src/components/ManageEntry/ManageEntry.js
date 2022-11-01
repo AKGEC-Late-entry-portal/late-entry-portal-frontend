@@ -311,7 +311,7 @@ const ManageEntry = () => {
             className="table-responsive"
             style={{ paddingTop: "0%", position: "relative", top: "-31px" }}
           >
-            <div className="row" style={{ width: "100%", minHeight: "70vh" }}>
+            <div className="row" style={{ width: "100%", minHeight: "78vh" }}>
               <table className="table">
                 <thead className="text-primary" style={{ marginBottom: "3px" }}>
                   <tr>
