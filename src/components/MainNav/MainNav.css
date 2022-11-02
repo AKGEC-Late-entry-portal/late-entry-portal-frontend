@@ -12,6 +12,7 @@
   min-height: 100vh;
   max-height: 100vh;
   color: #686de8;
+  border-right: 1px solid lightgray;
 }
 
  .sidenav-container {
