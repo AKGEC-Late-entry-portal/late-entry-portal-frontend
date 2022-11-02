@@ -281,7 +281,7 @@ const FullReport = () => {
   };
 
   return (
-    <div>
+    <div className="components">
       <Dialog
         open={openDialog}
         onClose={handleClose}

@@ -145,9 +145,9 @@ const CreateUser = () => {
   };
 
   return (
-    <div>
+    <div className="components">
       <div style={{ paddingTop: "6%" }}>
-        <div className="logincard2">
+        <div className="logincard2" style={{ height: "83vh" }}>
           <div
             style={{
               backgroundColor: "#ffab00",
@@ -177,7 +177,11 @@ const CreateUser = () => {
             </div>
           </div>
           <div style={{ paddingTop: "25px" }}>
-            <form className="loginform" onSubmit={submitHandler}>
+            <form
+              className="loginform"
+              onSubmit={submitHandler}
+              style={{ paddingTop: "3%" }}
+            >
               <div
                 style={{
                   display: "flex",

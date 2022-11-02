@@ -182,194 +182,201 @@ const DailyReport = () => {
   }, []);
 
   return (
-    <div style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "6.0%" }}>
-      <div className="dr__card dr__card-profile">
-        <div
-          className="dr__card-header dr__card-header-image"
-          style={{ height: "14vh", position: "relative", top: "-40px" }}
-        >
-          <h1
-            className="dr__card-title"
-            style={{
-              fontSize: "xx-large",
-              paddingTop: "1%",
-              fontFamily: "Poppins, sans-serif",
-              fontWeight: "500",
-              marginTop: "0",
-              marginLeft: "3%",
-            }}
-          >
-            Daily Report
-          </h1>
+    <div className="components">
+      <div
+        style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "6.0%" }}
+      >
+        <div className="dr__card dr__card-profile">
           <div
-            className="field1"
-            style={{
-              float: "right",
-              marginRight: "5%",
-            }}
+            className="dr__card-header dr__card-header-image"
+            style={{ height: "14vh", position: "relative", top: "-40px" }}
           >
-            <FormControl required sx={{ m: 1, minWidth: 175 }}>
-              <InputLabel
-                id="demo-simple-select-required-label"
-                style={{ color: "white" }}
-              >
-                Location
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-required-label"
-                id="demo-simple-select-required"
-                value={loc}
-                label="Location *"
-                onChange={(e) => {
-                  setLoc(e.target.value);
-                  func2(e.target.value, 1, obj[e.target.value]);
-                }}
-                style={{
-                  border: "1.9px solid white",
-                  color: "white",
-                  height: "8vh",
-                }}
-              >
-                <MenuItem value={"LT"}>Lecture Theatre</MenuItem>
-                <MenuItem value={"MG"}>Main Gate</MenuItem>
-                <MenuItem value={"CS/IT"}>CS/IT</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-        </div>
-        <div className="dr__card-body" style={{ height: "82vh" }}>
-          <div
-            className="table-responsive"
-            style={{ paddingTop: "0%", position: "relative", top: "-31px" }}
-          >
-            <div className="row" style={{ width: "100%", minHeight: "70vh" }}>
-              <table className="table">
-                <thead className="text-primary" style={{ marginBottom: "3px" }}>
-                  <tr>
-                    <th>Name</th>
-                    <th>Student No.</th>
-                    <th>Branch</th>
-                    <th>Year</th>
-                    <th>Location</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {loading && (
-                    <tr>
-                      <td colSpan="8" style={{ paddingTop: "20%" }}>
-                        <div className="lds-ellipsis">
-                          <div className="dr__div"></div>
-                          <div className="dr__div"></div>
-                          <div className="dr__div"></div>
-                          <div className="dr__div"></div>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-
-                  {results.map((com) => {
-                    return (
-                      <tr key={com._id}>
-                        <td className="manage__td">{com.name}</td>
-                        <td className="manage__td">{com.stdNo}</td>
-                        <td className="manage__td">{com.branch}</td>
-                        <td className="manage__td">{year[com.year]}</td>
-                        <td className="manage__td">{com.location}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <div style={{ float: "left" }}>
-              {d === 0 && (
-                <button
-                  className="btn mat-raised-button"
-                  type="submit"
-                  style={{
-                    color: "white",
-                    borderColor: "#7E57C2",
-                    backgroundColor: "#7E57C2",
-                    fontFamily: "Poppins, sans-serif",
-                  }}
-                  onClick={() => {
-                    setPage(1);
-                    fetchEntries(1);
-                    setLoc("");
-                  }}
-                >
-                  Refresh
-                </button>
-              )}
-              {d === 1 && (
-                <button
-                  className="btn mat-raised-button"
-                  type="submit"
-                  style={{
-                    color: "white",
-                    borderColor: "#7E57C2",
-                    backgroundColor: "#7E57C2",
-                    fontFamily: "Poppins, sans-serif",
-                  }}
-                  onClick={() => {
-                    setPage(1);
-                    setD(0);
-                    fetchEntries(1);
-                    setLoc("");
-                  }}
-                >
-                  All Entries
-                </button>
-              )}
-            </div>
-            <nav
-              aria-label="Page navigation example"
-              style={{ float: "right" }}
+            <h1
+              className="dr__card-title"
+              style={{
+                fontSize: "xx-large",
+                paddingTop: "1%",
+                fontFamily: "Poppins, sans-serif",
+                fontWeight: "500",
+                marginTop: "0",
+                marginLeft: "3%",
+              }}
             >
-              <ul className="pagination">
-                <button
-                  className="btn mat-stroked-button"
-                  type="submit"
-                  style={{
-                    color: "#7E57C2",
-                    borderColor: "#7E57C2",
-                    fontFamily: "Poppins, sans-serif",
-                  }}
-                  onClick={prev}
-                  disabled={!prv}
+              Daily Report
+            </h1>
+            <div
+              className="field1"
+              style={{
+                float: "right",
+                marginRight: "5%",
+              }}
+            >
+              <FormControl required sx={{ m: 1, minWidth: 175 }}>
+                <InputLabel
+                  id="demo-simple-select-required-label"
+                  style={{ color: "white" }}
                 >
-                  <i className="fas fa-angle-left"></i> Previous
-                </button>
-                &nbsp;
-                {isData && (
-                  <li
-                    className="btn"
+                  Location
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-required-label"
+                  id="demo-simple-select-required"
+                  value={loc}
+                  label="Location *"
+                  onChange={(e) => {
+                    setLoc(e.target.value);
+                    func2(e.target.value, 1, obj[e.target.value]);
+                  }}
+                  style={{
+                    border: "1.9px solid white",
+                    color: "white",
+                    height: "8vh",
+                  }}
+                >
+                  <MenuItem value={"LT"}>Lecture Theatre</MenuItem>
+                  <MenuItem value={"MG"}>Main Gate</MenuItem>
+                  <MenuItem value={"CS/IT"}>CS/IT</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          </div>
+          <div className="dr__card-body" style={{ height: "76vh" }}>
+            <div
+              className="table-responsive"
+              style={{ paddingTop: "0%", position: "relative", top: "-31px" }}
+            >
+              <div className="row" style={{ width: "100%", minHeight: "72vh" }}>
+                <table className="table">
+                  <thead
+                    className="text-primary"
+                    style={{ marginBottom: "3px" }}
+                  >
+                    <tr>
+                      <th>Name</th>
+                      <th>Student No.</th>
+                      <th>Branch</th>
+                      <th>Year</th>
+                      <th>Location</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {loading && (
+                      <tr>
+                        <td colSpan="8" style={{ paddingTop: "20%" }}>
+                          <div className="lds-ellipsis">
+                            <div className="dr__div"></div>
+                            <div className="dr__div"></div>
+                            <div className="dr__div"></div>
+                            <div className="dr__div"></div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+
+                    {results.map((com) => {
+                      return (
+                        <tr key={com._id}>
+                          <td className="manage__td">{com.name}</td>
+                          <td className="manage__td">{com.stdNo}</td>
+                          <td className="manage__td">{com.branch}</td>
+                          <td className="manage__td">{year[com.year]}</td>
+                          <td className="manage__td">{com.location}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div style={{ float: "left" }}>
+                {d === 0 && (
+                  <button
+                    className="btn mat-raised-button"
+                    type="submit"
+                    style={{
+                      color: "white",
+                      borderColor: "#7E57C2",
+                      backgroundColor: "#7E57C2",
+                      fontFamily: "Poppins, sans-serif",
+                    }}
+                    onClick={() => {
+                      setPage(1);
+                      fetchEntries(1);
+                      setLoc("");
+                    }}
+                  >
+                    Refresh
+                  </button>
+                )}
+                {d === 1 && (
+                  <button
+                    className="btn mat-raised-button"
+                    type="submit"
+                    style={{
+                      color: "white",
+                      borderColor: "#7E57C2",
+                      backgroundColor: "#7E57C2",
+                      fontFamily: "Poppins, sans-serif",
+                    }}
+                    onClick={() => {
+                      setPage(1);
+                      setD(0);
+                      fetchEntries(1);
+                      setLoc("");
+                    }}
+                  >
+                    All Entries
+                  </button>
+                )}
+              </div>
+              <nav
+                aria-label="Page navigation example"
+                style={{ float: "right" }}
+              >
+                <ul className="pagination">
+                  <button
+                    className="btn mat-stroked-button"
+                    type="submit"
                     style={{
                       color: "#7E57C2",
                       borderColor: "#7E57C2",
                       fontFamily: "Poppins, sans-serif",
                     }}
+                    onClick={prev}
+                    disabled={!prv}
                   >
-                    {page}
-                  </li>
-                )}
-                &nbsp;
-                <button
-                  className="btn mat-stroked-button"
-                  type="submit"
-                  style={{
-                    color: "#7E57C2",
-                    borderColor: "#7E57C2",
-                    fontFamily: "Poppins, sans-serif",
-                  }}
-                  onClick={next}
-                  disabled={!nxt}
-                >
-                  Next <i className="fas fa-angle-right"></i>
-                </button>
-              </ul>
-            </nav>
+                    <i className="fas fa-angle-left"></i> Previous
+                  </button>
+                  &nbsp;
+                  {isData && (
+                    <li
+                      className="btn"
+                      style={{
+                        color: "#7E57C2",
+                        borderColor: "#7E57C2",
+                        fontFamily: "Poppins, sans-serif",
+                      }}
+                    >
+                      {page}
+                    </li>
+                  )}
+                  &nbsp;
+                  <button
+                    className="btn mat-stroked-button"
+                    type="submit"
+                    style={{
+                      color: "#7E57C2",
+                      borderColor: "#7E57C2",
+                      fontFamily: "Poppins, sans-serif",
+                    }}
+                    onClick={next}
+                    disabled={!nxt}
+                  >
+                    Next <i className="fas fa-angle-right"></i>
+                  </button>
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
       </div>

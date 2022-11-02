@@ -59,3 +59,32 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
       transform: translate(24px, 0);
     }
   }
+
+  .main {
+    display: flex;
+    flex-direction: row;
+
+  }
+
+  .components {
+    display: inline-block;
+    min-width: 81.69vw;
+    max-width: 81.69vw;
+    margin-left: 0;
+    background-color: #fafafa;
+    position: absolute;
+    right: 0;
+  }
+
+  #root {
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  button:focus {
+    outline:none;
+  }
+
+  a, a:hover, a:active, a:visited, a:focus {
+    text-decoration: none;
+  }

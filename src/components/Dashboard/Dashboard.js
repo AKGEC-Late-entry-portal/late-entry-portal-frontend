@@ -74,7 +74,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <>
+    <div className="components" style={{ height: "100vh" }}>
       <div className="container">
         <div className="row">
           <h4
@@ -251,7 +251,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

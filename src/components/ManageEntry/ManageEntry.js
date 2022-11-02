@@ -257,210 +257,217 @@ const ManageEntry = () => {
   };
 
   return (
-    <div style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "6.0%" }}>
-      <div className="me__card me__card-profile">
-        <div
-          className="me__card-header me__card-header-image"
-          style={{ height: "14vh", position: "relative", top: "-40px" }}
-        >
-          <h1
-            className="me__card-title"
-            style={{
-              fontSize: "xx-large",
-              paddingTop: "1%",
-              fontFamily: "Poppins, sans-serif",
-              fontWeight: "500",
-              marginTop: "0",
-              marginLeft: "3%",
-            }}
+    <div className="components">
+      <div
+        style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "6.0%" }}
+      >
+        <div className="me__card me__card-profile">
+          <div
+            className="me__card-header me__card-header-image"
+            style={{ height: "14vh", position: "relative", top: "-40px" }}
           >
-            Manage Entries
-          </h1>
-          <div style={{ float: "right" }}>
-            <div appearance="outline">
-              <input
-                type="date"
-                placeholder="Enter Date"
-                name="date"
-                value={date}
-                onChange={(e) => {
-                  setDate(e.target.value);
-                  setD(e.target.value === "" ? 0 : 1);
-                  e.target.value === ""
-                    ? fetchEntries(page)
-                    : func2(page, e.target.value);
-                }}
-                style={{
-                  marginTop: "3%",
-                  marginRight: "49px",
-                  width: "238px",
-                  height: "54px",
-                  backgroundColor: "#00bfa5",
-                  border: "1.8px solid white",
-                  borderRadius: "5px",
-                  color: "white",
-                  padding: "19px",
-                  fontSize: "15px",
-                }}
-              />
+            <h1
+              className="me__card-title"
+              style={{
+                fontSize: "xx-large",
+                paddingTop: "1%",
+                fontFamily: "Poppins, sans-serif",
+                fontWeight: "500",
+                marginTop: "0",
+                marginLeft: "3%",
+              }}
+            >
+              Manage Entries
+            </h1>
+            <div style={{ float: "right" }}>
+              <div appearance="outline">
+                <input
+                  type="date"
+                  placeholder="Enter Date"
+                  name="date"
+                  value={date}
+                  onChange={(e) => {
+                    setDate(e.target.value);
+                    setD(e.target.value === "" ? 0 : 1);
+                    e.target.value === ""
+                      ? fetchEntries(page)
+                      : func2(page, e.target.value);
+                  }}
+                  style={{
+                    marginTop: "3%",
+                    marginRight: "49px",
+                    width: "238px",
+                    height: "54px",
+                    backgroundColor: "#00bfa5",
+                    border: "1.8px solid white",
+                    borderRadius: "5px",
+                    color: "white",
+                    padding: "19px",
+                    fontSize: "15px",
+                  }}
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="me__card-body" style={{ height: "82vh" }}>
-          <div
-            className="table-responsive"
-            style={{ paddingTop: "0%", position: "relative", top: "-31px" }}
-          >
-            <div className="row" style={{ width: "100%", minHeight: "78vh" }}>
-              <table className="table">
-                <thead className="text-primary" style={{ marginBottom: "3px" }}>
-                  <tr>
-                    <th>Name</th>
-                    <th>Student No.</th>
-                    <th>Branch</th>
-                    <th>Year</th>
-                    <th>Location</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {loading && (
+          <div className="me__card-body" style={{ height: "82vh" }}>
+            <div
+              className="table-responsive"
+              style={{ paddingTop: "0%", position: "relative", top: "-31px" }}
+            >
+              <div className="row" style={{ width: "100%", minHeight: "78vh" }}>
+                <table className="table">
+                  <thead
+                    className="text-primary"
+                    style={{ marginBottom: "3px" }}
+                  >
                     <tr>
-                      <td colSpan="8" style={{ paddingTop: "20%" }}>
-                        <div className="lds-ellipsis">
-                          <div className="me__div"></div>
-                          <div className="me__div"></div>
-                          <div className="me__div"></div>
-                          <div className="me__div"></div>
-                        </div>
-                      </td>
+                      <th>Name</th>
+                      <th>Student No.</th>
+                      <th>Branch</th>
+                      <th>Year</th>
+                      <th>Location</th>
+                      <th>Date</th>
+                      <th>Time</th>
+                      <th>Action</th>
                     </tr>
-                  )}
+                  </thead>
 
-                  {results.map((com) => {
-                    return (
-                      <tr key={com._id}>
-                        <td className="manage__td">{com.name}</td>
-                        <td className="manage__td">{com.stdNo}</td>
-                        <td className="manage__td">{com.branch}</td>
-                        <td className="manage__td">{year[com.year]}</td>
-                        <td className="manage__td">{com.location}</td>
-                        <td className="manage__td">{com.date}</td>
-                        <td className="manage__td">{com.time}</td>
-                        <td className="manage__td">
-                          <button
-                            style={{
-                              outlineStyle: "none",
-                              marginTop: "-15%",
-                              width: "30px",
-                              height: "30px",
-                              border: "none",
-                              backgroundColor: "white",
-                              borderRadius: "100%",
-                            }}
-                            onClick={() => deleteEntry(com._id)}
-                          >
-                            <i
-                              className="fa fa-trash"
-                              style={{ color: "red" }}
-                            ></i>
-                          </button>
+                  <tbody>
+                    {loading && (
+                      <tr>
+                        <td colSpan="8" style={{ paddingTop: "20%" }}>
+                          <div className="lds-ellipsis">
+                            <div className="me__div"></div>
+                            <div className="me__div"></div>
+                            <div className="me__div"></div>
+                            <div className="me__div"></div>
+                          </div>
                         </td>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <div style={{ float: "left" }}>
-              {d === 0 && (
-                <button
-                  className="btn mat-raised-button"
-                  type="submit"
-                  style={{
-                    color: "white",
-                    borderColor: "#00bfa5",
-                    backgroundColor: "#00bfa5",
-                    fontFamily: "Poppins, sans-serif",
-                  }}
-                  onClick={() => {
-                    setPage(1);
-                    fetchEntries(1);
-                  }}
-                >
-                  Refresh
-                </button>
-              )}
-              {d === 1 && (
-                <button
-                  className="btn mat-raised-button"
-                  type="submit"
-                  style={{
-                    color: "white",
-                    borderColor: "#00bfa5",
-                    backgroundColor: "#00bfa5",
-                    fontFamily: "Poppins, sans-serif",
-                  }}
-                  onClick={() => {
-                    setPage(1);
-                    setD(0);
-                    fetchEntries(1);
-                  }}
-                >
-                  All Entries
-                </button>
-              )}
-            </div>
-            <nav
-              aria-label="Page navigation example"
-              style={{ float: "right" }}
-            >
-              <ul className="pagination">
-                <button
-                  className="btn mat-stroked-button"
-                  type="submit"
-                  style={{
-                    color: "#00bfa5",
-                    borderColor: "#00bfa5",
-                    fontFamily: "Poppins, sans-serif",
-                  }}
-                  onClick={prev}
-                  disabled={!prv}
-                >
-                  <i className="fas fa-angle-left"></i> Previous
-                </button>
-                &nbsp;
-                {isData && (
-                  <li
-                    className="btn"
+                    )}
+
+                    {results.map((com) => {
+                      return (
+                        <tr key={com._id}>
+                          <td className="manage__td">{com.name}</td>
+                          <td className="manage__td">{com.stdNo}</td>
+                          <td className="manage__td">{com.branch}</td>
+                          <td className="manage__td">{year[com.year]}</td>
+                          <td className="manage__td">{com.location}</td>
+                          <td className="manage__td">{com.date}</td>
+                          <td className="manage__td">{com.time}</td>
+                          <td className="manage__td">
+                            <button
+                              style={{
+                                outlineStyle: "none",
+                                marginTop: "-15%",
+                                width: "30px",
+                                height: "30px",
+                                border: "none",
+                                backgroundColor: "white",
+                                borderRadius: "100%",
+                              }}
+                              onClick={() => deleteEntry(com._id)}
+                            >
+                              <i
+                                className="fa fa-trash"
+                                style={{ color: "red" }}
+                              ></i>
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div style={{ float: "left" }}>
+                {d === 0 && (
+                  <button
+                    className="btn mat-raised-button"
+                    type="submit"
+                    style={{
+                      color: "white",
+                      borderColor: "#00bfa5",
+                      backgroundColor: "#00bfa5",
+                      fontFamily: "Poppins, sans-serif",
+                    }}
+                    onClick={() => {
+                      setPage(1);
+                      fetchEntries(1);
+                    }}
+                  >
+                    Refresh
+                  </button>
+                )}
+                {d === 1 && (
+                  <button
+                    className="btn mat-raised-button"
+                    type="submit"
+                    style={{
+                      color: "white",
+                      borderColor: "#00bfa5",
+                      backgroundColor: "#00bfa5",
+                      fontFamily: "Poppins, sans-serif",
+                    }}
+                    onClick={() => {
+                      setPage(1);
+                      setD(0);
+                      fetchEntries(1);
+                    }}
+                  >
+                    All Entries
+                  </button>
+                )}
+              </div>
+              <nav
+                aria-label="Page navigation example"
+                style={{ float: "right" }}
+              >
+                <ul className="pagination">
+                  <button
+                    className="btn mat-stroked-button"
+                    type="submit"
                     style={{
                       color: "#00bfa5",
                       borderColor: "#00bfa5",
                       fontFamily: "Poppins, sans-serif",
                     }}
+                    onClick={prev}
+                    disabled={!prv}
                   >
-                    {page}
-                  </li>
-                )}
-                &nbsp;
-                <button
-                  className="btn mat-stroked-button"
-                  type="submit"
-                  style={{
-                    color: "#00bfa5",
-                    borderColor: "#00bfa5",
-                    fontFamily: "Poppins, sans-serif",
-                  }}
-                  onClick={next}
-                  disabled={!nxt}
-                >
-                  Next <i className="fas fa-angle-right"></i>
-                </button>
-              </ul>
-            </nav>
+                    <i className="fas fa-angle-left"></i> Previous
+                  </button>
+                  &nbsp;
+                  {isData && (
+                    <li
+                      className="btn"
+                      style={{
+                        color: "#00bfa5",
+                        borderColor: "#00bfa5",
+                        fontFamily: "Poppins, sans-serif",
+                      }}
+                    >
+                      {page}
+                    </li>
+                  )}
+                  &nbsp;
+                  <button
+                    className="btn mat-stroked-button"
+                    type="submit"
+                    style={{
+                      color: "#00bfa5",
+                      borderColor: "#00bfa5",
+                      fontFamily: "Poppins, sans-serif",
+                    }}
+                    onClick={next}
+                    disabled={!nxt}
+                  >
+                    Next <i className="fas fa-angle-right"></i>
+                  </button>
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
       </div>

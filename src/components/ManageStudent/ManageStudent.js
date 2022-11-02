@@ -682,7 +682,7 @@ const ManageStudent = () => {
   const handleClose = () => setOpenDialog(false);
 
   return (
-    <div>
+    <div className="components">
       <Dialog
         fullWidth={true}
         open={openDialog}
@@ -702,7 +702,10 @@ const ManageStudent = () => {
       <div
         style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "4.5%" }}
       >
-        <div className="ms__card ms__card-profile" style={{ height: "101vh" }}>
+        <div
+          className="ms__card ms__card-profile"
+          style={{ minHeight: "100vh" }}
+        >
           <div
             className="ms__card-header ms__card-header-image"
             style={{ height: "12vh", position: "relative", top: "-30px" }}

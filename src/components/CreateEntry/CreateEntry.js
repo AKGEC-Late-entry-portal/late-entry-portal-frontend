@@ -193,7 +193,7 @@ const CreateEntry = () => {
   };
 
   return (
-    <div>
+    <div className = "components">
       <div className="row" style={{ margin: "0" }}>
         <div className="col-sm-8">
           <div style={{ paddingLeft: "2.5%", paddingTop: "2.5%" }}>
