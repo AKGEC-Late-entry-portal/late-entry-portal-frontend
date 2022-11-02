@@ -101,7 +101,7 @@ const ManageStudent = () => {
     setLoading(true);
     const response = await axios
       .get(
-        "http://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=" +
+        "https://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=" +
           pg +
           "&limit=10",
         {
@@ -195,7 +195,7 @@ const ManageStudent = () => {
     }
     const res = await axios
       .get(
-        "http://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=" +
+        "https://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=" +
           page +
           "&limit=10&year=" +
           year +
@@ -640,7 +640,7 @@ const ManageStudent = () => {
     }
     const res = await axios
       .get(
-        "http://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=1&limit=5000&year=" +
+        "https://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=1&limit=5000&year=" +
           year +
           "&branch=" +
           branch +

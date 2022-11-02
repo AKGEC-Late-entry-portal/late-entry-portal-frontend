@@ -48,7 +48,7 @@ const ManageEntry = () => {
     setLoading(true);
     const response = await axios
       .get(
-        "http://akgec-late-entry.herokuapp.com/api/admin/entry/readall?limit=10&page=" +
+        "https://akgec-late-entry.herokuapp.com/api/admin/entry/readall?limit=10&page=" +
           pg,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -126,7 +126,7 @@ const ManageEntry = () => {
     setLoading(true);
     const res = await axios
       .get(
-        "http://akgec-late-entry.herokuapp.com/api/admin/entry/read?limit=10&page=" +
+        "https://akgec-late-entry.herokuapp.com/api/admin/entry/read?limit=10&page=" +
           page +
           "&date=" +
           date,

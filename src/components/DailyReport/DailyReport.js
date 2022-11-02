@@ -56,7 +56,7 @@ const DailyReport = () => {
     setLoading(true);
     const response = await axios
       .get(
-        "http://akgec-late-entry.herokuapp.com/api/admin/report/daily?page=" +
+        "https://akgec-late-entry.herokuapp.com/api/admin/report/daily?page=" +
           page +
           "&limit=10",
         {

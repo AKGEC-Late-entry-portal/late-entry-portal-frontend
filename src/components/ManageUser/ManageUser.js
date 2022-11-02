@@ -53,7 +53,7 @@ const ManageUser = () => {
   const fetchUsers = async (pg) => {
     const response = await axios
       .get(
-        "http://akgec-late-entry.herokuapp.com/api/admin/user/readall?limit=10&page=" +
+        "https://akgec-late-entry.herokuapp.com/api/admin/user/readall?limit=10&page=" +
           pg,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
