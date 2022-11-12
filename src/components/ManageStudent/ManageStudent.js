@@ -3,7 +3,12 @@ import "./ManageStudent.css";
 import { useEffect, useState } from "react";
 
 import Dialog from "@mui/material/Dialog";
-import { DialogContent } from "@mui/material";
+import {
+  Button,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -38,6 +43,7 @@ const ManageStudent = () => {
   const [searchStd, setSearchStd] = useState({ stdno: "" });
   const [openDialog, setOpenDialog] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [openUpdateAll, setOpenUpdateAll] = useState(false);
   const next = () => {
     setPage((prevPage) => prevPage + 1);
     if (d === 0) return fetchStudents(page + 1);
@@ -431,6 +437,7 @@ const ManageStudent = () => {
   const handleClose = () => {
     setOpenDialog(false);
     setOpenConfirmDialog(false);
+    setOpenUpdateAll(false);
   };
 
   const deleteItem = async (_id) => {
@@ -524,6 +531,14 @@ const ManageStudent = () => {
     setArr(arr);
   };
 
+  const handleUpdateAll = () => {
+    setOpenUpdateAll(true);
+  };
+
+  // const submitUpdateHandler = (e) => {
+  //   e.preventDefault();
+  // };
+
   return (
     <div className="components">
       <Dialog open={openConfirmDialog} onClose={handleClose} fullWidth={true}>
@@ -553,6 +568,77 @@ const ManageStudent = () => {
           />
         </DialogContent>
       </Dialog>
+      {/* <Dialog open={openUpdateAll} onClose={handleClose}>
+        <DialogTitle style={{ textAlign: "center" }}>
+          Select New Year / Branch
+        </DialogTitle>
+        <DialogContent>
+          <form
+            onSubmit={submitUpdateHandler}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <FormControl
+              sx={{ m: 1, minWidth: 200, maxWidth: 200 }}
+              variant="standard"
+            >
+              <InputLabel>New Year: &nbsp;</InputLabel>
+              <Select
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                // onChange={(e) => {
+                //   setData({ ...data, year: e.target.value });
+                // }}
+                // value={data.year}
+                required
+              >
+                <MenuItem value={"1"}>First</MenuItem>
+                <MenuItem value={"2"}>Second</MenuItem>
+                <MenuItem value={"3"}>Third</MenuItem>
+                <MenuItem value={"4"}>Fourth</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl
+              sx={{ m: 1, minWidth: 200, maxWidth: 200 }}
+              variant="standard"
+            >
+              <InputLabel>New Branch: &nbsp;</InputLabel>
+              <Select
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                // onChange={(e) => {
+                //   setData({ ...data, branch: e.target.value });
+                // }}
+                // value={data.branch}
+                required
+              >
+                <MenuItem value={"CSE"}>
+                  Computer Science & Engineering
+                </MenuItem>
+                <MenuItem value={"CS"}>Computer Science</MenuItem>
+                <MenuItem value={"CSIT"}>
+                  Computer Science & Information Technology
+                </MenuItem>
+                <MenuItem value={"IT"}>Information Technology</MenuItem>
+                <MenuItem value={"ECE"}>Electronics And Communication</MenuItem>
+                <MenuItem value={"EN"}>Electrical And Electronics</MenuItem>
+                <MenuItem value={"EI"}>Electronics & Instrumentation</MenuItem>
+                <MenuItem value={"ME"}>Mechanical</MenuItem>
+                <MenuItem value={"CE"}>Civil</MenuItem>
+                <MenuItem value={"MCA"}>MCA</MenuItem>
+              </Select>
+            </FormControl>
+            <br />
+            <Button variant="contained" type="submit">
+              Update
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog> */}
       <div
         style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "4.5%" }}
       >
@@ -740,94 +826,82 @@ const ManageStudent = () => {
                       </tbody>
                     </table>
                   </div>
-                  <div style={{ float: "left" }}>
+                </div>
+                <div style={{ float: "left" }}>
+                  <button
+                    className="btn mat-flat-button ms__button"
+                    type="submit"
+                    style={{
+                      color: "white",
+                      borderColor: "#ff783d",
+                      backgroundColor: "#ff783d",
+                      fontFamily: "Poppins, sans-serif",
+                    }}
+                    onClick={() => {
+                      setPage(1);
+                      setSearchedStd("");
+                      setCreateStd({
+                        year: "",
+                        branch: "",
+                      });
+                      setArr([]);
+                      fetchStudents(1);
+                    }}
+                  >
+                    Refresh
+                  </button>
+                </div>
+                <nav
+                  aria-label="Page navigation example"
+                  style={{ float: "right" }}
+                >
+                  <ul className="pagination">
                     <button
-                      className="btn mat-flat-button ms__button"
+                      className="btn mat-stroked-button ms__button"
                       type="submit"
+                      onClick={prev}
                       style={{
-                        color: "white",
+                        color: "#ff783d",
                         borderColor: "#ff783d",
-                        backgroundColor: "#ff783d",
                         fontFamily: "Poppins, sans-serif",
                       }}
-                      //   position: "absolute",
-                      //   bottom: "11.5px",
-                      // }}
-                      onClick={() => {
-                        setPage(1);
-                        setSearchedStd("");
-                        setCreateStd({
-                          year: "",
-                          branch: "",
-                        });
-                        setArr([]);
-                        fetchStudents(1);
-                      }}
+                      disabled={!prv}
                     >
-                      Refresh
+                      <i className="fas fa-angle-left"></i> Previous
                     </button>
-                  </div>
-                  <nav
-                    aria-label="Page navigation example"
-                    style={{ float: "right" }}
-                  >
-                    <ul className="pagination">
-                      <button
-                        className="btn mat-stroked-button ms__button"
-                        type="submit"
-                        onClick={prev}
+                    &nbsp;
+                    {isData && (
+                      <li
+                        className="mat-stroked-button"
                         style={{
                           color: "#ff783d",
                           borderColor: "#ff783d",
                           fontFamily: "Poppins, sans-serif",
-                          // position: "absolute",
-                          // right: "22%",
-                          // bottom: "2%",
+                          border: "1.2px solid",
+                          borderRadius: "3px",
+                          width: "59px",
+                          height: "33px",
                         }}
-                        disabled={!prv}
                       >
-                        <i className="fas fa-angle-left"></i> Previous
-                      </button>
-                      &nbsp;
-                      {isData && (
-                        <li
-                          className="mat-stroked-button"
-                          style={{
-                            color: "#ff783d",
-                            borderColor: "#ff783d",
-                            fontFamily: "Poppins, sans-serif",
-                            // position: "absolute",
-                            // bottom: "2.05%",
-                            // right: "12.5%",
-                            border: "1.2px solid",
-                            borderRadius: "3px",
-                            width: "59px",
-                            height: "33px",
-                          }}
-                        >
-                          {page}
-                        </li>
-                      )}
-                      &nbsp;
-                      <button
-                        className="btn mat-stroked-button ms__button"
-                        type="submit"
-                        onClick={next}
-                        style={{
-                          color: "#ff783d",
-                          borderColor: "#ff783d",
-                          fontFamily: "Poppins, sans-serif",
-                          // position: "absolute",
-                          // right: "2%",
-                          // bottom: "2%",
-                        }}
-                        disabled={!nxt}
-                      >
-                        Next <i className="fas fa-angle-right"></i>
-                      </button>
-                    </ul>
-                  </nav>
-                </div>
+                        {page}
+                      </li>
+                    )}
+                    &nbsp;
+                    <button
+                      className="btn mat-stroked-button ms__button"
+                      type="submit"
+                      onClick={next}
+                      style={{
+                        color: "#ff783d",
+                        borderColor: "#ff783d",
+                        fontFamily: "Poppins, sans-serif",
+                      }}
+                      disabled={!nxt}
+                    >
+                      Next <i className="fas fa-angle-right"></i>
+                    </button>
+                  </ul>
+                </nav>
               </div>
               <div className="col-md-3" id="ms__col-sel">
                 <h5 style={{ marginBottom: "2px", marginTop: "9px" }}>
@@ -941,17 +1015,32 @@ const ManageStudent = () => {
                   Options
                 </h5>
                 <div className="ms__options">
+                  {/* <button
+                    className="btn mat-flat-button ms__button"
+                    type="submit"
+                    onClick={handleUpdateAll}
+                    style={{ fontSize: "18px" }}
+                    disabled={createStd.branch === "" && createStd.year === ""}
+                  >
+                    Update all
+                  </button> */}
                   <button
                     className="btn mat-flat-button ms__button"
                     type="submit"
                     onClick={handleDeleteAll}
                     style={{ fontSize: "18px" }}
+                    disabled={createStd.branch === "" && createStd.year === ""}
                   >
                     Delete all
                   </button>
+                  {/* <p className="ms__term">
+                    *Use Update All to Update the filtered students of selected
+                    Year / Branch.
+                  </p> */}
+                  <br />
                   <p className="ms__term">
-                    *Use Delete All to Delete all students of selected Branch /
-                    Year.
+                    *Use Delete All to Delete all filtered students of selected
+                    Year / Branch.
                   </p>
                 </div>
               </div>
