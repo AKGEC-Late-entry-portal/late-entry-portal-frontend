@@ -1,63 +1,172 @@
 import { FormControl, Input, MenuItem, Select } from "@mui/material";
+import axios from "axios";
+import { useEffect } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Spinner from "react-spinner-material";
+import { toast } from "react-toastify";
 import "./UpdateStudent.css";
 
-const UpdateStudent = ({ selectedStd, boolArr, editVal }) => {
-  console.log(selectedStd, boolArr, editVal);
-  const [loading, setLoading] = useState(false);
-  const [editArr, setEditArr] = useState(editVal);
-
-  const [createStd, setCreateStd] = useState({
-    id: [],
-    stdNo: "",
+const UpdateStudent = (props) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [disable, setDisable] = useState(false);
+  const [data, setData] = useState({
+    id: "",
     name: "",
-    branch: "",
     mobile: "",
     email: "",
+    branch: "",
     year: "",
+    stdNo: "",
     lateCount: "",
     fineCount: "",
-  });
-  const [boolObj, setBoolObj] = useState({
-    stdno: false,
-    name: false,
-    branch: false,
-    mobile: false,
-    email: false,
-    year: false,
-    lateCount: false,
-    fineCount: false,
   });
 
   const submitHandler = (e) => {
     e.preventDefault();
-    setLoading(true);
-    if (!boolObj.name) {
-      createStd.name = "";
-    }
-    if (!boolObj.mobile) {
-      createStd.mobile = "";
-    }
-    if (!boolObj.email) {
-      createStd.email = "";
-    }
-    if (!boolObj.branch) {
-      createStd.branch = "";
-    }
-    if (!boolObj.year) {
-      createStd.year = "";
-    }
-    if (!boolObj.stdNo) {
-      createStd.stdNo = "";
-    }
-    if (!boolObj.lateCount) {
-      createStd.lateCount = "";
-    }
-    if (!boolObj.fineCount) {
-      createStd.fineCount = "";
+    const updateData = async (data) => {
+      console.log(data);
+      const res = await axios
+        .patch(
+          "https://akgec-late-entry.herokuapp.com/api/admin/student/update",
+          data,
+          {
+            headers: { Authorization: `Bearer ${localStorage.token}` },
+          }
+        )
+        .catch((err) => {
+          props.onSuccessfulUpdate(false);
+          setLoading(false);
+          toast.error(
+            `Error updating Student! Check Your Connection and Try Again!`,
+            {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            }
+          );
+          if (err.status === 403) {
+            toast.error("Unauthorized User", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            localStorage.removeItem("token");
+            localStorage.removeItem("results");
+            navigate("/");
+          } else {
+            toast.error("Error Updating Student", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+          }
+        });
+      if (res) {
+        setLoading(false);
+        props.onSuccessfulUpdate(true);
+        toast.success("Student Updated Successfully!!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    };
+    updateData(data);
+  };
+
+  const fetchStudent = async (id) => {
+    const res = await axios
+      .get(
+        "https://akgec-late-entry.herokuapp.com/api/admin/student/read/" + id,
+        {
+          headers: { Authorization: `Bearer ${localStorage.token}` },
+        }
+      )
+      .catch((err) => {
+        if (err.status === 403) {
+          toast.error("Unauthorized User", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          localStorage.removeItem("token");
+          localStorage.removeItem("results");
+          navigate("/");
+        } else {
+          toast.error("Unable to access student information!", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
+        setLoading(false);
+        toast.error(
+          `Error loading Student! Check Your Connection and Try Again!`,
+          {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          }
+        );
+      });
+    if (res) {
+      setLoading(false);
+      const x = res.data.result;
+      console.log(x);
+      setData({
+        id: x._id,
+        name: x.name,
+        mobile: x.mobile,
+        email: x.email,
+        branch: x.branch,
+        year: x.year,
+        stdNo: x.stdNo,
+        lateCount: x.lateCount,
+        fineCount: x.fineCount,
+      });
     }
   };
+
+  useEffect(() => {
+    fetchStudent(props._id);
+  }, []);
 
   return (
     <div style={{ padding: "0", margin: "0" }}>
@@ -99,234 +208,192 @@ const UpdateStudent = ({ selectedStd, boolArr, editVal }) => {
         >
           <table>
             <tbody>
-              {boolObj.name && (
-                <tr>
-                  <td>
-                    <label>Name:</label>
-                  </td>
-                  <td style={{ width: "100px" }}>
-                    <div>
-                      <FormControl variant="standard" sx={{ minWidth: 180 }}>
-                        <Input
-                          id="component-helper"
-                          // value={user.name}
-                          // onChange={(e) => {
-                          //   setIsEmpty({
-                          //     ...isEmpty,
-                          //     name: e.target.value === "" ? true : false,
-                          //   });
-                          //   setUser({ ...user, name: e.target.value });
-                          // }}
-                          aria-describedby="component-helper-text"
-                        />
-                      </FormControl>
-                    </div>
-                  </td>
-                </tr>
-              )}
-              {boolObj.mobile && (
-                <tr>
-                  <td>
-                    <label>Mobile No:</label>
-                  </td>
-                  <td>
-                    <div>
-                      <FormControl variant="standard" sx={{ minWidth: 180 }}>
-                        <Input
-                          id="component-helper"
-                          // value={user.name}
-                          // onChange={(e) => {
-                          //   setIsEmpty({
-                          //     ...isEmpty,
-                          //     name: e.target.value === "" ? true : false,
-                          //   });
-                          //   setUser({ ...user, name: e.target.value });
-                          // }}
-                          aria-describedby="component-helper-text"
-                        />
-                      </FormControl>
-                    </div>
-                  </td>
-                </tr>
-              )}
-              {boolObj.email && (
-                <tr>
-                  <td>
-                    <label>Email:</label>
-                  </td>
-                  <td>
-                    <div>
-                      <FormControl variant="standard" sx={{ minWidth: 180 }}>
-                        <Input
-                          id="component-helper"
-                          // value={user.name}
-                          // onChange={(e) => {
-                          //   setIsEmpty({
-                          //     ...isEmpty,
-                          //     name: e.target.value === "" ? true : false,
-                          //   });
-                          //   setUser({ ...user, name: e.target.value });
-                          // }}
-                          aria-describedby="component-helper-text"
-                        />
-                      </FormControl>
-                    </div>
-                  </td>
-                </tr>
-              )}
-              {boolObj.branch && (
-                <tr>
-                  <td>
-                    <label>Branch:</label>
-                  </td>
-                  <td>
-                    <div>
-                      <FormControl sx={{ minWidth: 180 }} variant="standard">
-                        <Select
-                          labelId="demo-simple-select-helper-label"
-                          id="demo-simple-select-helper"
-                          // value={user.privilege}
-                          // onChange={(e) => {
-                          //   setIsEmpty({
-                          //     ...isEmpty,
-                          //     privilege: e.target.value === "" ? true : false,
-                          //   });
-                          //   setUser({ ...user, privilege: e.target.value });
-                          // }}
-                        >
-                          <MenuItem value={"CSE"}>
-                            Computer Science & Engineering
-                          </MenuItem>
-                          <MenuItem value={"CS"}>Computer Science</MenuItem>
-                          <MenuItem value={"CS/IT"}>
-                            Computer Science & Information Technology
-                          </MenuItem>
-                          <MenuItem value={"IT"}>
-                            Information Technology
-                          </MenuItem>
-                          <MenuItem value={"ECE"}>
-                            Electronics And Communication
-                          </MenuItem>
-                          <MenuItem value={"EN"}>
-                            Electrical And Electronics
-                          </MenuItem>
-                          <MenuItem value={"EI"}>
-                            Electronics & Instrumentation
-                          </MenuItem>
-                          <MenuItem value={"ME"}>Mechanical</MenuItem>
-                          <MenuItem value={"CE"}>Civil</MenuItem>
-                          <MenuItem value={"MCA"}>MCA</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </div>
-                  </td>
-                </tr>
-              )}
-              {boolObj.year && (
-                <tr>
-                  <td>
-                    <label>Year</label>
-                  </td>
-                  <td>
-                    <div>
-                      <FormControl sx={{ minWidth: 180 }} variant="standard">
-                        <Select
-                          labelId="demo-simple-select-helper-label"
-                          id="demo-simple-select-helper"
-                          // value={user.privilege}
-                          // onChange={(e) => {
-                          //   setIsEmpty({
-                          //     ...isEmpty,
-                          //     privilege: e.target.value === "" ? true : false,
-                          //   });
-                          //   setUser({ ...user, privilege: e.target.value });
-                          // }}
-                        >
-                          <MenuItem value={"1"}>First</MenuItem>
-                          <MenuItem value={"2"}>Second</MenuItem>
-                          <MenuItem value={"3"}>Third</MenuItem>
-                          <MenuItem value={"4"}>Fourth</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </div>
-                  </td>
-                </tr>
-              )}
-              {boolObj.stdNo && (
-                <tr>
-                  <td>
-                    <label>Student No:</label>
-                  </td>
-                  <td>
-                    <div>
-                      <FormControl variant="standard" sx={{ minWidth: 180 }}>
-                        <Input
-                          id="component-helper"
-                          // value={user.name}
-                          // onChange={(e) => {
-                          //   setIsEmpty({
-                          //     ...isEmpty,
-                          //     name: e.target.value === "" ? true : false,
-                          //   });
-                          //   setUser({ ...user, name: e.target.value });
-                          // }}
-                          aria-describedby="component-helper-text"
-                        />
-                      </FormControl>
-                    </div>
-                  </td>
-                </tr>
-              )}
-              {boolObj.lateCount && (
-                <tr>
-                  <td>
-                    <label>Late Count:</label>
-                  </td>
-                  <td>
-                    <div>
-                      <FormControl variant="standard" sx={{ minWidth: 180 }}>
-                        <Input
-                          id="component-helper"
-                          // value={user.name}
-                          // onChange={(e) => {
-                          //   setIsEmpty({
-                          //     ...isEmpty,
-                          //     name: e.target.value === "" ? true : false,
-                          //   });
-                          //   setUser({ ...user, name: e.target.value });
-                          // }}
-                          aria-describedby="component-helper-text"
-                        />
-                      </FormControl>
-                    </div>
-                  </td>
-                </tr>
-              )}
-              {boolObj.fineCount && (
-                <tr>
-                  <td>
-                    <label>Fine Count:</label>
-                  </td>
-                  <td>
-                    <div>
-                      <FormControl variant="standard" sx={{ minWidth: 180 }}>
-                        <Input
-                          id="component-helper"
-                          // value={user.name}
-                          // onChange={(e) => {
-                          //   setIsEmpty({
-                          //     ...isEmpty,
-                          //     name: e.target.value === "" ? true : false,
-                          //   });
-                          //   setUser({ ...user, name: e.target.value });
-                          // }}
-                          aria-describedby="component-helper-text"
-                        />
-                      </FormControl>
-                    </div>
-                  </td>
-                </tr>
-              )}
+              <tr>
+                <td>
+                  <label>Name:</label>
+                </td>
+                <td style={{ width: "100px" }}>
+                  <div>
+                    <FormControl variant="standard" sx={{ minWidth: 200 }}>
+                      <Input
+                        id="component-helper"
+                        value={data.name}
+                        onChange={(e) => {
+                          setData({ ...data, name: e.target.value });
+                        }}
+                        required
+                      />
+                    </FormControl>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Mobile No:</label>
+                </td>
+                <td>
+                  <div>
+                    <FormControl variant="standard" sx={{ minWidth: 200 }}>
+                      <Input
+                        id="component-helper"
+                        value={data.mobile}
+                        onChange={(e) => {
+                          setDisable(
+                            !(e.target.value.toString().length === 10)
+                          );
+                          setData({ ...data, mobile: e.target.value });
+                        }}
+                        required
+                      />
+                    </FormControl>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Email:</label>
+                </td>
+                <td>
+                  <div>
+                    <FormControl variant="standard" sx={{ minWidth: 200 }}>
+                      <Input
+                        id="component-helper"
+                        value={data.email}
+                        onChange={(e) => {
+                          setData({ ...data, email: e.target.value });
+                        }}
+                        required
+                      />
+                    </FormControl>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Branch:</label>
+                </td>
+                <td>
+                  <div>
+                    <FormControl
+                      sx={{ minWidth: 200, maxWidth: 200 }}
+                      variant="standard"
+                    >
+                      <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        onChange={(e) => {
+                          setData({ ...data, branch: e.target.value });
+                        }}
+                        value={data.branch}
+                        required
+                      >
+                        <MenuItem value={"CSE"}>
+                          Computer Science & Engineering
+                        </MenuItem>
+                        <MenuItem value={"CS"}>Computer Science</MenuItem>
+                        <MenuItem value={"CSIT"}>
+                          Computer Science & Information Technology
+                        </MenuItem>
+                        <MenuItem value={"IT"}>Information Technology</MenuItem>
+                        <MenuItem value={"ECE"}>
+                          Electronics And Communication
+                        </MenuItem>
+                        <MenuItem value={"EN"}>
+                          Electrical And Electronics
+                        </MenuItem>
+                        <MenuItem value={"EI"}>
+                          Electronics & Instrumentation
+                        </MenuItem>
+                        <MenuItem value={"ME"}>Mechanical</MenuItem>
+                        <MenuItem value={"CE"}>Civil</MenuItem>
+                        <MenuItem value={"MCA"}>MCA</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Year</label>
+                </td>
+                <td>
+                  <div>
+                    <FormControl sx={{ minWidth: 200 }} variant="standard">
+                      <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        onChange={(e) => {
+                          setData({ ...data, year: e.target.value });
+                        }}
+                        value={data.year}
+                        required
+                      >
+                        <MenuItem value={"1"}>First</MenuItem>
+                        <MenuItem value={"2"}>Second</MenuItem>
+                        <MenuItem value={"3"}>Third</MenuItem>
+                        <MenuItem value={"4"}>Fourth</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Student No:</label>
+                </td>
+                <td>
+                  <div>
+                    <FormControl variant="standard" sx={{ minWidth: 200 }}>
+                      <Input
+                        id="component-helper"
+                        onChange={(e) => {
+                          setData({ ...data, stdNo: e.target.value });
+                        }}
+                        value={data.stdNo}
+                        required
+                      />
+                    </FormControl>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Late Count:</label>
+                </td>
+                <td>
+                  <div>
+                    <FormControl variant="standard" sx={{ minWidth: 200 }}>
+                      <Input
+                        id="component-helper"
+                        onChange={(e) => {
+                          setData({ ...data, lateCount: e.target.value });
+                        }}
+                        value={data.lateCount}
+                        required
+                      />
+                    </FormControl>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Fine Count:</label>
+                </td>
+                <td>
+                  <div>
+                    <FormControl variant="standard" sx={{ minWidth: 200 }}>
+                      <Input
+                        id="component-helper"
+                        onChange={(e) => {
+                          setData({ ...data, fineCount: e.target.value });
+                        }}
+                        value={data.fineCount}
+                        required
+                      />
+                    </FormControl>
+                  </div>
+                </td>
+              </tr>
               <tr>
                 <td
                   colSpan="2"
@@ -341,6 +408,7 @@ const UpdateStudent = ({ selectedStd, boolArr, editVal }) => {
                     id="us__btn1"
                     type="submit"
                     style={{ height: "47px", marginTop: "10%" }}
+                    disabled={disable}
                   >
                     Update
                   </button>

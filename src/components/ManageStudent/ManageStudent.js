@@ -2,7 +2,6 @@ import "./ManageStudent.css";
 
 import { useEffect, useState } from "react";
 
-import Checkbox from "@mui/material/Checkbox";
 import Dialog from "@mui/material/Dialog";
 import { DialogContent } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
@@ -20,60 +19,27 @@ const Year = ["-", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ"];
 const ManageStudent = () => {
   const navigate = useNavigate();
   const [results, setResults] = useState([]);
+  const [arr, setArr] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [nxt, setNxt] = useState(true);
   const [prv, setPrv] = useState(true);
   const [d, setD] = useState(0);
   const [isData, setIsData] = useState(false);
-  const [isDelete, setIsDelete] = useState(false);
-  const [isStoring, setIsStoring] = useState(false);
-  const [check, setCheck] = useState(false);
-  const [isCheck, setIsCheck] = useState([]);
   const [j, setJ] = useState("");
   const [message, setMessage] = useState("");
   const [student, setStudent] = useState("");
-
-  const [selected, setSelected] = useState({
-    student: [],
-    name: [],
-    stdNo: [],
-    branch: [],
-    year: [],
-    mobile: [],
-    email: [],
-    lateCount: [],
-    fineCount: [],
-  });
-  const [editVal, setEditVal] = useState({
-    name: "",
-    mobile: "",
-    email: "",
-    branch: "",
-    year: "",
-    stdNo: "",
-    lateCount: "",
-    fineCount: "",
-  });
-  const [boolArr, setBoolArr] = useState([]);
+  const [studentData, setStudentData] = useState({});
   const [createStd, setCreateStd] = useState({
     year: "",
     branch: "",
   });
   const [searchedStd, setSearchedStd] = useState("");
   const [searchStd, setSearchStd] = useState({ stdno: "" });
-  const [user_ID, setUser_ID] = useState({
-    student: "",
-    boolArr: [],
-    editVal: {},
-  });
   const [openDialog, setOpenDialog] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const next = () => {
     setPage((prevPage) => prevPage + 1);
-    if (check) {
-      setCheck(false);
-    }
     if (d === 0) return fetchStudents(page + 1);
     else if (d === 1) return func2(page + 1);
   };
@@ -93,16 +59,12 @@ const ManageStudent = () => {
         theme: "colored",
       });
     }
-    if (check) {
-      setCheck(false);
-    }
     if (d === 0) return fetchStudents(page - 1);
     else if (d === 1) return func2(page - 1);
   };
 
   const fetchStudents = async (pg) => {
     setResults([]);
-    deselectAll();
     setLoading(true);
     const response = await axios
       .get(
@@ -146,12 +108,6 @@ const ManageStudent = () => {
     if (response) {
       setLoading(false);
       setIsData(true);
-      if (pg === 1) {
-        storeALL();
-      }
-      if (check) {
-        setCheck(false);
-      }
       const users = response.data.results;
       setResults(users);
       setStudent(users.length);
@@ -187,7 +143,6 @@ const ManageStudent = () => {
     setResults([]);
     setPage(page);
     setD(1);
-    deselectAll();
     setLoading(true);
     var branch = createStd.branch;
     var year = createStd.year;
@@ -249,12 +204,6 @@ const ManageStudent = () => {
       const users = res.data.results;
       setResults(users);
       setStudent(users.length);
-      if (check) {
-        setCheck(false);
-      }
-      if (page === 1) {
-        storeALL();
-      }
       if (users.length === 0) {
         toast.error("You have reached the end of the document!", {
           position: "bottom-right",
@@ -287,28 +236,15 @@ const ManageStudent = () => {
     setResults([]);
     setPage(1);
     setD(0);
-    setCheck(false);
-    setIsDelete(false);
-    setSelected({ ...selected, student: [] });
-    deselectAll();
     setSearchStd({ stdno: "" });
     setSearchedStd("");
     fetchStudents(page);
   }, []);
 
-  const handleClick = (e) => {
-    const { id, checked } = e.target;
-    setIsCheck([...isCheck, id]);
-    if (!checked) {
-      setIsCheck(isCheck.filter((item) => item !== id));
-    }
-  };
-
-  const handleDelete = async () => {
-    setIsDelete(true);
-    let len = selected.student.length;
+  const handleDeleteAll = async () => {
+    let len = arr.length;
     if (len === 0) {
-      toast.warn("Atleast one student must be selected!", {
+      toast.warn("No students to delete!", {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -318,12 +254,12 @@ const ManageStudent = () => {
         progress: undefined,
         theme: "colored",
       });
-      setIsDelete(false);
     } else {
+      console.log(arr);
       const res = await axios
         .patch(
           "https://akgec-late-entry.herokuapp.com/api/admin/student/delete",
-          selected.student,
+          arr,
           {
             headers: { Authorization: `Bearer ${localStorage.token}` },
           }
@@ -356,7 +292,6 @@ const ManageStudent = () => {
               theme: "colored",
             });
           }
-          setIsDelete(false);
           if (d === 0) return fetchStudents(page);
           else if (d === 1) return func2(page);
         });
@@ -371,7 +306,7 @@ const ManageStudent = () => {
           progress: undefined,
           theme: "colored",
         });
-        setIsDelete(false);
+        setArr([]);
         if (d === 0) return fetchStudents(page);
         else if (d === 1) return func2(page);
       }
@@ -379,168 +314,16 @@ const ManageStudent = () => {
   };
 
   const reset = () => {
+    setArr([]);
     setCreateStd({
       year: "",
       branch: "",
     });
     setD(0);
     setPage(1);
-    setSelected({ ...selected, student: [] });
     setSearchedStd("");
     setSearchStd({ ...searchStd, stdno: "" });
     fetchStudents(1);
-  };
-
-  const Selected = (
-    id,
-    Name,
-    Stdno,
-    Branch,
-    Mobile,
-    Email,
-    Year,
-    lateCount,
-    fineCount
-  ) => {
-    const ind = selected.student.indexOf(id);
-    if (ind < 0) {
-      selected.student.push(id);
-      selected.name.push(Name);
-      selected.stdNo.push(Stdno);
-      selected.year.push(Year);
-      selected.branch.push(Branch);
-      selected.mobile.push(Mobile);
-      selected.email.push(Email);
-      selected.lateCount.push(lateCount);
-      selected.fineCount.push(fineCount);
-    } else {
-      selected.student.splice(ind, 1);
-      selected.name.splice(ind, 1);
-      selected.stdNo.splice(ind, 1);
-      selected.year.splice(ind, 1);
-      selected.branch.splice(ind, 1);
-      selected.mobile.splice(ind, 1);
-      selected.email.splice(ind, 1);
-      selected.fineCount.splice(ind, 1);
-      selected.lateCount.splice(ind, 1);
-    }
-    setSelected(selected);
-  };
-
-  const selectAll = () => {
-    setCheck(true);
-    setIsCheck(results.map((li) => li._id));
-    var id = "";
-    for (var i = 0; i < results.length; i++) {
-      id = results[i]._id;
-      const ind = selected.student.indexOf(id);
-      if (ind < 0) {
-        selected.student.push(id);
-        selected.name.push(results[i].name);
-        selected.stdNo.push(results[i].stdNo);
-        selected.year.push(results[i].year);
-        selected.branch.push(results[i].branch);
-        selected.mobile.push(results[i].mobile);
-        selected.email.push(results[i].email);
-        selected.lateCount.push(results[i].lateCount);
-        selected.fineCount.push(results[i].fineCount);
-      }
-    }
-    setSelected(selected);
-  };
-
-  const deselectAll = () => {
-    setCheck(false);
-    setIsCheck([]);
-    setSelected({
-      student: [],
-      name: [],
-      stdNo: [],
-      branch: [],
-      year: [],
-      mobile: [],
-      email: [],
-      lateCount: [],
-      fineCount: [],
-    });
-    setBoolArr([]);
-  };
-
-  const AllTheSame = (array) => {
-    var first = array[0];
-    return array.every(function (element) {
-      return element === first;
-    });
-  };
-
-  const AllFalse = (array) => {
-    return array.every(function (element) {
-      return element === false;
-    });
-  };
-
-  const update = () => {
-    // console.log(selected.student);
-    let len = selected.student.length;
-    if (len === 0) {
-      toast.warn("Atleast one student must be selected!", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    } else {
-      var boolArray = [
-        AllTheSame(selected.name),
-        AllTheSame(selected.mobile),
-        AllTheSame(selected.email),
-        AllTheSame(selected.branch),
-        AllTheSame(selected.year),
-        AllTheSame(selected.stdNo),
-        AllTheSame(selected.lateCount),
-        AllTheSame(selected.fineCount),
-      ];
-      if (AllFalse(boolArray)) {
-        toast.error("No information can be changed for selected students!", {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      } else {
-        setEditVal({
-          name: selected.name[0],
-          mobile: selected.mobile[0],
-          email: selected.email[0],
-          branch: selected.branch[0],
-          year: selected.year[0],
-          stdNo: selected.stdNo[0],
-          lateCount: selected.lateCount[0],
-          fineCount: selected.fineCount[0],
-        });
-        setUser_ID({
-          student: selected.student,
-          boolArr: boolArr,
-          editVal: editVal,
-        });
-        setOpenDialog(true);
-
-        // dialogRef3.afterClosed().subscribe(dialog_result=>{
-        //   if(dialog_result){
-        //     if (d === 0) return fetchStudents(page);
-        //     else if (d === 1) return func2(page);
-        //   }
-        // })
-      }
-    }
   };
 
   const search = async () => {
@@ -564,7 +347,6 @@ const ManageStudent = () => {
       } else {
         var _res = [];
         setLoading(true);
-        setSelected({ ...selected, student: [] });
         const res = await axios
           .get(
             "https://akgec-late-entry.herokuapp.com/api/admin/student/read?stdNo=" +
@@ -612,9 +394,6 @@ const ManageStudent = () => {
           setIsData(true);
           _res[0] = res.data.result;
           setResults(_res);
-          if (check) {
-            setCheck(false);
-          }
           if (res.data.next == null) {
             setNxt(false);
           } else {
@@ -630,62 +409,6 @@ const ManageStudent = () => {
     }
   };
 
-  const storeALL = async () => {
-    // console.log(createStd);
-    // console.log(selected.student);
-    // console.log(searchedStd);
-    setIsStoring(true);
-    var branch = createStd.branch;
-    var year = createStd.year;
-    if (createStd.branch === null) {
-      branch = "";
-      setCreateStd({ ...createStd, branch: "" });
-    }
-    if (createStd.year === null) {
-      year = "";
-      setCreateStd({ ...createStd, year: "" });
-    }
-    const res = await axios
-      .get(
-        "https://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=1&limit=5000&year=" +
-          year +
-          "&branch=" +
-          branch +
-          "&name=" +
-          searchedStd,
-        {
-          headers: { Authorization: `Bearer ${localStorage.token}` },
-        }
-      )
-      .catch((err) => {
-        console.log(err);
-      });
-    if (res) {
-      // console.log(res.data.results);
-      localStorage.removeItem("results");
-      localStorage.setItem("results", JSON.stringify(res.data.results));
-      setIsStoring(false);
-    }
-  };
-
-  const showALL = () => {
-    // console.log(createStd);
-    // console.log(selected.student);
-    // console.log(searchedStd);
-    setIsStoring(true);
-    setResults(JSON.parse(localStorage.getItem("results")));
-    setNxt(false);
-    setPrv(false);
-    setCheck(true);
-    selectAll();
-    return selectedFunc();
-  };
-
-  const selectedFunc = () => {
-    localStorage.removeItem("results");
-    setIsStoring(false);
-  };
-
   const confirmDialog = (id, a) => {
     if (student === 1) {
       toast.error("Can't Delete All Students!!", {
@@ -699,6 +422,7 @@ const ManageStudent = () => {
         theme: "colored",
       });
     } else {
+      setJ(id);
       setMessage(`Are you sure you want to delete student ` + a + ` ?`);
       setOpenConfirmDialog(true);
     }
@@ -710,15 +434,30 @@ const ManageStudent = () => {
   };
 
   const deleteItem = async (_id) => {
-    await axios
-      .delete(
-        "https://akgec-late-entry.herokuapp.com/api/admin/student/delete/" +
-          [_id],
+    const arr = [];
+    arr.push(_id);
+    console.log(arr);
+    const res = await axios
+      .patch(
+        "https://akgec-late-entry.herokuapp.com/api/admin/student/delete",
+        arr,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
         }
       )
       .catch((e) => console.log(e));
+    if (res) {
+      toast.success("Student deleted successfully", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
     setResults(
       results.filter((item) => {
         return item._id !== _id;
@@ -735,8 +474,54 @@ const ManageStudent = () => {
 
   const openDialogBox = (_id) => {
     setJ(_id);
-    // setUserData(results.filter((item) => item._id === _id));
-    // setOpenEditDialog(true);
+    setStudentData(results.filter((item) => item._id === _id));
+    setOpenDialog(true);
+  };
+
+  const successfulUpdateHandler = (res) => {
+    if (res) {
+      setOpenDialog(false);
+      fetchStudents(page);
+    }
+  };
+
+  const storeIDs = (year, branch) => {
+    const arr = [];
+    if (year === "" && branch === "") {
+      toast.warn("Please select Branch / Year to delete", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    } else if (year !== "" && branch !== "") {
+      const res = JSON.parse(localStorage.getItem("results"));
+      for (let i = 0; i < res.length; i++) {
+        if (res[i].year === year && res[i].branch === branch) {
+          arr.push(res[i]._id);
+        }
+      }
+    } else if (year === "") {
+      const res = JSON.parse(localStorage.getItem("results"));
+      for (let i = 0; i < res.length; i++) {
+        if (res[i].branch === branch) {
+          arr.push(res[i]._id);
+        }
+      }
+    } else if (branch === "") {
+      const res = JSON.parse(localStorage.getItem("results"));
+      for (let i = 0; i < res.length; i++) {
+        if (res[i].year === year) {
+          arr.push(res[i]._id);
+        }
+      }
+    }
+    setArr(arr);
   };
 
   return (
@@ -761,7 +546,11 @@ const ManageStudent = () => {
         }}
       >
         <DialogContent>
-          <UpdateStudent />
+          <UpdateStudent
+            onSuccessfulUpdate={successfulUpdateHandler}
+            _id={j}
+            data={studentData}
+          />
         </DialogContent>
       </Dialog>
       <div
@@ -832,33 +621,8 @@ const ManageStudent = () => {
                     <table className="table ms__table">
                       <thead className="text-primary">
                         <tr>
-                          {/* <th style={{ padding: "0", width: "5%" }}>
-                            {!check && (
-                              <Checkbox
-                                sx={{
-                                  color: "gray",
-                                  "&.Mui-checked": {
-                                    color: "#ff783d",
-                                  },
-                                }}
-                                onClick={selectAll}
-                              />
-                            )}
-                            {check && (
-                              <Checkbox
-                                checked={true}
-                                sx={{
-                                  color: "gray",
-                                  "&.Mui-checked": {
-                                    color: "#ff783d",
-                                  },
-                                }}
-                                onClick={deselectAll}
-                              />
-                            )}
-                          </th> */}
                           <th style={{ width: "15%" }} className="ms__th">
-                            S.No.
+                            &nbsp; &nbsp; S.No.
                           </th>
                           <th style={{ width: "28%" }} className="ms__th">
                             Name
@@ -899,36 +663,6 @@ const ManageStudent = () => {
                         {results.map((com, index) => {
                           return (
                             <tr key={com._id}>
-                              {/* <td
-                                style={{ width: "5%", padding: "0" }}
-                                className="ms__td"
-                              >
-                                <Checkbox
-                                  id={com._id}
-                                  checked={isCheck.includes(com._id)}
-                                  inputProps={{ "aria-label": "controlled" }}
-                                  onChange={() => {
-                                    Selected(
-                                      com._id,
-                                      com.name,
-                                      com.stdNo,
-                                      com.branch,
-                                      com.mobile,
-                                      com.email,
-                                      com.year,
-                                      com.lateCount,
-                                      com.fineCount
-                                    );
-                                  }}
-                                  onClick={handleClick}
-                                  sx={{
-                                    color: "gray",
-                                    "&.Mui-checked": {
-                                      color: "#ff783d",
-                                    },
-                                  }}
-                                />
-                              </td> */}
                               <td
                                 style={{ width: "15%", fontWeight: "bold" }}
                                 className="ms__td"
@@ -1021,6 +755,12 @@ const ManageStudent = () => {
                       // }}
                       onClick={() => {
                         setPage(1);
+                        setSearchedStd("");
+                        setCreateStd({
+                          year: "",
+                          branch: "",
+                        });
+                        setArr([]);
                         fetchStudents(1);
                       }}
                     >
@@ -1120,12 +860,13 @@ const ManageStudent = () => {
                         id="demo-simple-select-required"
                         value={createStd.year}
                         label="YEAR *"
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setCreateStd({
                             ...createStd,
                             year: e.target.value,
-                          })
-                        }
+                          });
+                          storeIDs(e.target.value, createStd.branch);
+                        }}
                         style={{
                           color: "white",
                           border: "1px solid white",
@@ -1149,12 +890,13 @@ const ManageStudent = () => {
                         id="demo-simple-select-required"
                         value={createStd.branch}
                         label="BRANCH *"
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setCreateStd({
                             ...createStd,
                             branch: e.target.value,
-                          })
-                        }
+                          });
+                          storeIDs(createStd.year, e.target.value);
+                        }}
                         style={{
                           color: "white",
                           border: "1px solid white",
@@ -1202,48 +944,14 @@ const ManageStudent = () => {
                   <button
                     className="btn mat-flat-button ms__button"
                     type="submit"
-                    onClick={update}
-                    style={{ fontSize: "12.5px" }}
+                    onClick={handleDeleteAll}
+                    style={{ fontSize: "18px" }}
                   >
-                    Update Selected
+                    Delete all
                   </button>
-                  {!isDelete && (
-                    <button
-                      className="btn mat-flat-button ms__button"
-                      type="submit"
-                      onClick={handleDelete}
-                      style={{ fontSize: "12.5px" }}
-                    >
-                      Delete Selected
-                    </button>
-                  )}
-                  {isDelete && (
-                    <button
-                      className="btn mat-flat-button ms__button"
-                      id="load_btn"
-                    >
-                      <div className="ms__lds-dual-ring"></div>
-                    </button>
-                  )}
-                  {!isStoring && (
-                    <button
-                      className="btn mat-flat-button ms__button"
-                      type="submit"
-                      onClick={showALL}
-                    >
-                      Select All
-                    </button>
-                  )}
-                  {isStoring && (
-                    <button
-                      className="btn mat-flat-button ms__button"
-                      id="load_btn"
-                    >
-                      <div className="ms__lds-dual-ring"></div>
-                    </button>
-                  )}
                   <p className="ms__term">
-                    *Use Select All to select all filtered students.
+                    *Use Delete All to Delete all students of selected Branch /
+                    Year.
                   </p>
                 </div>
               </div>
