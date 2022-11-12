@@ -2,7 +2,9 @@ import "./ManageStudent.css";
 
 import { useEffect, useState } from "react";
 
+import Checkbox from "@mui/material/Checkbox";
 import Dialog from "@mui/material/Dialog";
+import { DialogContent } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -11,8 +13,7 @@ import UpdateStudent from "../UpdateStudent/UpdateStudent";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import Checkbox from "@mui/material/Checkbox";
-import { DialogContent } from "@mui/material";
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 
 const Year = ["-", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ"];
 
@@ -29,6 +30,9 @@ const ManageStudent = () => {
   const [isStoring, setIsStoring] = useState(false);
   const [check, setCheck] = useState(false);
   const [isCheck, setIsCheck] = useState([]);
+  const [j, setJ] = useState("");
+  const [message, setMessage] = useState("");
+  const [student, setStudent] = useState("");
 
   const [selected, setSelected] = useState({
     student: [],
@@ -64,6 +68,7 @@ const ManageStudent = () => {
     editVal: {},
   });
   const [openDialog, setOpenDialog] = useState(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const next = () => {
     setPage((prevPage) => prevPage + 1);
     if (check) {
@@ -149,6 +154,7 @@ const ManageStudent = () => {
       }
       const users = response.data.results;
       setResults(users);
+      setStudent(users.length);
       if (users.length === 0) {
         toast.error("You have reached the end of the document!", {
           position: "bottom-right",
@@ -242,6 +248,7 @@ const ManageStudent = () => {
       setIsData(true);
       const users = res.data.results;
       setResults(users);
+      setStudent(users.length);
       if (check) {
         setCheck(false);
       }
@@ -679,10 +686,68 @@ const ManageStudent = () => {
     setIsStoring(false);
   };
 
-  const handleClose = () => setOpenDialog(false);
+  const confirmDialog = (id, a) => {
+    if (student === 1) {
+      toast.error("Can't Delete All Students!!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else {
+      setMessage(`Are you sure you want to delete student ` + a + ` ?`);
+      setOpenConfirmDialog(true);
+    }
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+    setOpenConfirmDialog(false);
+  };
+
+  const deleteItem = async (_id) => {
+    await axios
+      .delete(
+        "https://akgec-late-entry.herokuapp.com/api/admin/student/delete/" +
+          [_id],
+        {
+          headers: { Authorization: `Bearer ${localStorage.token}` },
+        }
+      )
+      .catch((e) => console.log(e));
+    setResults(
+      results.filter((item) => {
+        return item._id !== _id;
+      })
+    );
+  };
+
+  const responseHandler = (remove) => {
+    setOpenConfirmDialog(false);
+    if (remove) {
+      deleteItem(j);
+    }
+  };
+
+  const openDialogBox = (_id) => {
+    setJ(_id);
+    // setUserData(results.filter((item) => item._id === _id));
+    // setOpenEditDialog(true);
+  };
 
   return (
     <div className="components">
+      <Dialog open={openConfirmDialog} onClose={handleClose} fullWidth={true}>
+        <ConfirmDialog
+          title="Delete Student"
+          message={message}
+          onResponse={responseHandler}
+        />
+      </Dialog>
       <Dialog
         fullWidth={true}
         open={openDialog}
@@ -767,7 +832,7 @@ const ManageStudent = () => {
                     <table className="table ms__table">
                       <thead className="text-primary">
                         <tr>
-                          <th style={{ padding: "0", width: "15%" }}>
+                          {/* <th style={{ padding: "0", width: "5%" }}>
                             {!check && (
                               <Checkbox
                                 sx={{
@@ -791,18 +856,24 @@ const ManageStudent = () => {
                                 onClick={deselectAll}
                               />
                             )}
+                          </th> */}
+                          <th style={{ width: "15%" }} className="ms__th">
+                            S.No.
                           </th>
                           <th style={{ width: "28%" }} className="ms__th">
                             Name
                           </th>
-                          <th style={{ width: "20%" }} className="ms__th">
+                          <th style={{ width: "18%" }} className="ms__th">
                             Student No.
                           </th>
-                          <th style={{ width: "17%" }} className="ms__th">
+                          <th style={{ width: "13%" }} className="ms__th">
                             Branch
                           </th>
-                          <th style={{ width: "20%" }} className="ms__th">
+                          <th style={{ width: "13%" }} className="ms__th">
                             Year
+                          </th>
+                          <th style={{ width: "15%" }} className="ms__th">
+                            Actions
                           </th>
                         </tr>
                       </thead>
@@ -825,11 +896,11 @@ const ManageStudent = () => {
                             </td>
                           </tr>
                         )}
-                        {results.map((com) => {
+                        {results.map((com, index) => {
                           return (
                             <tr key={com._id}>
-                              <td
-                                style={{ width: "15%", padding: "0" }}
+                              {/* <td
+                                style={{ width: "5%", padding: "0" }}
                                 className="ms__td"
                               >
                                 <Checkbox
@@ -857,6 +928,12 @@ const ManageStudent = () => {
                                     },
                                   }}
                                 />
+                              </td> */}
+                              <td
+                                style={{ width: "15%", fontWeight: "bold" }}
+                                className="ms__td"
+                              >
+                                {10 * (page - 1) + index + 1}
                               </td>
                               <td
                                 style={{ width: "28%", fontWeight: "bold" }}
@@ -865,22 +942,63 @@ const ManageStudent = () => {
                                 {com.name}
                               </td>
                               <td
-                                style={{ width: "20%", fontWeight: "bold" }}
+                                style={{ width: "18%", fontWeight: "bold" }}
                                 className="ms__td"
                               >
                                 {com.stdNo}
                               </td>
                               <td
-                                style={{ width: "17%", fontWeight: "bold" }}
+                                style={{ width: "13%", fontWeight: "bold" }}
                                 className="ms__td"
                               >
                                 {com.branch}
                               </td>
                               <td
-                                style={{ width: "20%", fontWeight: "bold" }}
+                                style={{ width: "13%", fontWeight: "bold" }}
                                 className="ms__td"
                               >
                                 {Year[com.year]}
+                              </td>
+                              <td
+                                style={{ width: "15%", fontWeight: "bold" }}
+                                className="ms__td"
+                              >
+                                <button
+                                  style={{
+                                    outlineStyle: "none",
+                                    marginTop: "-15%",
+                                    width: "30px",
+                                    height: "30px",
+                                    border: "none",
+                                    backgroundColor: "#f5f5f5",
+                                    borderRadius: "100%",
+                                  }}
+                                  onClick={() =>
+                                    confirmDialog(com._id, com.name)
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-trash"
+                                    style={{ color: "red" }}
+                                  ></i>
+                                </button>
+                                <button
+                                  style={{
+                                    outlineStyle: "none",
+                                    marginTop: "-15%",
+                                    width: "30px",
+                                    height: "30px",
+                                    border: "none",
+                                    backgroundColor: "#f5f5f5",
+                                    borderRadius: "100%",
+                                  }}
+                                  onClick={() => openDialogBox(com._id)}
+                                >
+                                  <i
+                                    className="fa fa-edit"
+                                    style={{ color: "#0000b3" }}
+                                  ></i>
+                                </button>
                               </td>
                             </tr>
                           );

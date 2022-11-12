@@ -265,6 +265,7 @@ const ManageUser = () => {
                       style={{ marginBottom: "3px" }}
                     >
                       <tr>
+                        <th>&nbsp;&nbsp;S.No.</th>
                         <th>Name</th>
                         <th>Mobile</th>
                         <th>Username</th>
@@ -289,9 +290,12 @@ const ManageUser = () => {
                         </tr>
                       )}
 
-                      {results.map((com) => {
+                      {results.map((com, index) => {
                         return (
                           <tr key={com._id}>
+                            <td className="manage__td">
+                              {10 * (page - 1) + index + 1}
+                            </td>
                             <td className="manage__td">{com.name}</td>
                             <td className="manage__td">{com.mobile}</td>
                             <td className="manage__td">{com.userName}</td>

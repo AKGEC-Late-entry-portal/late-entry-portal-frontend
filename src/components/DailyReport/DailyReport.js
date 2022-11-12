@@ -1,11 +1,11 @@
 import "./DailyReport.css";
 
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 const DailyReport = () => {
   const navigate = useNavigate();
@@ -252,6 +252,7 @@ const DailyReport = () => {
                     style={{ marginBottom: "3px" }}
                   >
                     <tr>
+                      <th>S.No.</th>
                       <th>Name</th>
                       <th>Student No.</th>
                       <th>Branch</th>
@@ -274,9 +275,12 @@ const DailyReport = () => {
                       </tr>
                     )}
 
-                    {results.map((com) => {
+                    {results.map((com, index) => {
                       return (
                         <tr key={com._id}>
+                          <td className="manage__td">
+                            {10 * (page - 1) + index + 1}
+                          </td>
                           <td className="manage__td">{com.name}</td>
                           <td className="manage__td">{com.stdNo}</td>
                           <td className="manage__td">{com.branch}</td>

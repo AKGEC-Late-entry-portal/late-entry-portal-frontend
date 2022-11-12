@@ -1,11 +1,14 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import * as FileSaver from "file-saver";
 import "./FullReport.css";
+
+import * as FileSaver from "file-saver";
+
+import { useEffect, useState } from "react";
+
 import { Dialog } from "@mui/material";
 import EditFormat from "../EditFormat/EditFormat";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Year = ["-", "I", "II", "III", "IV"];
 
@@ -325,11 +328,13 @@ const FullReport = () => {
                     <table className="table">
                       <thead className="text-primary">
                         <tr>
-                          <th style={{ width: "30%" }}>Name</th>
-                          <th style={{ width: "20%" }}>Student No.</th>
-                          <th style={{ width: "20%" }}>Branch</th>
-                          <th style={{ width: "15%" }}>Year</th>
-                          <th style={{ width: "15%" }}>Count</th>
+                          <th style={{ width: "11%" }}>S.No.</th>
+                          <th style={{ width: "13%" }}>Name</th>
+                          <th style={{ width: "17%" }}>Student No.</th>
+                          <th style={{ width: "14%" }}>Branch</th>
+                          <th style={{ width: "12%" }}>Year</th>
+                          <th style={{ width: "16.5%" }}>Late Count</th>
+                          <th style={{ width: "16.5%" }}>Fine Count</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -350,38 +355,50 @@ const FullReport = () => {
                             </td>
                           </tr>
                         )}
-                        {results.map((com) => {
+                        {results.map((com, index) => {
                           return (
                             <tr key={com._id}>
                               <td
                                 className="manage__td"
-                                style={{ width: "30%" }}
+                                style={{ width: "11%" }}
+                              >
+                                {10 * (page - 1) + index + 1}
+                              </td>
+                              <td
+                                className="manage__td"
+                                style={{ width: "13%" }}
                               >
                                 {com.name}
                               </td>
                               <td
                                 className="manage__td"
-                                style={{ width: "20%" }}
+                                style={{ width: "17%" }}
                               >
                                 {com.stdNo}
                               </td>
                               <td
                                 className="manage__td"
-                                style={{ width: "20%" }}
+                                style={{ width: "14%" }}
                               >
                                 {com.branch}
                               </td>
                               <td
                                 className="manage__td"
-                                style={{ width: "15%" }}
+                                style={{ width: "12%" }}
                               >
                                 {Year[com.year]}
                               </td>
                               <td
                                 className="manage__td"
-                                style={{ width: "15%" }}
+                                style={{ width: "16.5%" }}
                               >
                                 {com.lateCount}
+                              </td>
+                              <td
+                                className="manage__td"
+                                style={{ width: "16.5%" }}
+                              >
+                                {com.fineCount}
                               </td>
                             </tr>
                           );
