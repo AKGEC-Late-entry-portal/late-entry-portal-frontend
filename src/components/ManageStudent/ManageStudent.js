@@ -1,14 +1,10 @@
 import "./ManageStudent.css";
 
+import { Button, DialogContent, DialogTitle } from "@mui/material";
 import { useEffect, useState } from "react";
 
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import Dialog from "@mui/material/Dialog";
-import {
-  Button,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -17,7 +13,6 @@ import UpdateStudent from "../UpdateStudent/UpdateStudent";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 
 const Year = ["-", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ"];
 
@@ -39,11 +34,17 @@ const ManageStudent = () => {
     year: "",
     branch: "",
   });
+  const [isStoring, setIsStoring] = useState(false);
   const [searchedStd, setSearchedStd] = useState("");
   const [searchStd, setSearchStd] = useState({ stdno: "" });
   const [openDialog, setOpenDialog] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [openUpdateAll, setOpenUpdateAll] = useState(false);
+  const [update, setUpdate] = useState({
+    id: arr,
+    branch: createStd.branch,
+    year: createStd.year,
+  });
   const next = () => {
     setPage((prevPage) => prevPage + 1);
     if (d === 0) return fetchStudents(page + 1);
@@ -114,6 +115,9 @@ const ManageStudent = () => {
     if (response) {
       setLoading(false);
       setIsData(true);
+      if (pg === 1) {
+        storeALL();
+      }
       const users = response.data.results;
       setResults(users);
       setStudent(users.length);
@@ -210,6 +214,9 @@ const ManageStudent = () => {
       const users = res.data.results;
       setResults(users);
       setStudent(users.length);
+      if (page === 1) {
+        storeALL();
+      }
       if (users.length === 0) {
         toast.error("You have reached the end of the document!", {
           position: "bottom-right",
@@ -313,14 +320,29 @@ const ManageStudent = () => {
           theme: "colored",
         });
         setArr([]);
-        if (d === 0) return fetchStudents(page);
-        else if (d === 1) return func2(page);
+        setUpdate({
+          id: [],
+          year: "",
+          branch: "",
+        });
+        setCreateStd({
+          year: "",
+          branch: "",
+        });
+        setPage(1);
+        if (d === 0) return fetchStudents(1);
+        else if (d === 1) return func2(1);
       }
     }
   };
 
   const reset = () => {
     setArr([]);
+    setUpdate({
+      id: [],
+      year: "",
+      branch: "",
+    });
     setCreateStd({
       year: "",
       branch: "",
@@ -412,6 +434,41 @@ const ManageStudent = () => {
           }
         }
       }
+    }
+  };
+
+  const storeALL = async () => {
+    setIsStoring(true);
+    var branch = createStd.branch;
+    var year = createStd.year;
+    if (createStd.branch === null) {
+      branch = "";
+      setCreateStd({ ...createStd, branch: "" });
+    }
+    if (createStd.year === null) {
+      year = "";
+      setCreateStd({ ...createStd, year: "" });
+    }
+    const res = await axios
+      .get(
+        "https://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=1&limit=5000&year=" +
+          year +
+          "&branch=" +
+          branch +
+          "&name=" +
+          searchedStd,
+        {
+          headers: { Authorization: `Bearer ${localStorage.token}` },
+        }
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+    if (res) {
+      // console.log(res.data.results);
+      localStorage.removeItem("results");
+      localStorage.setItem("results", JSON.stringify(res.data.results));
+      setIsStoring(false);
     }
   };
 
@@ -529,15 +586,102 @@ const ManageStudent = () => {
       }
     }
     setArr(arr);
+    setUpdate({
+      id: arr,
+      year: year,
+      branch: branch,
+    });
   };
 
   const handleUpdateAll = () => {
     setOpenUpdateAll(true);
   };
 
-  // const submitUpdateHandler = (e) => {
-  //   e.preventDefault();
-  // };
+  const submitUpdateHandler = (e) => {
+    e.preventDefault();
+    let len = arr.length;
+    if (len === 0) {
+      toast.warn("No students to Update!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else {
+      const updateFunc = async (data) => {
+        console.log(data);
+        const res = await axios
+          .patch(
+            "https://akgec-late-entry.herokuapp.com/api/admin/student/update",
+            data,
+            {
+              headers: { Authorization: `Bearer ${localStorage.token}` },
+            }
+          )
+          .catch((err) => {
+            if (err.status === 403) {
+              toast.error("Unauthorized User", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              });
+              localStorage.removeItem("token");
+              localStorage.removeItem("results");
+              navigate("/");
+              return;
+            } else {
+              toast.error("Error Updating Students! Try Again!", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              });
+            }
+            if (d === 0) return fetchStudents(page);
+            else if (d === 1) return func2(page);
+          });
+        if (res) {
+          toast.success("Successfully Updated Year / Branch !", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          setArr([]);
+          setUpdate({
+            id: [],
+            year: "",
+            branch: "",
+          });
+          setCreateStd({
+            year: "",
+            branch: "",
+          });
+          setPage(1);
+          return fetchStudents(1);
+        }
+      };
+      updateFunc(update);
+    }
+    setOpenUpdateAll(false);
+  };
 
   return (
     <div className="components">
@@ -568,7 +712,7 @@ const ManageStudent = () => {
           />
         </DialogContent>
       </Dialog>
-      {/* <Dialog open={openUpdateAll} onClose={handleClose}>
+      <Dialog open={openUpdateAll} onClose={handleClose}>
         <DialogTitle style={{ textAlign: "center" }}>
           Select New Year / Branch
         </DialogTitle>
@@ -590,11 +734,10 @@ const ManageStudent = () => {
               <Select
                 labelId="demo-simple-select-helper-label"
                 id="demo-simple-select-helper"
-                // onChange={(e) => {
-                //   setData({ ...data, year: e.target.value });
-                // }}
-                // value={data.year}
-                required
+                onChange={(e) => {
+                  setUpdate({ ...update, year: e.target.value });
+                }}
+                value={update.year}
               >
                 <MenuItem value={"1"}>First</MenuItem>
                 <MenuItem value={"2"}>Second</MenuItem>
@@ -610,11 +753,10 @@ const ManageStudent = () => {
               <Select
                 labelId="demo-simple-select-helper-label"
                 id="demo-simple-select-helper"
-                // onChange={(e) => {
-                //   setData({ ...data, branch: e.target.value });
-                // }}
-                // value={data.branch}
-                required
+                onChange={(e) => {
+                  setUpdate({ ...update, branch: e.target.value });
+                }}
+                value={update.branch}
               >
                 <MenuItem value={"CSE"}>
                   Computer Science & Engineering
@@ -633,12 +775,16 @@ const ManageStudent = () => {
               </Select>
             </FormControl>
             <br />
-            <Button variant="contained" type="submit">
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={update.year === "" && update.branch === ""}
+            >
               Update
             </Button>
           </form>
         </DialogContent>
-      </Dialog> */}
+      </Dialog>
       <div
         style={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "4.5%" }}
       >
@@ -840,6 +986,11 @@ const ManageStudent = () => {
                     onClick={() => {
                       setPage(1);
                       setSearchedStd("");
+                      setUpdate({
+                        id: [],
+                        branch: "",
+                        year: "",
+                      });
                       setCreateStd({
                         year: "",
                         branch: "",
@@ -1015,7 +1166,7 @@ const ManageStudent = () => {
                   Options
                 </h5>
                 <div className="ms__options">
-                  {/* <button
+                  <button
                     className="btn mat-flat-button ms__button"
                     type="submit"
                     onClick={handleUpdateAll}
@@ -1023,7 +1174,7 @@ const ManageStudent = () => {
                     disabled={createStd.branch === "" && createStd.year === ""}
                   >
                     Update all
-                  </button> */}
+                  </button>
                   <button
                     className="btn mat-flat-button ms__button"
                     type="submit"
@@ -1033,11 +1184,10 @@ const ManageStudent = () => {
                   >
                     Delete all
                   </button>
-                  {/* <p className="ms__term">
+                  <p className="ms__term">
                     *Use Update All to Update the filtered students of selected
                     Year / Branch.
-                  </p> */}
-                  <br />
+                  </p>
                   <p className="ms__term">
                     *Use Delete All to Delete all filtered students of selected
                     Year / Branch.

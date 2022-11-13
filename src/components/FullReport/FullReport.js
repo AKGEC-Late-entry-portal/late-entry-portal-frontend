@@ -211,7 +211,7 @@ const FullReport = () => {
     }
   };
 
-  const downloadFunc = async () => {
+  const downloadFuncPDF = async () => {
     if (results.length === 0) {
       toast.error("No Data Found To Generate Report !", {
         position: "bottom-right",
@@ -227,7 +227,7 @@ const FullReport = () => {
       setIsDownloading(true);
       const res = await axios
         .get(
-          "https://akgec-late-entry.herokuapp.com/api/admin/report/download",
+          "https://akgec-late-entry.herokuapp.com/api/admin/report/download?count=3",
           {
             headers: {
               Authorization: `Bearer ${localStorage.token}`,
@@ -267,6 +267,71 @@ const FullReport = () => {
         });
       if (res) {
         const blob = new Blob([res], { type: "application/pdf" });
+        FileSaver.saveAs(blob, "Report");
+        setIsDownloading(false);
+      }
+    }
+  };
+
+  const downloadFuncDOCX = async () => {
+    if (results.length === 0) {
+      toast.error("No Data Found To Generate Report !", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else {
+      setIsDownloading(true);
+      const res = await axios
+        .get(
+          "https://akgec-late-entry.herokuapp.com/api/admin/report/download_docx?count=3",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.token}`,
+              Accept:
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            },
+            responseType: "blob",
+          }
+        )
+        .catch((err) => {
+          if (err.status === 403) {
+            toast.error("Unauthorized User", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            localStorage.removeItem("token");
+            localStorage.removeItem("results");
+            navigate("/");
+          } else {
+            toast.error("Error downloading report!", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            setIsDownloading(false);
+          }
+        });
+      if (res) {
+        const blob = new Blob([res], {
+          type: "application/application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        });
         FileSaver.saveAs(blob, "Report");
         setIsDownloading(false);
       }
@@ -566,15 +631,26 @@ const FullReport = () => {
                   Reset
                 </button>
                 {!isDownloading && (
-                  <button
-                    className="btn mat-flat-button"
-                    type="submit"
-                    id="fr__op"
-                    style={{ marginBottom: "4%" }}
-                    onClick={downloadFunc}
-                  >
-                    Download
-                  </button>
+                  <div>
+                    <button
+                      className="btn mat-flat-button"
+                      type="submit"
+                      id="fr__op"
+                      style={{ marginBottom: "4%" }}
+                      onClick={downloadFuncPDF}
+                    >
+                      Download PDF
+                    </button>
+                    <button
+                      className="btn mat-flat-button"
+                      type="submit"
+                      id="fr__op"
+                      style={{ marginBottom: "4%" }}
+                      onClick={downloadFuncDOCX}
+                    >
+                      Download DOCX
+                    </button>
+                  </div>
                 )}
                 {isDownloading && (
                   <button
