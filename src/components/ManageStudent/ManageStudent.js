@@ -563,25 +563,30 @@ const ManageStudent = () => {
         theme: "colored",
       });
       return;
-    } else if (year !== "" && branch !== "") {
+    } else {
       const res = JSON.parse(localStorage.getItem("results"));
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].year === year && res[i].branch === branch) {
-          arr.push(res[i]._id);
-        }
+      if (res === null) {
+        return;
       }
-    } else if (year === "") {
-      const res = JSON.parse(localStorage.getItem("results"));
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].branch === branch) {
-          arr.push(res[i]._id);
+      if (year !== "" && branch !== "") {
+        for (let i = 0; i < res.length; i++) {
+          if (res[i].year === year && res[i].branch === branch) {
+            arr.push(res[i]._id);
+          }
         }
-      }
-    } else if (branch === "") {
-      const res = JSON.parse(localStorage.getItem("results"));
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].year === year) {
-          arr.push(res[i]._id);
+      } else if (year === "") {
+        const res = JSON.parse(localStorage.getItem("results"));
+        for (let i = 0; i < res.length; i++) {
+          if (res[i].branch === branch) {
+            arr.push(res[i]._id);
+          }
+        }
+      } else if (branch === "") {
+        const res = JSON.parse(localStorage.getItem("results"));
+        for (let i = 0; i < res.length; i++) {
+          if (res[i].year === year) {
+            arr.push(res[i]._id);
+          }
         }
       }
     }
