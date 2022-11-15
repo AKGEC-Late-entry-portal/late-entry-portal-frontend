@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 import { Dialog } from "@mui/material";
 import EditFormat from "../EditFormat/EditFormat";
+import Spinner from "react-spinner-material";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +23,7 @@ const FullReport = () => {
   const [isData, setIsData] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloading1, setIsDownloading1] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [send_mail, setSend_mail] = useState({
     admin: false,
@@ -59,7 +61,7 @@ const FullReport = () => {
       .get(
         "https://akgec-late-entry.herokuapp.com/api/admin/report/final?page=" +
           page +
-          "&limit=10",
+          "&limit=10&count=3",
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
         }
@@ -286,15 +288,13 @@ const FullReport = () => {
         theme: "colored",
       });
     } else {
-      setIsDownloading(true);
+      setIsDownloading1(true);
       const res = await axios
         .get(
           "https://akgec-late-entry.herokuapp.com/api/admin/report/download_docx?count=3",
           {
             headers: {
               Authorization: `Bearer ${localStorage.token}`,
-              Accept:
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             },
             responseType: "blob",
           }
@@ -325,15 +325,15 @@ const FullReport = () => {
               progress: undefined,
               theme: "colored",
             });
-            setIsDownloading(false);
+            setIsDownloading1(false);
           }
         });
       if (res) {
         const blob = new Blob([res], {
-          type: "application/application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         });
         FileSaver.saveAs(blob, "Report");
-        setIsDownloading(false);
+        setIsDownloading1(false);
       }
     }
   };
@@ -388,7 +388,10 @@ const FullReport = () => {
           <div className="fr__card-body">
             <div className="row" style={{ position: "relative", top: "-29px" }}>
               <div className="col-md-8" id="fr__ta-col">
-                <div className="table-responsive" style={{ paddingTop: "2%" }}>
+                <div
+                  className="table-responsive"
+                  style={{ paddingTop: "2%", height: "77vh" }}
+                >
                   <div style={{ width: "100%", minHeight: "65vh" }}>
                     <table className="table">
                       <thead className="text-primary">
@@ -641,6 +644,28 @@ const FullReport = () => {
                     >
                       Download PDF
                     </button>
+                  </div>
+                )}
+                {isDownloading && (
+                  <button
+                    className="btn mat-flat-button"
+                    type="submit"
+                    id="fr__op"
+                    style={{
+                      marginBottom: "4%",
+                      textAlign: "-webkit-center",
+                    }}
+                  >
+                    <Spinner
+                      radius={25}
+                      color={"#FFFFFF"}
+                      stroke={3}
+                      visible={true}
+                    />
+                  </button>
+                )}
+                {!isDownloading1 && (
+                  <div>
                     <button
                       className="btn mat-flat-button"
                       type="submit"
@@ -652,14 +677,22 @@ const FullReport = () => {
                     </button>
                   </div>
                 )}
-                {isDownloading && (
+                {isDownloading1 && (
                   <button
                     className="btn mat-flat-button"
                     type="submit"
                     id="fr__op"
-                    style={{ marginBottom: "4%" }}
+                    style={{
+                      marginBottom: "4%",
+                      textAlign: "-webkit-center",
+                    }}
                   >
-                    <div className="lds-dual-ring"></div>
+                    <Spinner
+                      radius={25}
+                      color={"#FFFFFF"}
+                      stroke={3}
+                      visible={true}
+                    />
                   </button>
                 )}
               </div>
