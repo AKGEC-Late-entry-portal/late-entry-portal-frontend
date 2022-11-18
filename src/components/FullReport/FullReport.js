@@ -268,7 +268,7 @@ const FullReport = () => {
           }
         });
       if (res) {
-        const blob = new Blob([res], { type: "application/pdf" });
+        const blob = new Blob([res.data], { type: "application/pdf" });
         FileSaver.saveAs(blob, "Report");
         setIsDownloading(false);
       }
@@ -329,7 +329,7 @@ const FullReport = () => {
           }
         });
       if (res) {
-        const blob = new Blob([res], {
+        const blob = new Blob([res.data], {
           type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         });
         FileSaver.saveAs(blob, "Report");
