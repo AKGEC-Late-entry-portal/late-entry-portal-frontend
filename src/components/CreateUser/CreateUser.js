@@ -90,7 +90,7 @@ const CreateUser = () => {
       const createData = async (user) => {
         const res = await axios
           .post(
-            "https://akgec-late-entry.herokuapp.com/api/admin/user/create",
+            "https://akgec-late-entry-backend.onrender.com/api/admin/user/create",
             user,
             {
               headers: { Authorization: `Bearer ${localStorage.token}` },

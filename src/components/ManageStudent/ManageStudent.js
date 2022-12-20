@@ -75,7 +75,7 @@ const ManageStudent = () => {
     setLoading(true);
     const response = await axios
       .get(
-        "https://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=" +
+        "https://akgec-late-entry-backend.onrender.com/api/admin/student/filter?page=" +
           pg +
           "&limit=10",
         {
@@ -166,7 +166,7 @@ const ManageStudent = () => {
     }
     const res = await axios
       .get(
-        "https://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=" +
+        "https://akgec-late-entry-backend.onrender.com/api/admin/student/filter?page=" +
           page +
           "&limit=10&year=" +
           year +
@@ -271,7 +271,7 @@ const ManageStudent = () => {
       console.log(arr);
       const res = await axios
         .patch(
-          "https://akgec-late-entry.herokuapp.com/api/admin/student/delete",
+          "https://akgec-late-entry-backend.onrender.com/api/admin/student/delete",
           arr,
           {
             headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -377,7 +377,7 @@ const ManageStudent = () => {
         setLoading(true);
         const res = await axios
           .get(
-            "https://akgec-late-entry.herokuapp.com/api/admin/student/read?stdNo=" +
+            "https://akgec-late-entry-backend.onrender.com/api/admin/student/read?stdNo=" +
               searchStd.stdno,
             {
               headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -451,7 +451,7 @@ const ManageStudent = () => {
     }
     const res = await axios
       .get(
-        "https://akgec-late-entry.herokuapp.com/api/admin/student/filter?page=1&limit=5000&year=" +
+        "https://akgec-late-entry-backend.onrender.com/api/admin/student/filter?page=1&limit=5000&year=" +
           year +
           "&branch=" +
           branch +
@@ -503,7 +503,7 @@ const ManageStudent = () => {
     console.log(arr);
     const res = await axios
       .patch(
-        "https://akgec-late-entry.herokuapp.com/api/admin/student/delete",
+        "https://akgec-late-entry-backend.onrender.com/api/admin/student/delete",
         arr,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -621,7 +621,7 @@ const ManageStudent = () => {
         console.log(data);
         const res = await axios
           .patch(
-            "https://akgec-late-entry.herokuapp.com/api/admin/student/update",
+            "https://akgec-late-entry-backend.onrender.com/api/admin/student/update",
             data,
             {
               headers: { Authorization: `Bearer ${localStorage.token}` },

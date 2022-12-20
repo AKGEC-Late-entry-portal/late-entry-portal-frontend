@@ -37,7 +37,7 @@ const CreateEntry = () => {
     const fetchStudent = async (stdNo) => {
       const res = await axios
         .get(
-          "https://akgec-late-entry.herokuapp.com/api/admin/student/read?stdNo=" +
+          "https://akgec-late-entry-backend.onrender.com/api/admin/student/read?stdNo=" +
             stdNo,
           {
             headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -101,7 +101,7 @@ const CreateEntry = () => {
     const enterStudent = async (data) => {
       const res = await axios
         .post(
-          "https://akgec-late-entry.herokuapp.com/api/admin/entry/create",
+          "https://akgec-late-entry-backend.onrender.com/api/admin/entry/create",
           data,
           {
             headers: { Authorization: `Bearer ${localStorage.token}` },

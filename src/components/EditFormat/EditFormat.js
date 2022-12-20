@@ -16,7 +16,7 @@ const EditFormat = (props) => {
     setLoading(true);
     const res = await axios
       .post(
-        "https://akgec-late-entry.herokuapp.com/api/admin/report/format",
+        "https://akgec-late-entry-backend.onrender.com/api/admin/report/format",
         editFormat,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -70,7 +70,7 @@ const EditFormat = (props) => {
   const getFormat = async () => {
     setLoading(true);
     const res = await axios
-      .get("https://akgec-late-entry.herokuapp.com/api/admin/report/format/", {
+      .get("https://akgec-late-entry-backend.onrender.com/api/admin/report/format/", {
         headers: { Authorization: `Bearer ${localStorage.token}` },
       })
       .catch((err) => {

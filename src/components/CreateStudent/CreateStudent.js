@@ -99,7 +99,7 @@ const CreateStudent = () => {
       const createData = async (student) => {
         const res = await axios
           .post(
-            "https://akgec-late-entry.herokuapp.com/api/admin/student/create",
+            "https://akgec-late-entry-backend.onrender.com/api/admin/student/create",
             student,
             {
               headers: { Authorization: `Bearer ${localStorage.token}` },

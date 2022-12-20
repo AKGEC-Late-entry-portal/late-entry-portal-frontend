@@ -26,7 +26,7 @@ const UploadStudentData = (props) => {
     const uploadStudentData = async (fd) => {
       const res = await axios
         .post(
-          "https://akgec-late-entry.herokuapp.com/api/admin/student/upload",
+          "https://akgec-late-entry-backend.onrender.com/api/admin/student/upload",
           fd,
           {
             headers: { Authorization: `Bearer ${localStorage.token}` },

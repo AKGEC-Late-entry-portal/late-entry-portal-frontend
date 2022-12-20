@@ -60,7 +60,7 @@ const ManageEntry = () => {
     setLoading(true);
     const response = await axios
       .get(
-        "https://akgec-late-entry.herokuapp.com/api/admin/entry/readall?limit=10&page=" +
+        "https://akgec-late-entry-backend.onrender.com/api/admin/entry/readall?limit=10&page=" +
           pg,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -138,7 +138,7 @@ const ManageEntry = () => {
     setLoading(true);
     const res = await axios
       .get(
-        "https://akgec-late-entry.herokuapp.com/api/admin/entry/read?limit=10&page=" +
+        "https://akgec-late-entry-backend.onrender.com/api/admin/entry/read?limit=10&page=" +
           page +
           "&date=" +
           date,
@@ -218,7 +218,7 @@ const ManageEntry = () => {
     setLoading(true);
     const res = await axios
       .get(
-        "https://akgec-late-entry.herokuapp.com/api/admin/entry/read?limit=10&page=" +
+        "https://akgec-late-entry-backend.onrender.com/api/admin/entry/read?limit=10&page=" +
           page +
           "&location=" +
           loc,
@@ -298,7 +298,7 @@ const ManageEntry = () => {
     setLoading(true);
     const res = await axios
       .get(
-        "https://akgec-late-entry.herokuapp.com/api/admin/entry/read?limit=10&page=" +
+        "https://akgec-late-entry-backend.onrender.com/api/admin/entry/read?limit=10&page=" +
           page +
           "&date=" +
           date +
@@ -381,7 +381,7 @@ const ManageEntry = () => {
   const deleteEntry = async (id) => {
     const res = await axios
       .delete(
-        "https://akgec-late-entry.herokuapp.com/api/admin/entry/delete/" + id,
+        "https://akgec-late-entry-backend.onrender.com/api/admin/entry/delete/" + id,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
         }

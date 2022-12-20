@@ -1,4 +1,4 @@
-const url = "https://akgec-late-entry.herokuapp.com/";
+const url = "https://akgec-late-entry-backend.onrender.com/";
 
 const Api = {
   login: url + "login",

@@ -59,7 +59,7 @@ const FullReport = () => {
     setLoading(true);
     const response = await axios
       .get(
-        "https://akgec-late-entry.herokuapp.com/api/admin/report/final?page=" +
+        "https://akgec-late-entry-backend.onrender.com/api/admin/report/final?page=" +
           page +
           "&limit=10&count=3",
         {
@@ -142,7 +142,7 @@ const FullReport = () => {
     setIsSending(true);
     const res = await axios
       .post(
-        "https://akgec-late-entry.herokuapp.com/api/admin/report/send",
+        "https://akgec-late-entry-backend.onrender.com/api/admin/report/send",
         send_mail,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -200,7 +200,7 @@ const FullReport = () => {
     });
     const res = await axios
       .put(
-        "https://akgec-late-entry.herokuapp.com/api/admin/report/reset",
+        "https://akgec-late-entry-backend.onrender.com/api/admin/report/reset",
         "any",
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -229,7 +229,7 @@ const FullReport = () => {
       setIsDownloading(true);
       const res = await axios
         .get(
-          "https://akgec-late-entry.herokuapp.com/api/admin/report/download?count=3",
+          "https://akgec-late-entry-backend.onrender.com/api/admin/report/download?count=3",
           {
             headers: {
               Authorization: `Bearer ${localStorage.token}`,
@@ -291,7 +291,7 @@ const FullReport = () => {
       setIsDownloading1(true);
       const res = await axios
         .get(
-          "https://akgec-late-entry.herokuapp.com/api/admin/report/download_docx?count=3",
+          "https://akgec-late-entry-backend.onrender.com/api/admin/report/download_docx?count=3",
           {
             headers: {
               Authorization: `Bearer ${localStorage.token}`,

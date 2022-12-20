@@ -53,7 +53,7 @@ const ManageUser = () => {
   const fetchUsers = async (pg) => {
     const response = await axios
       .get(
-        "https://akgec-late-entry.herokuapp.com/api/admin/user/readall?limit=10&page=" +
+        "https://akgec-late-entry-backend.onrender.com/api/admin/user/readall?limit=10&page=" +
           pg,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -164,7 +164,7 @@ const ManageUser = () => {
   const deleteItem = async (_id) => {
     await axios
       .delete(
-        "https://akgec-late-entry.herokuapp.com/api/admin/user/delete/" + _id,
+        "https://akgec-late-entry-backend.onrender.com/api/admin/user/delete/" + _id,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
         }

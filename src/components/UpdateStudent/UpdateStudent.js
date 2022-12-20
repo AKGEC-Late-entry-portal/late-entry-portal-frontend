@@ -29,7 +29,7 @@ const UpdateStudent = (props) => {
       console.log(data);
       const res = await axios
         .patch(
-          "https://akgec-late-entry.herokuapp.com/api/admin/student/update",
+          "https://akgec-late-entry-backend.onrender.com/api/admin/student/update",
           data,
           {
             headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -99,7 +99,7 @@ const UpdateStudent = (props) => {
   const fetchStudent = async (id) => {
     const res = await axios
       .get(
-        "https://akgec-late-entry.herokuapp.com/api/admin/student/read/" + id,
+        "https://akgec-late-entry-backend.onrender.com/api/admin/student/read/" + id,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
         }

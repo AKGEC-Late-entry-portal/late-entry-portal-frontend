@@ -40,7 +40,7 @@ const Update = (props) => {
     const updateData = async (_id, data) => {
       const res = await axios
         .put(
-          "https://akgec-late-entry.herokuapp.com/api/admin/user/update/" + _id,
+          "https://akgec-late-entry-backend.onrender.com/api/admin/user/update/" + _id,
           data,
           {
             headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -110,7 +110,7 @@ const Update = (props) => {
 
   const fetchUser = async (id) => {
     const res = await axios
-      .get("https://akgec-late-entry.herokuapp.com/api/admin/user/read/" + id, {
+      .get("https://akgec-late-entry-backend.onrender.com/api/admin/user/read/" + id, {
         headers: { Authorization: `Bearer ${localStorage.token}` },
       })
       .catch((err) => {
@@ -182,7 +182,7 @@ const Update = (props) => {
       const updatePassword = async (_id, data) => {
         const res = await axios
           .put(
-            "https://akgec-late-entry.herokuapp.com/api/admin/user/password/" +
+            "https://akgec-late-entry-backend.onrender.com/api/admin/user/password/" +
               _id,
             data,
             {
