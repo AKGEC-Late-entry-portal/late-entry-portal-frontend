@@ -28,6 +28,7 @@ function App() {
         <Routes>
           <Route element={<WithoutNav />}>
             <Route path="" element={<Login />} />
+            <Route path="login" element={<Login />} />
             <Route path="setNewPassword/:id/:token" element={<ResetPswd />} />
           </Route>
           <Route element={<WithNav />}>
