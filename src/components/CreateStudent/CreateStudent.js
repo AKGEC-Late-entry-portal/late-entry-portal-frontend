@@ -406,14 +406,26 @@ const CreateStudent = () => {
                               }}
                             >
                               <MenuItem value={"CSE"}>
-                                Computer Science & Engineering
+                                Computer Science and Engineering
+                              </MenuItem>
+                              <MenuItem value={"CSE(AIML)"}>
+                                Computer Science and Engineering - AIML
+                              </MenuItem>
+                              <MenuItem value={"CSE(DS)"}>
+                                Computer Science and Engineering - DS
+                              </MenuItem>
+                              <MenuItem value={"CSE(HINDI)"}>
+                                Computer Science and Engineering - HINDI
+                              </MenuItem>
+                              <MenuItem value={"CSIT"}>
+                                Computer Science and Information Technology
                               </MenuItem>
                               <MenuItem value={"CS"}>Computer Science</MenuItem>
-                              <MenuItem value={"CS/IT"}>
-                                Computer Science & Information Technology
-                              </MenuItem>
                               <MenuItem value={"IT"}>
                                 Information Technology
+                              </MenuItem>
+                              <MenuItem value={"AIML"}>
+                                Artificial Intelligence Machine Learning
                               </MenuItem>
                               <MenuItem value={"ECE"}>
                                 Electronics And Communication
@@ -422,7 +434,7 @@ const CreateStudent = () => {
                                 Electrical And Electronics
                               </MenuItem>
                               <MenuItem value={"EI"}>
-                                Electronics & Instrumentation
+                                Electronics and Instrumentation
                               </MenuItem>
                               <MenuItem value={"ME"}>Mechanical</MenuItem>
                               <MenuItem value={"CE"}>Civil</MenuItem>

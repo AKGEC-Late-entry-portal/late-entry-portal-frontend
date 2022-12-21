@@ -1,26 +1,79 @@
 import "./ForgotPswd.css";
 
 import OtpInput from "react-otp-input";
+import Spinner from "react-spinner-material";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { useState } from "react";
 
 const ForgotPswd = () => {
   const [x, setX] = useState(true);
-  const [y, setY] = useState(false);
-  const [z, setZ] = useState(false);
+  // const [y, setY] = useState(false);
+  // const [z, setZ] = useState(false);
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState("");
+  // const [otp, setOtp] = useState("");
+  const [loader, setLoader] = useState(false);
   const emailChangeHandler = (e) => setEmail(e.target.value);
 
-  const handleOTP = (e) => {
-    e.preventDefault();
-    setX(!x);
-    setY(!y);
+  const sendMail = async (email) => {
+    const res = await axios
+      .post("https://akgec-late-entry-backend.onrender.com/forgotPassword", {
+        email: email,
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Can't send Email !", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        setLoader(false);
+      });
+    if (res) {
+      toast.error("Email sent successfully, Check your Inbox !", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setLoader(false);
+      setEmail("");
+      setX(!x);
+      // setY(!y);
+    }
   };
-  const handleVerify = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setY(!y);
-    setZ(!z);
+    if (email === "") {
+      toast.warn("Please fill the email address", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
+    setLoader(true);
+    sendMail(email);
   };
+  // const handleVerify = (e) => {
+  //   e.preventDefault();
+  //   setY(!y);
+  //   setZ(!z);
+  // };
 
   return (
     <div className="panel-body">
@@ -32,7 +85,7 @@ const ForgotPswd = () => {
           <h5 className="text-center">Forgot Password?</h5>
           <p>You can reset your password here.</p>
           <div className="panel-body">
-            <form className="form" onSubmit={handleOTP}>
+            <form className="form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <div className="input-group">
                   <span className="input-group-addon">
@@ -50,15 +103,27 @@ const ForgotPswd = () => {
                 </div>
               </div>
               <div className="form-group">
-                <button className="btn btn-lg btn-primary" type="submit">
-                  Send OTP
-                </button>
+                {!loader && (
+                  <button className="btn btn-lg btn-primary" type="submit">
+                    Send Email
+                  </button>
+                )}
+                {loader && (
+                  <button className="btn btn-lg btn-primary">
+                    <Spinner
+                      radius={30}
+                      color={"#FFFFFF"}
+                      stroke={3}
+                      visible={true}
+                    />
+                  </button>
+                )}
               </div>
             </form>
           </div>
         </div>
       )}
-      {y && (
+      {/* {y && (
         <div className="text-center">
           <h6 style={{ color: "#007BFF" }}>
             <i className="fas fa-key fa-4x"></i>
@@ -99,14 +164,20 @@ const ForgotPswd = () => {
                   Submit OTP
                 </button>
               </div>
-              <a className="text-primary" style={{ cursor: "pointer" }}>
+              <a
+                className="text-primary"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  sendMail(email);
+                }}
+              >
                 Resend OTP
               </a>
             </form>
           </div>
         </div>
-      )}
-      {z && (
+      )} */}
+      {/* {z && (
         <div className="text-center">
           <h6 style={{ color: "#00bfa5" }}>
             <i className="fa fa-unlock fa-4x"></i>
@@ -145,7 +216,7 @@ const ForgotPswd = () => {
             </form>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

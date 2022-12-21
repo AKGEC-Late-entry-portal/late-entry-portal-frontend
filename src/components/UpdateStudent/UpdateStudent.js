@@ -1,11 +1,13 @@
-import { FormControl, Input, MenuItem, Select } from "@mui/material";
-import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Spinner from "react-spinner-material";
-import { toast } from "react-toastify";
 import "./UpdateStudent.css";
+
+import { FormControl, Input, MenuItem, Select } from "@mui/material";
+
+import Spinner from "react-spinner-material";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const UpdateStudent = (props) => {
   const navigate = useNavigate();
@@ -99,7 +101,8 @@ const UpdateStudent = (props) => {
   const fetchStudent = async (id) => {
     const res = await axios
       .get(
-        "https://akgec-late-entry-backend.onrender.com/api/admin/student/read/" + id,
+        "https://akgec-late-entry-backend.onrender.com/api/admin/student/read/" +
+          id,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
         }
@@ -288,13 +291,22 @@ const UpdateStudent = (props) => {
                         required
                       >
                         <MenuItem value={"CSE"}>
-                          Computer Science & Engineering
+                          Computer Science and Engineering
+                        </MenuItem>
+                        <MenuItem value={"CSE(AIML)"}>
+                          Computer Science and Engineering - AIML
+                        </MenuItem>
+                        <MenuItem value={"CSE(DS)"}>
+                          Computer Science and Engineering - DS
+                        </MenuItem>
+                        <MenuItem value={"CSIT"}>
+                          Computer Science and Information Technology
                         </MenuItem>
                         <MenuItem value={"CS"}>Computer Science</MenuItem>
-                        <MenuItem value={"CSIT"}>
-                          Computer Science & Information Technology
-                        </MenuItem>
                         <MenuItem value={"IT"}>Information Technology</MenuItem>
+                        <MenuItem value={"AIML"}>
+                          Artificial Intelligence Machine Learning
+                        </MenuItem>
                         <MenuItem value={"ECE"}>
                           Electronics And Communication
                         </MenuItem>
@@ -302,7 +314,7 @@ const UpdateStudent = (props) => {
                           Electrical And Electronics
                         </MenuItem>
                         <MenuItem value={"EI"}>
-                          Electronics & Instrumentation
+                          Electronics and Instrumentation
                         </MenuItem>
                         <MenuItem value={"ME"}>Mechanical</MenuItem>
                         <MenuItem value={"CE"}>Civil</MenuItem>

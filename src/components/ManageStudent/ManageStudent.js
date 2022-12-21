@@ -120,6 +120,7 @@ const ManageStudent = () => {
       }
       const users = response.data.results;
       setResults(users);
+      // console.log(users);
       setStudent(users.length);
       if (users.length === 0) {
         toast.error("You have reached the end of the document!", {
@@ -268,7 +269,7 @@ const ManageStudent = () => {
         theme: "colored",
       });
     } else {
-      console.log(arr);
+      // console.log(arr);
       const res = await axios
         .patch(
           "https://akgec-late-entry-backend.onrender.com/api/admin/student/delete",
@@ -550,6 +551,7 @@ const ManageStudent = () => {
   };
 
   const storeIDs = (year, branch) => {
+    console.log(year);
     const arr = [];
     if (year === "" && branch === "") {
       toast.warn("Please select Branch / Year to delete", {
@@ -1067,6 +1069,7 @@ const ManageStudent = () => {
                   onSubmit={(e) => {
                     e.preventDefault();
                     func2(1);
+                    storeIDs(createStd.year, createStd.branch);
                   }}
                 >
                   <div
@@ -1126,15 +1129,34 @@ const ManageStudent = () => {
                             branch: e.target.value,
                           });
                           storeIDs(createStd.year, e.target.value);
+                          // console.log(e.target.value);
                         }}
                         style={{
                           color: "white",
                           border: "1px solid white",
                         }}
                       >
+                        <MenuItem value={"CSE"}>
+                          Computer Science and Engineering
+                        </MenuItem>
+                        <MenuItem value={"CSE(AIML)"}>
+                          Computer Science and Engineering - AIML
+                        </MenuItem>
+                        <MenuItem value={"CSE(DS)"}>
+                          Computer Science and Engineering - DS
+                        </MenuItem>
+                        <MenuItem value={"CSE(HINDI)"}>
+                          Computer Science and Engineering - HINDI
+                        </MenuItem>
+                        <MenuItem value={"CSIT"}>
+                          Computer Science and Information Technology
+                        </MenuItem>
                         <MenuItem value={"CS"}>Computer Science</MenuItem>
                         <MenuItem value={"IT"}>Information Technology</MenuItem>
-                        <MenuItem value={"EC"}>
+                        <MenuItem value={"AIML"}>
+                          Artificial Intelligence Machine Learning
+                        </MenuItem>
+                        <MenuItem value={"ECE"}>
                           Electronics And Communication
                         </MenuItem>
                         <MenuItem value={"EN"}>

@@ -1,22 +1,24 @@
 import "./App.css";
 
 import { Route, Routes } from "react-router";
-import { BrowserRouter as Router } from "react-router-dom";
+
 import CreateEntry from "./components/CreateEntry/CreateEntry";
 import CreateStudent from "./components/CreateStudent/CreateStudent";
 import CreateUser from "./components/CreateUser/CreateUser";
-import Dashboard from "./components/Dashboard/Dashboard";
-import Login from "./components/Login/Login";
-import ManageEntry from "./components/ManageEntry/ManageEntry";
-import ManageUser from "./components/ManageUser/ManageUser";
-import { ToastContainer } from "react-toastify";
-import ManageStudent from "./components/ManageStudent/ManageStudent";
 import DailyReport from "./components/DailyReport/DailyReport";
+import Dashboard from "./components/Dashboard/Dashboard";
 import FullReport from "./components/FullReport/FullReport";
+import Login from "./components/Login/Login";
 import MainNav from "./components/MainNav/MainNav";
-import { useState } from "react";
+import ManageEntry from "./components/ManageEntry/ManageEntry";
+import ManageStudent from "./components/ManageStudent/ManageStudent";
+import ManageUser from "./components/ManageUser/ManageUser";
+import ResetPswd from "./components/ResetPswd/ResetPswd";
+import { BrowserRouter as Router } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import WithNav from "./WithNav";
 import WithoutNav from "./WithoutNav";
+import { useState } from "react";
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
         <Routes>
           <Route element={<WithoutNav />}>
             <Route path="" element={<Login />} />
+            <Route path="setNewPassword/:id/:token" element={<ResetPswd />} />
           </Route>
           <Route element={<WithNav />}>
             <Route path="dashboard" element={<Dashboard />} />

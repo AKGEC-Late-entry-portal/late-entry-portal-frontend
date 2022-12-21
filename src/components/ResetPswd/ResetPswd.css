@@ -1,0 +1,12 @@
+#emailInput {
+    margin: 0 13%;
+}
+.form-group div {
+    justify-content: center !important;
+}
+#newpswd, #newpswdconfirm {
+    margin: 0 15%;
+}
+.panel-body {
+    width: 350px;
+} 
