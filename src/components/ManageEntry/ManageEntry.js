@@ -31,7 +31,7 @@ const ManageEntry = () => {
     if (d === 0) return fetchEntries(page + 1);
     else if (d === 1) return func2(page + 1, date);
     else if (d === 2) return func3(page + 1, location);
-    else if (d === 3) return func2(page + 1, location, date);
+    else if (d === 3) return func4(page + 1, location, date);
   };
 
   const prev = () => {
@@ -52,7 +52,7 @@ const ManageEntry = () => {
     if (d === 0) return fetchEntries(page - 1);
     else if (d === 1) return func2(page - 1, date);
     else if (d === 2) return func3(page - 1, location);
-    else if (d === 3) return func2(page - 1, location, date);
+    else if (d === 3) return func4(page - 1, location, date);
   };
 
   const fetchEntries = async (pg) => {
@@ -69,7 +69,7 @@ const ManageEntry = () => {
       .catch((err) => {
         setLoading(false);
         setIsData(false);
-        if (err.status === 403) {
+        if (err.response.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -103,6 +103,7 @@ const ManageEntry = () => {
       setLoading(false);
       setIsData(true);
       const users = response.data.results;
+      // console.log(users);
       setResults(users);
       if (users.length === 0) {
         toast.error("You have reached the end of the document!", {
@@ -149,7 +150,7 @@ const ManageEntry = () => {
       .catch((err) => {
         setLoading(false);
         setIsData(false);
-        if (err.status === 403) {
+        if (err.response.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -229,7 +230,7 @@ const ManageEntry = () => {
       .catch((err) => {
         setLoading(false);
         setIsData(false);
-        if (err.status === 403) {
+        if (err.response.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -311,7 +312,7 @@ const ManageEntry = () => {
       .catch((err) => {
         setLoading(false);
         setIsData(false);
-        if (err.status === 403) {
+        if (err.response.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -381,13 +382,14 @@ const ManageEntry = () => {
   const deleteEntry = async (id) => {
     const res = await axios
       .delete(
-        "https://akgec-late-entry-backend.onrender.com/api/admin/entry/delete/" + id,
+        "https://akgec-late-entry-backend.onrender.com/api/admin/entry/delete/" +
+          id,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
         }
       )
       .catch((err) => {
-        if (err.status === 403) {
+        if (err.response.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -553,6 +555,7 @@ const ManageEntry = () => {
                       <th>Location</th>
                       <th>Date</th>
                       <th>Time</th>
+                      <th>Late Count</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -584,6 +587,7 @@ const ManageEntry = () => {
                           <td className="manage__td">{com.location}</td>
                           <td className="manage__td">{com.date}</td>
                           <td className="manage__td">{com.time}</td>
+                          <td className="manage__td">{com.lateCount}</td>
                           <td className="manage__td">
                             <button
                               style={{

@@ -61,7 +61,7 @@ const ManageUser = () => {
       )
       .catch((err) => {
         setLoading(false);
-        if (err.status === 403) {
+        if (err.response.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -164,7 +164,8 @@ const ManageUser = () => {
   const deleteItem = async (_id) => {
     await axios
       .delete(
-        "https://akgec-late-entry-backend.onrender.com/api/admin/user/delete/" + _id,
+        "https://akgec-late-entry-backend.onrender.com/api/admin/user/delete/" +
+          _id,
         {
           headers: { Authorization: `Bearer ${localStorage.token}` },
         }

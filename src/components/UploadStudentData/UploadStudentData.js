@@ -34,7 +34,7 @@ const UploadStudentData = (props) => {
         )
         .catch((err) => {
           setLoading(false);
-          if (err.status === 403) {
+          if (err.response.status === 403) {
             toast.error("Unauthorized User", {
               position: "bottom-right",
               autoClose: 5000,

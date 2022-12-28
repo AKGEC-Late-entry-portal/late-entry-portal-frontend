@@ -40,7 +40,8 @@ const Update = (props) => {
     const updateData = async (_id, data) => {
       const res = await axios
         .put(
-          "https://akgec-late-entry-backend.onrender.com/api/admin/user/update/" + _id,
+          "https://akgec-late-entry-backend.onrender.com/api/admin/user/update/" +
+            _id,
           data,
           {
             headers: { Authorization: `Bearer ${localStorage.token}` },
@@ -110,9 +111,13 @@ const Update = (props) => {
 
   const fetchUser = async (id) => {
     const res = await axios
-      .get("https://akgec-late-entry-backend.onrender.com/api/admin/user/read/" + id, {
-        headers: { Authorization: `Bearer ${localStorage.token}` },
-      })
+      .get(
+        "https://akgec-late-entry-backend.onrender.com/api/admin/user/read/" +
+          id,
+        {
+          headers: { Authorization: `Bearer ${localStorage.token}` },
+        }
+      )
       .catch((err) => {
         if (err.status === 403) {
           toast.error("Unauthorized User", {
@@ -189,8 +194,8 @@ const Update = (props) => {
               headers: { Authorization: `Bearer ${localStorage.token}` },
             }
           )
-          .catch((error) => {
-            if (error.status === 403) {
+          .catch((err) => {
+            if (err.response.status === 403) {
               toast.error("Unauthorized User", {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -204,7 +209,7 @@ const Update = (props) => {
               localStorage.removeItem("token");
               localStorage.removeItem("results");
               navigate("/");
-            } else if (error.status === 404) {
+            } else if (err.response.status === 404) {
               toast.error("User Not Found!", {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -215,7 +220,7 @@ const Update = (props) => {
                 progress: undefined,
                 theme: "colored",
               });
-            } else if (error.status === 409) {
+            } else if (err.response.status === 409) {
               toast.error("Old password did not match!", {
                 position: "bottom-right",
                 autoClose: 5000,

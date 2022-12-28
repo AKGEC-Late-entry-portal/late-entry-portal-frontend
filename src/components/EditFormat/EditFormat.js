@@ -1,7 +1,9 @@
+import "./EditFormat.css";
+
 import { useEffect, useState } from "react";
+
 import Spinner from "react-spinner-material";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
-import "./EditFormat.css";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +25,7 @@ const EditFormat = (props) => {
         }
       )
       .catch((err) => {
-        if (err.status === 403) {
+        if (err.response.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -70,11 +72,14 @@ const EditFormat = (props) => {
   const getFormat = async () => {
     setLoading(true);
     const res = await axios
-      .get("https://akgec-late-entry-backend.onrender.com/api/admin/report/format/", {
-        headers: { Authorization: `Bearer ${localStorage.token}` },
-      })
+      .get(
+        "https://akgec-late-entry-backend.onrender.com/api/admin/report/format/",
+        {
+          headers: { Authorization: `Bearer ${localStorage.token}` },
+        }
+      )
       .catch((err) => {
-        if (err.status === 403) {
+        if (err.response.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,

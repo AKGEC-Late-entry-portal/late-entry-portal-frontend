@@ -66,7 +66,8 @@ const DailyReport = () => {
       .catch((err) => {
         setLoading(false);
         setIsData(false);
-        if (err.status === 403) {
+        console.log(err);
+        if (err.response.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -97,6 +98,7 @@ const DailyReport = () => {
       setLoading(false);
       setIsData(true);
       const users = response.data.results;
+      // console.log(users);
       setResults(users);
       if (response.data.next == null) {
         setNxt(false);
@@ -131,7 +133,7 @@ const DailyReport = () => {
         setLoading(false);
         setIsData(false);
         setResults([]);
-        if (err.status === 403) {
+        if (err.response.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -258,6 +260,7 @@ const DailyReport = () => {
                       <th>Branch</th>
                       <th>Year</th>
                       <th>Location</th>
+                      <th>Late Count</th>
                     </tr>
                   </thead>
 
@@ -286,6 +289,7 @@ const DailyReport = () => {
                           <td className="manage__td">{com.branch}</td>
                           <td className="manage__td">{year[com.year]}</td>
                           <td className="manage__td">{com.location}</td>
+                          <td className="manage__td">{com.lateCount}</td>
                         </tr>
                       );
                     })}

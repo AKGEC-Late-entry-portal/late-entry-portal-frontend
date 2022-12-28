@@ -53,7 +53,7 @@ const UpdateStudent = (props) => {
               theme: "colored",
             }
           );
-          if (err.status === 403) {
+          if (err.response.status === 403) {
             toast.error("Unauthorized User", {
               position: "bottom-right",
               autoClose: 5000,
@@ -108,7 +108,7 @@ const UpdateStudent = (props) => {
         }
       )
       .catch((err) => {
-        if (err.status === 403) {
+        if (err.response.status === 403) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,

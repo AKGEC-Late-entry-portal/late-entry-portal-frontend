@@ -34,8 +34,8 @@ const Dashboard = () => {
               console.log(res.data.msg);
               console.log(arr);
             });
-        } catch (error) {
-          if (error.status === 403) {
+        } catch (err) {
+          if (err.response.status === 403) {
             toast.error("Unauthorized User", {
               position: "bottom-right",
               autoClose: 5000,

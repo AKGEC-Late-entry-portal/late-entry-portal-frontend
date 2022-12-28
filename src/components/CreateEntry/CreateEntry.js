@@ -45,7 +45,7 @@ const CreateEntry = () => {
         )
         .catch((err) => {
           setLoading(false);
-          if (err.status === 403) {
+          if (err.response.status === 403) {
             toast.error("Unauthorized User", {
               position: "bottom-right",
               autoClose: 5000,
@@ -109,7 +109,7 @@ const CreateEntry = () => {
         )
         .catch((err) => {
           setLoading(false);
-          if (err.status === 403) {
+          if (err.response.status === 403) {
             toast.error("Unauthorized User", {
               position: "bottom-right",
               autoClose: 5000,
@@ -193,7 +193,7 @@ const CreateEntry = () => {
   };
 
   return (
-    <div className = "components">
+    <div className="components">
       <div className="row" style={{ margin: "0" }}>
         <div className="col-sm-8">
           <div style={{ paddingLeft: "2.5%", paddingTop: "2.5%" }}>
