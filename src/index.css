@@ -1,0 +1,8 @@
+ .components {
+    display: inline-block;
+    width: 81.5vw !important;
+    margin-left: auto !important;
+    background-color: #fafafa;
+    position: absolute;
+    right: 0;
+  }

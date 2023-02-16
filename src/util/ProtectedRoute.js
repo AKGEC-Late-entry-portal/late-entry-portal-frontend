@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from "react";
 
-import MainNav from './components/MainNav/MainNav'
-import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function App() {
+const ProtectedRoute = (props) => {
+    const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const checkUserToken = () => {
         const userToken = localStorage.getItem('token');
         if (!userToken || userToken === 'undefined') {
             setIsLoggedIn(false);
+            return navigate('/login');
         }
         setIsLoggedIn(true);
     }
     useEffect(() => {
-        checkUserToken();
-    }, [isLoggedIn]);
- 
+            checkUserToken();
+        }, [isLoggedIn]);
     return (
         <React.Fragment>
-          {isLoggedIn && < MainNav/>}
-            <Outlet />
+            {
+                isLoggedIn ? props.children : null
+            }
         </React.Fragment>
     );
 }
-export default App;
+export default ProtectedRoute;
