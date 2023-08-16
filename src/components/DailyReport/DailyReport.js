@@ -67,7 +67,7 @@ const DailyReport = () => {
         setLoading(false);
         setIsData(false);
         console.log(err);
-        if (err.response.status === 403) {
+        if (err.response.status === 404) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -133,7 +133,7 @@ const DailyReport = () => {
         setLoading(false);
         setIsData(false);
         setResults([]);
-        if (err.response.status === 403) {
+        if (err.response.status === 404) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,

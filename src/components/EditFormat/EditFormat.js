@@ -25,7 +25,7 @@ const EditFormat = (props) => {
         }
       )
       .catch((err) => {
-        if (err.response.status === 403) {
+        if (err.response.status === 404) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -79,7 +79,7 @@ const EditFormat = (props) => {
         }
       )
       .catch((err) => {
-        if (err.response.status === 403) {
+        if (err.response.status === 404) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,

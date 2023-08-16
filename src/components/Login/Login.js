@@ -107,7 +107,7 @@ const Login = () => {
               setLoader(false);
             });
         } catch (err) {
-          if (err.response.status === 403) {
+          if (err.response.status === 404) {
             console.log("invalid-token");
             localStorage.removeItem("token");
             localStorage.removeItem("results");

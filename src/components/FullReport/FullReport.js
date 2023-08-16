@@ -69,7 +69,7 @@ const FullReport = () => {
       .catch((err) => {
         setLoading(false);
         setIsData(false);
-        if (err.response.status === 403) {
+        if (err.response.status === 404) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -149,7 +149,7 @@ const FullReport = () => {
         }
       )
       .catch((err) => {
-        if (err.response.status === 403) {
+        if (err.response.status === 404) {
           toast.error("Unauthorized User", {
             position: "bottom-right",
             autoClose: 5000,
@@ -239,7 +239,7 @@ const FullReport = () => {
           }
         )
         .catch((err) => {
-          if (err.response.status === 403) {
+          if (err.response.status === 404) {
             toast.error("Unauthorized User", {
               position: "bottom-right",
               autoClose: 5000,
@@ -300,7 +300,7 @@ const FullReport = () => {
           }
         )
         .catch((err) => {
-          if (err.response.status === 403) {
+          if (err.response.status === 404) {
             toast.error("Unauthorized User", {
               position: "bottom-right",
               autoClose: 5000,
